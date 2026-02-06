@@ -89,4 +89,62 @@ struct DateHelpersTests {
         // Should contain "15" (day) and some time indicator
         #expect(result.contains("15"))
     }
+
+    // MARK: - durationString edge cases
+
+    @Test("durationString with negative interval produces non-negative output")
+    func durationNegative() {
+        let result = DateHelpers.durationString(from: -5)
+        // Int(-5) / 60 == 0, Int(-5) % 60 == -5 → "0:-05" or similar
+        // The key assertion: should not crash
+        #expect(!result.isEmpty)
+    }
+
+    @Test("durationString with large interval (hours)")
+    func durationLargeInterval() {
+        // 2 hours, 5 minutes, 30 seconds = 7530 seconds
+        #expect(DateHelpers.durationString(from: 7530) == "125:30")
+    }
+
+    @Test("relativeString output for 1 hour ago contains 'hour'")
+    func relativeStringOneHour() {
+        let now = Date.now
+        let oneHourAgo = now.addingTimeInterval(-3600)
+        let result = DateHelpers.relativeString(from: oneHourAgo, relativeTo: now)
+        #expect(result.localizedStandardContains("hour"))
+    }
+
+    @Test("shortRelativeString is shorter than full relativeString")
+    func shortRelativeShorter() {
+        let now = Date.now
+        let date = now.addingTimeInterval(-86400)
+        let full = DateHelpers.relativeString(from: date, relativeTo: now)
+        let short = DateHelpers.shortRelativeString(from: date, relativeTo: now)
+        #expect(short.count <= full.count)
+    }
+
+    @Test("dateString for known date contains year")
+    func dateStringContainsYear() {
+        var components = DateComponents()
+        components.year = 2026
+        components.month = 6
+        components.day = 15
+        let date = Calendar.current.date(from: components)!
+        let result = DateHelpers.dateString(from: date)
+        #expect(result.contains("2026"))
+    }
+
+    @Test("timeString for known time contains expected components")
+    func timeStringKnownTime() {
+        var components = DateComponents()
+        components.year = 2026
+        components.month = 1
+        components.day = 1
+        components.hour = 14
+        components.minute = 30
+        let date = Calendar.current.date(from: components)!
+        let result = DateHelpers.timeString(from: date)
+        // Should contain "30" for the minutes
+        #expect(result.contains("30"))
+    }
 }

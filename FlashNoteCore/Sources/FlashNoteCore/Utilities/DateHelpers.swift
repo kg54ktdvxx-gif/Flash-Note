@@ -1,39 +1,59 @@
 import Foundation
 
 public enum DateHelpers {
+    private nonisolated(unsafe) static let relativeFormatter: RelativeDateTimeFormatter = {
+        let f = RelativeDateTimeFormatter()
+        f.unitsStyle = .full
+        f.dateTimeStyle = .named
+        return f
+    }()
+
+    private nonisolated(unsafe) static let shortRelativeFormatter: RelativeDateTimeFormatter = {
+        let f = RelativeDateTimeFormatter()
+        f.unitsStyle = .abbreviated
+        f.dateTimeStyle = .named
+        return f
+    }()
+
+    private static let timeFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .none
+        f.timeStyle = .short
+        return f
+    }()
+
+    private static let dateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .medium
+        f.timeStyle = .none
+        return f
+    }()
+
+    private static let fullFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .medium
+        f.timeStyle = .short
+        return f
+    }()
+
     public static func relativeString(from date: Date, relativeTo now: Date = .now) -> String {
-        let formatter = RelativeDateTimeFormatter()
-        formatter.unitsStyle = .full
-        formatter.dateTimeStyle = .named
-        return formatter.localizedString(for: date, relativeTo: now)
+        relativeFormatter.localizedString(for: date, relativeTo: now)
     }
 
     public static func shortRelativeString(from date: Date, relativeTo now: Date = .now) -> String {
-        let formatter = RelativeDateTimeFormatter()
-        formatter.unitsStyle = .abbreviated
-        formatter.dateTimeStyle = .named
-        return formatter.localizedString(for: date, relativeTo: now)
+        shortRelativeFormatter.localizedString(for: date, relativeTo: now)
     }
 
     public static func timeString(from date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .none
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
+        timeFormatter.string(from: date)
     }
 
     public static func dateString(from date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
+        dateFormatter.string(from: date)
     }
 
     public static func fullString(from date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
+        fullFormatter.string(from: date)
     }
 
     public static func durationString(from interval: TimeInterval) -> String {

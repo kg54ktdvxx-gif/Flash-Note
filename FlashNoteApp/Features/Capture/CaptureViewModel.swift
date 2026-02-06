@@ -30,17 +30,16 @@ final class CaptureViewModel {
             SpotlightIndexer.index(note: note)
             ResurfacingScheduler.scheduleResurfacing(for: note)
             FNLog.capture.info("Note saved: \(note.id)")
+
+            hapticService.noteSaved()
+            withAnimation(.spring(duration: 0.4)) {
+                showSaveConfirmation = true
+            }
+            text = ""
         } catch {
             FNLog.capture.error("Failed to save note: \(error)")
+            context.delete(note)
         }
-
-        hapticService.noteSaved()
-
-        withAnimation(.spring(duration: 0.4)) {
-            showSaveConfirmation = true
-        }
-
-        text = ""
     }
 
     func saveVoiceNote(
@@ -67,14 +66,14 @@ final class CaptureViewModel {
             SpotlightIndexer.index(note: note)
             ResurfacingScheduler.scheduleResurfacing(for: note)
             FNLog.capture.info("Voice note saved: \(note.id)")
+
+            hapticService.noteSaved()
+            withAnimation(.spring(duration: 0.4)) {
+                showSaveConfirmation = true
+            }
         } catch {
             FNLog.capture.error("Failed to save voice note: \(error)")
-        }
-
-        hapticService.noteSaved()
-
-        withAnimation(.spring(duration: 0.4)) {
-            showSaveConfirmation = true
+            context.delete(note)
         }
     }
 

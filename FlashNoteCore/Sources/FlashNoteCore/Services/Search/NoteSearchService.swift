@@ -14,9 +14,10 @@ public struct LocalNoteSearchService: NoteSearchService, Sendable {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         guard !trimmed.isEmpty else { return [] }
 
+        let deletedRaw = NoteStatus.deleted.rawValue
         let predicate = #Predicate<Note> { note in
             note.text.localizedStandardContains(trimmed) &&
-            note.statusRaw != "deleted"
+            note.statusRaw != deletedRaw
         }
 
         var descriptor = FetchDescriptor<Note>(
