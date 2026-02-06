@@ -1,0 +1,138 @@
+name: FlashNote
+options:
+  bundleIdPrefix: com.flashnote
+  deploymentTarget:
+    iOS: "26.0"
+    watchOS: "26.0"
+  xcodeVersion: "26.0"
+  defaultConfig: Debug
+  groupSortPosition: top
+  generateEmptyDirectories: true
+  minimumXcodeGenVersion: "2.40.0"
+
+settings:
+  base:
+    SWIFT_VERSION: "6.2"
+    SWIFT_STRICT_CONCURRENCY: complete
+    ENABLE_USER_SCRIPT_SANDBOXING: "YES"
+
+packages:
+  FlashNoteCore:
+    path: FlashNoteCore
+
+targets:
+  FlashNoteApp:
+    type: application
+    platform: iOS
+    sources:
+      - FlashNoteApp
+    dependencies:
+      - package: FlashNoteCore
+      - target: FlashNoteWidgets
+      - target: FlashNoteShareExtension
+      - target: FlashNoteIntents
+    settings:
+      base:
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: "YES"
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: "YES"
+        INFOPLIST_KEY_UILaunchScreen_Generation: "YES"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: "FlashNote uses the microphone for voice capture to quickly record your thoughts."
+        INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: "FlashNote uses speech recognition to transcribe your voice notes on-device."
+        INFOPLIST_KEY_CFBundleURLTypes: >-
+          [{"CFBundleURLSchemes": ["flashnote"], "CFBundleURLName": "com.flashnote.urlscheme"}]
+        CODE_SIGN_ENTITLEMENTS: FlashNoteApp/FlashNoteApp.entitlements
+        PRODUCT_BUNDLE_IDENTIFIER: com.flashnote.app
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        GENERATE_INFOPLIST_FILE: "YES"
+        PRODUCT_NAME: FlashNote
+    entitlements:
+      path: FlashNoteApp/FlashNoteApp.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.flashnote.shared
+
+  FlashNoteWatch:
+    type: application
+    platform: watchOS
+    sources:
+      - FlashNoteWatch
+    dependencies:
+      - package: FlashNoteCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.flashnote.app.watchkitapp
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        GENERATE_INFOPLIST_FILE: "YES"
+        INFOPLIST_KEY_WKCompanionAppBundleIdentifier: com.flashnote.app
+    entitlements:
+      path: FlashNoteWatch/FlashNoteWatch.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.flashnote.shared
+
+  FlashNoteWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - FlashNoteWidgets
+    dependencies:
+      - package: FlashNoteCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.flashnote.app.widgets
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        GENERATE_INFOPLIST_FILE: "YES"
+        INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: FlashNoteWidgets/FlashNoteWidgets.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.flashnote.shared
+
+  FlashNoteShareExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - FlashNoteShareExtension
+    dependencies:
+      - package: FlashNoteCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.flashnote.app.share
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        GENERATE_INFOPLIST_FILE: "YES"
+        INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier: com.apple.share-services
+        INFOPLIST_KEY_NSExtension_NSExtensionAttributes_NSExtensionActivationRule: >-
+          TRUEPREDICATE
+    entitlements:
+      path: FlashNoteShareExtension/FlashNoteShareExtension.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.flashnote.shared
+
+  FlashNoteIntents:
+    type: app-extension
+    platform: iOS
+    sources:
+      - FlashNoteIntents
+    dependencies:
+      - package: FlashNoteCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.flashnote.app.intents
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        GENERATE_INFOPLIST_FILE: "YES"
+        INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier: com.apple.intents-service
+    entitlements:
+      path: FlashNoteIntents/FlashNoteIntents.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.flashnote.shared
