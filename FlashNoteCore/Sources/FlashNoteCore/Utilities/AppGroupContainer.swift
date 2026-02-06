@@ -21,7 +21,11 @@ public enum AppGroupContainer {
 
     public static var audioDirectory: URL {
         let url = sharedContainerURL.appendingPathComponent("Audio", isDirectory: true)
-        try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        do {
+            try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        } catch {
+            FNLog.voice.error("Failed to create audio directory: \(error)")
+        }
         return url
     }
 

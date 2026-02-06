@@ -6,6 +6,7 @@ struct ExportActionSheet: View {
     @Binding var isPresented: Bool
     @State private var exportURL: URL?
     @State private var showShareSheet = false
+    @State private var exportError: String?
 
     private let exportService = DefaultExportService()
 
@@ -52,6 +53,14 @@ struct ExportActionSheet: View {
                     ShareLink(item: exportURL)
                 }
             }
+            .alert("Export Error", isPresented: .init(
+                get: { exportError != nil },
+                set: { if !$0 { exportError = nil } }
+            )) {
+                Button("OK") { exportError = nil }
+            } message: {
+                if let exportError { Text(exportError) }
+            }
         }
     }
 
@@ -69,6 +78,7 @@ struct ExportActionSheet: View {
             showShareSheet = true
         } catch {
             FNLog.export.error("Export failed: \(error)")
+            exportError = "Export failed. Please try again."
         }
     }
 

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SaveConfirmationView: View {
     @Binding var isVisible: Bool
+    @State private var dismissTask: Task<Void, Never>?
 
     var body: some View {
         if isVisible {
@@ -19,11 +20,16 @@ struct SaveConfirmationView: View {
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppBorderRadius.lg))
             .transition(.scale.combined(with: .opacity))
             .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                dismissTask = Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(1.2))
+                    guard !Task.isCancelled else { return }
                     withAnimation(.easeOut(duration: 0.3)) {
                         isVisible = false
                     }
                 }
+            }
+            .onDisappear {
+                dismissTask?.cancel()
             }
         }
     }

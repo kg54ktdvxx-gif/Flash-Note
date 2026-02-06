@@ -6,6 +6,7 @@ struct InboxView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(NavigationRouter.self) private var router
     @Query(
+        // NoteStatus.deleted.rawValue — @Query requires a compile-time literal
         filter: #Predicate<Note> { $0.statusRaw != "deleted" },
         sort: \Note.createdAt,
         order: .reverse
@@ -44,7 +45,11 @@ struct InboxView: View {
             }
             .onChange(of: router.selectedNoteID) { _, noteID in
                 if let noteID {
-                    selectedNote = notes.first(where: { $0.id == noteID })
+                    if let note = notes.first(where: { $0.id == noteID }) {
+                        selectedNote = note
+                    } else {
+                        FNLog.capture.warning("Deep link note not found: \(noteID)")
+                    }
                     router.selectedNoteID = nil
                 }
             }

@@ -62,6 +62,11 @@ struct NoteSearchServiceTests {
         #expect(results.isEmpty)
     }
 
+    @Test("NoteStatus.deleted.rawValue matches expected string")
+    func deletedRawValue() {
+        #expect(NoteStatus.deleted.rawValue == "deleted")
+    }
+
     @MainActor
     @Test("search excludes deleted notes")
     func searchExcludesDeleted() throws {

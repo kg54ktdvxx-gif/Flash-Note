@@ -20,7 +20,7 @@ final class NavigationRouter {
         case "capture":
             selectedTab = .capture
             if let text = url.queryValue(for: "text") {
-                prefillText = text
+                prefillText = String(text.prefix(10_000))
             }
         case "inbox":
             selectedTab = .inbox
