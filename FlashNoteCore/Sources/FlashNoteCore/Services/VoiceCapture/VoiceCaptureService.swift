@@ -16,6 +16,8 @@ public protocol VoiceCaptureService: Sendable {
 #if canImport(Speech) && canImport(AVFoundation) && os(iOS)
 public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked Sendable {
     private let lock = NSLock()
+
+    // All mutable state — only access inside lock.withLock { }
     private var recognizer: SFSpeechRecognizer?
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
@@ -92,7 +94,7 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
 
         let serviceLock = self.lock
         let stream = AsyncStream<TranscriptionResult> { continuation in
-            inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] buffer, _ in
+            inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
                 request.append(buffer)
                 if let channelData = buffer.floatChannelData?[0] {
                     let frameLength = Int(buffer.frameLength)
@@ -100,8 +102,8 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
                     for i in 0..<frameLength {
                         sum += abs(channelData[i])
                     }
-                    let avg = sum / Float(frameLength)
-                    serviceLock.withLock {
+                    let avg = sum / Float(max(frameLength, 1))
+                    serviceLock.withLock { [weak self] in
                         self?._audioLevel = avg
                     }
                 }
@@ -134,6 +136,8 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
                 try engine.start()
             } catch {
                 FNLog.voice.error("Audio engine failed to start: \(error)")
+                // Clean up everything since we claimed _isCapturing = true
+                self.tearDownCaptureResources()
                 continuation.finish()
             }
         }
@@ -145,12 +149,6 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
         let isCapturing = lock.withLock { _isCapturing }
         guard isCapturing else { return nil }
 
-        audioEngine?.stop()
-        audioEngine?.inputNode.removeTap(onBus: 0)
-        recognitionRequest?.endAudio()
-        recognitionTask?.cancel()
-        audioRecorder?.stop()
-
         let duration: TimeInterval?
         if let start = recordingStartTime {
             duration = Date.now.timeIntervalSince(start)
@@ -158,18 +156,8 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
             duration = nil
         }
 
-        let fileName = lock.withLock { () -> String? in
-            _isCapturing = false
-            _audioLevel = 0
-            let name = _audioFileName
-            _audioFileName = nil
-            return name
-        }
-
-        recognitionRequest = nil
-        recognitionTask = nil
-        audioEngine = nil
-        recordingStartTime = nil
+        let fileName = lock.withLock { _audioFileName }
+        tearDownCaptureResources()
 
         if let fileName {
             return TranscriptionResult(
@@ -180,6 +168,28 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
             )
         }
         return nil
+    }
+
+    /// Tears down audio engine, recorder, recognition, and resets state flags.
+    /// Safe to call multiple times.
+    private func tearDownCaptureResources() {
+        audioEngine?.stop()
+        audioEngine?.inputNode.removeTap(onBus: 0)
+        recognitionRequest?.endAudio()
+        recognitionTask?.cancel()
+        audioRecorder?.stop()
+
+        lock.withLock {
+            _isCapturing = false
+            _audioLevel = 0
+            _audioFileName = nil
+        }
+
+        recognitionRequest = nil
+        recognitionTask = nil
+        audioEngine = nil
+        audioRecorder = nil
+        recordingStartTime = nil
     }
 }
 #endif

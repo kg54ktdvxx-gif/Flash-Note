@@ -53,14 +53,16 @@ struct CaptureTextField: UIViewRepresentable {
     }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(self)
+        Coordinator(text: $text, placeholder: placeholder)
     }
 
     final class Coordinator: NSObject, UITextViewDelegate {
-        let parent: CaptureTextField
+        var text: Binding<String>
+        var placeholder: String
 
-        init(_ parent: CaptureTextField) {
-            self.parent = parent
+        init(text: Binding<String>, placeholder: String) {
+            self.text = text
+            self.placeholder = placeholder
         }
 
         func textViewDidBeginEditing(_ textView: UITextView) {
@@ -72,13 +74,13 @@ struct CaptureTextField: UIViewRepresentable {
 
         func textViewDidEndEditing(_ textView: UITextView) {
             if textView.text.isEmpty {
-                textView.text = parent.placeholder
+                textView.text = placeholder
                 textView.textColor = .placeholderText
             }
         }
 
         func textViewDidChange(_ textView: UITextView) {
-            parent.text = textView.text
+            text.wrappedValue = textView.text
         }
     }
 }

@@ -24,8 +24,10 @@ struct CaptureWidgetEntry: TimelineEntry {
 struct CaptureWidgetView: View {
     var entry: CaptureWidgetProvider.Entry
 
+    private static let captureURL = URL(string: "flashnote://capture")!
+
     var body: some View {
-        Link(destination: URL(string: "flashnote://capture")!) {
+        Link(destination: Self.captureURL) {
             VStack(spacing: 8) {
                 Image(systemName: "plus.circle.fill")
                     .font(.system(size: 36))
