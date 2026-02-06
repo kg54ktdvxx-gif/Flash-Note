@@ -69,10 +69,12 @@ public struct DefaultExportService: ExportService, Sendable {
 
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-        guard let data = try? encoder.encode(exportNotes),
-              let string = String(data: data, encoding: .utf8) else {
+        do {
+            let data = try encoder.encode(exportNotes)
+            return String(data: data, encoding: .utf8) ?? "[]"
+        } catch {
+            FNLog.export.error("JSON export encoding failed: \(error)")
             return "[]"
         }
-        return string
     }
 }

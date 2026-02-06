@@ -4,6 +4,10 @@ import FlashNoteCore
 
 @main
 struct FlashNoteWatchApp: App {
+    init() {
+        WatchConnectivityManager.shared.activate()
+    }
+
     var body: some Scene {
         WindowGroup {
             WatchContentView()

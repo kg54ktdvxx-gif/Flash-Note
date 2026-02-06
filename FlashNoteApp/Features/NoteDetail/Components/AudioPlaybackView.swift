@@ -10,6 +10,7 @@ struct AudioPlaybackView: View {
     @State private var duration: TimeInterval = 0
     @State private var player: AVAudioPlayer?
     @State private var displayLink: Timer?
+    @State private var setupFailed = false
 
     var body: some View {
         VStack(spacing: AppSpacing.xs) {
@@ -22,12 +23,13 @@ struct AudioPlaybackView: View {
                 } label: {
                     Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
                         .font(.system(size: 36))
-                        .foregroundStyle(AppColors.primary)
+                        .foregroundStyle(setupFailed ? AppColors.textTertiary : AppColors.primary)
                 }
+                .disabled(setupFailed)
 
                 Spacer()
 
-                Text(DateHelpers.durationString(from: progress) + " / " + DateHelpers.durationString(from: duration))
+                Text(setupFailed ? "Audio unavailable" : DateHelpers.durationString(from: progress) + " / " + DateHelpers.durationString(from: duration))
                     .font(AppTypography.caption)
                     .foregroundStyle(AppColors.textSecondary)
                     .monospacedDigit()
@@ -40,13 +42,17 @@ struct AudioPlaybackView: View {
     }
 
     private func setupPlayer() {
-        guard FileManager.default.fileExists(atPath: audioURL.path) else { return }
+        guard FileManager.default.fileExists(atPath: audioURL.path) else {
+            setupFailed = true
+            return
+        }
         do {
             player = try AVAudioPlayer(contentsOf: audioURL)
             player?.prepareToPlay()
             duration = player?.duration ?? 0
         } catch {
             FNLog.capture.error("Failed to init audio player: \(error)")
+            setupFailed = true
         }
     }
 

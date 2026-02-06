@@ -6,5 +6,6 @@ struct FlashNoteWidgetBundle: WidgetBundle {
     var body: some Widget {
         CaptureWidget()
         RecentNotesWidget()
+        CaptureControlWidget()
     }
 }
