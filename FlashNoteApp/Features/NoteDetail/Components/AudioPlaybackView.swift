@@ -9,7 +9,7 @@ struct AudioPlaybackView: View {
     @State private var progress: Double = 0
     @State private var duration: TimeInterval = 0
     @State private var player: AVAudioPlayer?
-    @State private var timer: Timer?
+    @State private var displayLink: Timer?
 
     var body: some View {
         VStack(spacing: AppSpacing.xs) {
@@ -61,9 +61,15 @@ struct AudioPlaybackView: View {
     private func startPlayback() {
         player?.play()
         isPlaying = true
-        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
-            progress = player?.currentTime ?? 0
-            if let player, !player.isPlaying {
+        // Capture player in a local to avoid capturing self in the timer closure
+        let currentPlayer = player
+        displayLink = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak currentPlayer] _ in
+            guard let currentPlayer else {
+                stopPlayback()
+                return
+            }
+            progress = currentPlayer.currentTime
+            if !currentPlayer.isPlaying {
                 stopPlayback()
             }
         }
@@ -72,8 +78,8 @@ struct AudioPlaybackView: View {
     private func pausePlayback() {
         player?.pause()
         isPlaying = false
-        timer?.invalidate()
-        timer = nil
+        displayLink?.invalidate()
+        displayLink = nil
     }
 
     private func stopPlayback() {
@@ -81,7 +87,7 @@ struct AudioPlaybackView: View {
         player?.currentTime = 0
         isPlaying = false
         progress = 0
-        timer?.invalidate()
-        timer = nil
+        displayLink?.invalidate()
+        displayLink = nil
     }
 }

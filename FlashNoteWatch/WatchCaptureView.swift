@@ -4,8 +4,8 @@ import FlashNoteCore
 
 struct WatchCaptureView: View {
     @Environment(\.modelContext) private var modelContext
-    @State private var capturedText = ""
     @State private var showConfirmation = false
+    @State private var showTextInput = false
 
     var body: some View {
         NavigationStack {
@@ -24,22 +24,15 @@ struct WatchCaptureView: View {
                 }
             }
             .onTapGesture {
-                presentDictation()
+                showTextInput = true
+            }
+            .sheet(isPresented: $showTextInput) {
+                WatchTextInputView { text in
+                    saveNote(text)
+                }
             }
             .navigationTitle("Capture")
         }
-    }
-
-    private func presentDictation() {
-        // watchOS dictation is handled via system text input
-        // Using WKExtension to present dictation controller
-        #if os(watchOS)
-        let device = WKInterfaceDevice.current()
-        device.play(.click)
-        #endif
-
-        // On watchOS, we use the system dictation by presenting a text field
-        // The actual dictation UI is provided by the system
     }
 
     private func saveNote(_ text: String) {
@@ -53,17 +46,42 @@ struct WatchCaptureView: View {
             try modelContext.save()
             FNLog.watch.info("Watch note saved: \(note.id)")
 
+            #if os(watchOS)
+            WKInterfaceDevice.current().play(.success)
+            #endif
+
             withAnimation {
                 showConfirmation = true
             }
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(2))
                 withAnimation {
                     showConfirmation = false
                 }
             }
         } catch {
             FNLog.watch.error("Failed to save watch note: \(error)")
+        }
+    }
+}
+
+/// Minimal text-input sheet that presents the watchOS dictation/scribble keyboard.
+private struct WatchTextInputView: View {
+    var onSave: (String) -> Void
+    @State private var text = ""
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        VStack(spacing: 8) {
+            TextField("Speak or type...", text: $text)
+                .font(.system(.body, design: .rounded))
+
+            Button("Save") {
+                onSave(text)
+                dismiss()
+            }
+            .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
         }
     }
 }

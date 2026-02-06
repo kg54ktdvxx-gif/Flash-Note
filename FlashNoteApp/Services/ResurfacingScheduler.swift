@@ -50,12 +50,13 @@ enum ResurfacingScheduler {
         calendar.timeZone = .current
         var components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: triggerDate)
         if let hour = components.hour, hour >= 22 || hour < 8 {
-            // Push to 8am next day
             components.hour = 8
             components.minute = 0
-            if let hour = components.hour, hour >= 22 {
+            if hour >= 22 {
+                // Late evening → push to 8am next day
                 if let day = components.day { components.day = day + 1 }
             }
+            // Early morning (0-7) → push to 8am same day
         }
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)

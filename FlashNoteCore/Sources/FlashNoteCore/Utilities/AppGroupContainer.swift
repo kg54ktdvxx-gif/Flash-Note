@@ -4,12 +4,15 @@ public enum AppGroupContainer {
     public static let groupIdentifier = "group.com.flashnote.shared"
 
     public static var sharedContainerURL: URL {
-        guard let url = FileManager.default.containerURL(
+        if let url = FileManager.default.containerURL(
             forSecurityApplicationGroupIdentifier: groupIdentifier
-        ) else {
-            fatalError("App Group '\(groupIdentifier)' not configured")
+        ) {
+            return url
         }
-        return url
+        // Fallback to Documents when App Group entitlement is missing (e.g. tests, previews).
+        // Logged so it's visible in Console during development.
+        FNLog.buffer.warning("App Group '\(groupIdentifier)' unavailable — falling back to Documents")
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     }
 
     public static var hotBufferFileURL: URL {
@@ -23,10 +26,7 @@ public enum AppGroupContainer {
     }
 
     public static var sharedDefaults: UserDefaults {
-        guard let defaults = UserDefaults(suiteName: groupIdentifier) else {
-            fatalError("Cannot create UserDefaults for App Group '\(groupIdentifier)'")
-        }
-        return defaults
+        UserDefaults(suiteName: groupIdentifier) ?? .standard
     }
 
     public static func audioFileURL(for fileName: String) -> URL {

@@ -2,7 +2,7 @@ import Foundation
 
 public protocol ResurfacingService: Sendable {
     func computeNextResurfaceDate(for note: Note, schedule: ResurfacingSchedule) -> Date?
-    func shouldResurace(note: Note, schedule: ResurfacingSchedule) -> Bool
+    func shouldResurface(note: Note, schedule: ResurfacingSchedule) -> Bool
 }
 
 public struct SpacedResurfacingService: ResurfacingService, Sendable {
@@ -21,14 +21,17 @@ public struct SpacedResurfacingService: ResurfacingService, Sendable {
         let hour = calendar.component(.hour, from: targetDate)
 
         if hour >= schedule.quietHoursStart || hour < schedule.quietHoursEnd {
-            // Push to quietHoursEnd of next day
+            // Target falls in quiet window — push to quietHoursEnd same day (early morning)
+            // or next day (late evening).
             var components = calendar.dateComponents([.year, .month, .day], from: targetDate)
             components.hour = schedule.quietHoursEnd
             components.minute = 0
 
             if hour >= schedule.quietHoursStart {
+                // Late evening (e.g. 22:00–23:59) → push to 8am next day
                 if let day = components.day { components.day = day + 1 }
             }
+            // Early morning (e.g. 0:00–7:59) → push to 8am same day (no day bump needed)
 
             if let adjusted = calendar.date(from: components) {
                 targetDate = adjusted
@@ -38,7 +41,7 @@ public struct SpacedResurfacingService: ResurfacingService, Sendable {
         return targetDate
     }
 
-    public func shouldResurace(note: Note, schedule: ResurfacingSchedule) -> Bool {
+    public func shouldResurface(note: Note, schedule: ResurfacingSchedule) -> Bool {
         guard note.status == .active else { return false }
         guard !note.isTriaged else { return false }
         guard note.resurfaceCount < schedule.maxResurfaceCount else { return false }

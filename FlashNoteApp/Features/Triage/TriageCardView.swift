@@ -14,9 +14,9 @@ struct TriageCardView: View {
     var body: some View {
         ZStack {
             // Action indicators behind the card
-            if currentAction != nil {
+            if let action = currentAction {
                 SwipeActionIndicator(
-                    action: currentAction!,
+                    action: action,
                     intensity: swipeIntensity
                 )
                 .padding(.horizontal, AppSpacing.xl)
