@@ -12,6 +12,7 @@ struct VoiceCaptureView: View {
     @State private var confidence: Float?
     @State private var voiceService: OnDeviceVoiceCaptureService?
     @State private var errorMessage: String?
+    @State private var recordingTask: Task<Void, Never>?
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -73,6 +74,7 @@ struct VoiceCaptureView: View {
                     Button("Cancel") { dismiss() }
                 }
             }
+            .onDisappear { recordingTask?.cancel() }
             .alert("Voice Capture Error", isPresented: .init(
                 get: { errorMessage != nil },
                 set: { if !$0 { errorMessage = nil } }
@@ -91,12 +93,13 @@ struct VoiceCaptureView: View {
         let service = OnDeviceVoiceCaptureService()
         self.voiceService = service
 
-        Task { @MainActor in
+        recordingTask = Task { @MainActor in
             do {
                 let stream = try await service.startCapture()
                 isRecording = true
 
                 for await result in stream {
+                    if Task.isCancelled { break }
                     transcribedText = result.text
                     confidence = result.confidence
                     audioFileName = result.audioFileName

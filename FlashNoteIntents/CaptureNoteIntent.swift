@@ -20,7 +20,12 @@ struct CaptureNoteIntent: AppIntent {
 
         let entry = BufferEntry(text: trimmed, source: .siri)
         let buffer = FileBasedHotCaptureBuffer()
-        try buffer.append(entry)
+        do {
+            try buffer.append(entry)
+        } catch {
+            FNLog.intent.error("Siri capture failed: \(error)")
+            return .result(dialog: "Sorry, I couldn't save that thought. Please try again.")
+        }
 
         FNLog.intent.info("Siri captured note: \(entry.id)")
 

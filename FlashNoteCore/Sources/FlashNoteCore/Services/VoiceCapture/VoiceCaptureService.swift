@@ -143,7 +143,7 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
             } catch {
                 FNLog.voice.error("Audio engine failed to start: \(error)")
                 // Clean up everything since we claimed _isCapturing = true
-                self.tearDownCaptureResources()
+                self.tearDownCaptureResources(deleteOrphanedAudio: true)
                 continuation.finish()
             }
         }
@@ -181,10 +181,12 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
 
     /// Tears down audio engine, recorder, recognition, and resets state flags.
     /// Safe to call multiple times.
-    private func tearDownCaptureResources() {
+    /// - Parameter deleteOrphanedAudio: If `true`, deletes the recorded audio file.
+    ///   Only pass `true` from error paths where the audio won't be used.
+    private func tearDownCaptureResources(deleteOrphanedAudio: Bool = false) {
         // Grab references inside lock, then operate outside to avoid deadlock
-        let (engine, request, task, recorder) = lock.withLock {
-            let refs = (audioEngine, recognitionRequest, recognitionTask, audioRecorder)
+        let (engine, request, task, recorder, fileName) = lock.withLock {
+            let refs = (audioEngine, recognitionRequest, recognitionTask, audioRecorder, _audioFileName)
             _isCapturing = false
             _audioLevel = 0
             _audioFileName = nil
@@ -201,6 +203,12 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
         request?.endAudio()
         task?.cancel()
         recorder?.stop()
+
+        if deleteOrphanedAudio, let fileName {
+            let url = AppGroupContainer.audioFileURL(for: fileName)
+            try? FileManager.default.removeItem(at: url)
+            FNLog.voice.info("Cleaned up orphaned audio: \(fileName)")
+        }
     }
 }
 #endif
