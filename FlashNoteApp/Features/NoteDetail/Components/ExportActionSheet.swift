@@ -73,24 +73,30 @@ struct ExportActionSheet: View {
     }
 
     private func openInReminders() {
-        // Uses EventKit — will be fully implemented in Phase 13
-        let encoded = note.text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        if let url = URL(string: "x-apple-reminderkit://REMCDReminder/create?title=\(encoded)") {
-            UIApplication.shared.open(url)
-        }
+        var components = URLComponents()
+        components.scheme = "x-apple-reminderkit"
+        components.host = "REMCDReminder"
+        components.path = "/create"
+        components.queryItems = [URLQueryItem(name: "title", value: note.text)]
+        guard let url = components.url else { return }
+        UIApplication.shared.open(url)
     }
 
     private func openInThings() {
-        let encoded = note.text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        if let url = URL(string: "things:///add?title=\(encoded)") {
-            UIApplication.shared.open(url)
-        }
+        var components = URLComponents()
+        components.scheme = "things"
+        components.path = "///add"
+        components.queryItems = [URLQueryItem(name: "title", value: note.text)]
+        guard let url = components.url else { return }
+        UIApplication.shared.open(url)
     }
 
     private func openInObsidian() {
-        let encoded = note.text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        if let url = URL(string: "obsidian://new?content=\(encoded)") {
-            UIApplication.shared.open(url)
-        }
+        var components = URLComponents()
+        components.scheme = "obsidian"
+        components.host = "new"
+        components.queryItems = [URLQueryItem(name: "content", value: note.text)]
+        guard let url = components.url else { return }
+        UIApplication.shared.open(url)
     }
 }

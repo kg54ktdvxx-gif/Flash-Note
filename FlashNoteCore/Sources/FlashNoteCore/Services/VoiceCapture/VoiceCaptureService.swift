@@ -56,14 +56,12 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
             throw VoiceCaptureError.notAuthorized
         }
 
+        let recognizer = lock.withLock { self.recognizer }
         guard let recognizer, recognizer.isAvailable else {
             throw VoiceCaptureError.recognizerUnavailable
         }
 
-        lock.withLock { _isCapturing = true }
-
         let fileName = "\(UUID().uuidString).m4a"
-        lock.withLock { _audioFileName = fileName }
         let audioURL = AppGroupContainer.audioFileURL(for: fileName)
         let recordingSettings: [String: Any] = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -72,15 +70,21 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
         ]
         let recorder = try AVAudioRecorder(url: audioURL, settings: recordingSettings)
-        self.audioRecorder = recorder
 
         let request = SFSpeechAudioBufferRecognitionRequest()
         request.shouldReportPartialResults = true
         request.requiresOnDeviceRecognition = true
-        self.recognitionRequest = request
 
         let engine = AVAudioEngine()
-        self.audioEngine = engine
+
+        // Store all state inside lock
+        lock.withLock {
+            _isCapturing = true
+            _audioFileName = fileName
+            self.audioRecorder = recorder
+            self.recognitionRequest = request
+            self.audioEngine = engine
+        }
 
         let audioSession = AVAudioSession.sharedInstance()
         try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
@@ -89,7 +93,7 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
         let inputNode = engine.inputNode
         let recordingFormat = inputNode.outputFormat(forBus: 0)
 
-        recordingStartTime = .now
+        lock.withLock { recordingStartTime = .now }
         recorder.record()
 
         let serviceLock = self.lock
@@ -129,7 +133,9 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
                     continuation.finish()
                 }
             }
-            self.recognitionTask = task
+            serviceLock.withLock { [weak self] in
+                self?.recognitionTask = task
+            }
 
             do {
                 engine.prepare()
@@ -149,14 +155,17 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
         let isCapturing = lock.withLock { _isCapturing }
         guard isCapturing else { return nil }
 
+        let (fileName, startTime) = lock.withLock {
+            (_audioFileName, recordingStartTime)
+        }
+
         let duration: TimeInterval?
-        if let start = recordingStartTime {
-            duration = Date.now.timeIntervalSince(start)
+        if let startTime {
+            duration = Date.now.timeIntervalSince(startTime)
         } else {
             duration = nil
         }
 
-        let fileName = lock.withLock { _audioFileName }
         tearDownCaptureResources()
 
         if let fileName {
@@ -173,23 +182,25 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
     /// Tears down audio engine, recorder, recognition, and resets state flags.
     /// Safe to call multiple times.
     private func tearDownCaptureResources() {
-        audioEngine?.stop()
-        audioEngine?.inputNode.removeTap(onBus: 0)
-        recognitionRequest?.endAudio()
-        recognitionTask?.cancel()
-        audioRecorder?.stop()
-
-        lock.withLock {
+        // Grab references inside lock, then operate outside to avoid deadlock
+        let (engine, request, task, recorder) = lock.withLock {
+            let refs = (audioEngine, recognitionRequest, recognitionTask, audioRecorder)
             _isCapturing = false
             _audioLevel = 0
             _audioFileName = nil
+            audioEngine = nil
+            recognitionRequest = nil
+            recognitionTask = nil
+            audioRecorder = nil
+            recordingStartTime = nil
+            return refs
         }
 
-        recognitionRequest = nil
-        recognitionTask = nil
-        audioEngine = nil
-        audioRecorder = nil
-        recordingStartTime = nil
+        engine?.stop()
+        engine?.inputNode.removeTap(onBus: 0)
+        request?.endAudio()
+        task?.cancel()
+        recorder?.stop()
     }
 }
 #endif

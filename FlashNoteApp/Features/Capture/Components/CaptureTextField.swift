@@ -41,6 +41,12 @@ struct CaptureTextField: UIViewRepresentable {
     }
 
     func updateUIView(_ textView: UITextView, context: Context) {
+        // Skip if this update was triggered by our own delegate callback
+        guard !context.coordinator.isUpdating else { return }
+
+        context.coordinator.isUpdating = true
+        defer { context.coordinator.isUpdating = false }
+
         if text.isEmpty && !textView.isFirstResponder {
             textView.text = placeholder
             textView.textColor = .placeholderText
@@ -59,6 +65,7 @@ struct CaptureTextField: UIViewRepresentable {
     final class Coordinator: NSObject, UITextViewDelegate {
         var text: Binding<String>
         var placeholder: String
+        var isUpdating = false
 
         init(text: Binding<String>, placeholder: String) {
             self.text = text
@@ -80,7 +87,10 @@ struct CaptureTextField: UIViewRepresentable {
         }
 
         func textViewDidChange(_ textView: UITextView) {
+            guard !isUpdating else { return }
+            isUpdating = true
             text.wrappedValue = textView.text
+            isUpdating = false
         }
     }
 }

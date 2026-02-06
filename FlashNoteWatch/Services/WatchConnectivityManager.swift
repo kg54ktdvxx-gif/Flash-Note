@@ -1,8 +1,11 @@
 import WatchConnectivity
 import FlashNoteCore
 
-final class WatchConnectivityManager: NSObject, WCSessionDelegate, Sendable {
+final class WatchConnectivityManager: NSObject, WCSessionDelegate, @unchecked Sendable {
     static let shared = WatchConnectivityManager()
+
+    /// Serial queue for all delegate callbacks and message handling
+    private let queue = DispatchQueue(label: "com.flashnote.watchconnectivity")
 
     private override init() {
         super.init()
@@ -57,13 +60,18 @@ final class WatchConnectivityManager: NSObject, WCSessionDelegate, Sendable {
     #endif
 
     func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
-        handleReceivedMessage(message)
+        queue.async { [weak self] in
+            self?.handleReceivedMessage(message)
+        }
     }
 
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any] = [:]) {
-        handleReceivedMessage(userInfo)
+        queue.async { [weak self] in
+            self?.handleReceivedMessage(userInfo)
+        }
     }
 
+    /// Called on `queue` — serialized, no concurrent access.
     private func handleReceivedMessage(_ message: [String: Any]) {
         guard let type = message["type"] as? String, type == "newNote",
               let text = message["text"] as? String else { return }

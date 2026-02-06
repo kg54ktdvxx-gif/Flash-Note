@@ -6,6 +6,7 @@ struct WatchCaptureView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var showConfirmation = false
     @State private var showTextInput = false
+    @State private var confirmationTask: Task<Void, Never>?
 
     var body: some View {
         NavigationStack {
@@ -31,6 +32,9 @@ struct WatchCaptureView: View {
                     saveNote(text)
                 }
             }
+            .onDisappear {
+                confirmationTask?.cancel()
+            }
             .navigationTitle("Capture")
         }
     }
@@ -54,8 +58,10 @@ struct WatchCaptureView: View {
                 showConfirmation = true
             }
 
-            Task { @MainActor in
+            confirmationTask?.cancel()
+            confirmationTask = Task { @MainActor in
                 try? await Task.sleep(for: .seconds(2))
+                guard !Task.isCancelled else { return }
                 withAnimation {
                     showConfirmation = false
                 }

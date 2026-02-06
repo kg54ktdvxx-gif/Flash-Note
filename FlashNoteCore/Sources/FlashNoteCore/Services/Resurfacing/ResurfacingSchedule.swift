@@ -22,7 +22,7 @@ public struct ResurfacingSchedule: Sendable {
     )
 
     public func nextInterval(for resurfaceCount: Int) -> TimeInterval? {
-        guard resurfaceCount < intervals.count else { return nil }
+        guard resurfaceCount >= 0, resurfaceCount < intervals.count else { return nil }
         return intervals[resurfaceCount]
     }
 }

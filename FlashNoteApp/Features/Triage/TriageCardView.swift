@@ -98,10 +98,13 @@ struct TriageCardView: View {
             if action == .task { verticalOffset = -500 }
         }
 
+        // Reset state synchronously before notifying parent.
+        // Parent should use .id(note.id) on TriageCardView so SwiftUI
+        // creates a fresh view (with fresh @State) for the next card.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-            onAction(action)
             offset = .zero
             verticalOffset = 0
+            onAction(action)
         }
     }
 }
