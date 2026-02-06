@@ -17,7 +17,9 @@ struct InboxView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if notes.isEmpty && !viewModel.isSearchActive {
+                if viewModel.isSearchActive && displayedNotes.isEmpty {
+                    ContentUnavailableView.search(text: viewModel.searchText)
+                } else if notes.isEmpty && !viewModel.isSearchActive {
                     EmptyInboxView()
                 } else {
                     notesList

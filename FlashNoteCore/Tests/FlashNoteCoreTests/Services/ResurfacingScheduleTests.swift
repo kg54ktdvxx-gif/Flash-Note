@@ -39,10 +39,8 @@ struct ResurfacingScheduleTests {
     @Test("nextInterval returns nil for negative count")
     func nextIntervalNegative() {
         let schedule = ResurfacingSchedule.default
-        // Negative index — guard catches it since -1 < count
-        // Actually -1 < 5 is true, so it would try intervals[-1] which crashes
-        // This reveals a missing bounds check for negative values!
-        // For now, just test the documented behavior
+        #expect(schedule.nextInterval(for: -1) == nil)
+        #expect(schedule.nextInterval(for: -100) == nil)
     }
 
     @Test("default quiet hours are 22-8")

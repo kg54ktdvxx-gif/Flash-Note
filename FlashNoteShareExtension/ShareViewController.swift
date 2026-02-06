@@ -10,8 +10,11 @@ final class ShareViewController: UIViewController {
     }
 
     private func handleSharedContent() {
-        guard let extensionItems = extensionContext?.inputItems as? [NSExtensionItem] else {
-            completeRequest()
+        // Capture extensionContext immediately — it can become nil if the
+        // extension is terminated while our async Task is still running.
+        guard let context = extensionContext,
+              let extensionItems = context.inputItems as? [NSExtensionItem] else {
+            extensionContext?.completeRequest(returningItems: nil)
             return
         }
 
@@ -23,12 +26,20 @@ final class ShareViewController: UIViewController {
 
                 for provider in attachments {
                     if provider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
-                        if let url = try? await provider.loadItem(forTypeIdentifier: UTType.url.identifier) as? URL {
-                            capturedText += url.absoluteString
+                        do {
+                            if let url = try await provider.loadItem(forTypeIdentifier: UTType.url.identifier) as? URL {
+                                capturedText += url.absoluteString
+                            }
+                        } catch {
+                            FNLog.share.error("Failed to load URL attachment: \(error)")
                         }
                     } else if provider.hasItemConformingToTypeIdentifier(UTType.plainText.identifier) {
-                        if let text = try? await provider.loadItem(forTypeIdentifier: UTType.plainText.identifier) as? String {
-                            capturedText += text
+                        do {
+                            if let text = try await provider.loadItem(forTypeIdentifier: UTType.plainText.identifier) as? String {
+                                capturedText += text
+                            }
+                        } catch {
+                            FNLog.share.error("Failed to load text attachment: \(error)")
                         }
                     }
                 }
@@ -36,7 +47,7 @@ final class ShareViewController: UIViewController {
 
             let trimmed = capturedText.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !trimmed.isEmpty else {
-                completeRequest()
+                context.completeRequest(returningItems: nil)
                 return
             }
 
@@ -53,11 +64,7 @@ final class ShareViewController: UIViewController {
                 FNLog.share.error("Failed to save shared content: \(error)")
             }
 
-            completeRequest()
+            context.completeRequest(returningItems: nil)
         }
-    }
-
-    private func completeRequest() {
-        extensionContext?.completeRequest(returningItems: nil)
     }
 }

@@ -36,7 +36,7 @@ struct AudioPlaybackView: View {
         .padding(AppSpacing.sm)
         .background(AppColors.cardBackground, in: RoundedRectangle(cornerRadius: AppBorderRadius.md))
         .onAppear { setupPlayer() }
-        .onDisappear { stopPlayback() }
+        .onDisappear { tearDown() }
     }
 
     private func setupPlayer() {
@@ -61,25 +61,19 @@ struct AudioPlaybackView: View {
     private func startPlayback() {
         player?.play()
         isPlaying = true
-        // Capture player in a local to avoid capturing self in the timer closure
-        let currentPlayer = player
-        displayLink = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak currentPlayer] _ in
-            guard let currentPlayer else {
+        displayLink = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+            guard let player, player.isPlaying else {
                 stopPlayback()
                 return
             }
-            progress = currentPlayer.currentTime
-            if !currentPlayer.isPlaying {
-                stopPlayback()
-            }
+            progress = player.currentTime
         }
     }
 
     private func pausePlayback() {
         player?.pause()
         isPlaying = false
-        displayLink?.invalidate()
-        displayLink = nil
+        invalidateTimer()
     }
 
     private func stopPlayback() {
@@ -87,6 +81,16 @@ struct AudioPlaybackView: View {
         player?.currentTime = 0
         isPlaying = false
         progress = 0
+        invalidateTimer()
+    }
+
+    private func tearDown() {
+        invalidateTimer()
+        player?.stop()
+        player = nil
+    }
+
+    private func invalidateTimer() {
         displayLink?.invalidate()
         displayLink = nil
     }

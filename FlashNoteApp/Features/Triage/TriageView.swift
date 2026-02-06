@@ -32,6 +32,7 @@ struct TriageView: View {
                         DependencyContainer.shared.hapticService.triageAction()
                         viewModel.performAction(action, context: modelContext)
                     }
+                    .id(note.id)
                 }
                 .padding(.horizontal, AppSpacing.screenHorizontal)
 

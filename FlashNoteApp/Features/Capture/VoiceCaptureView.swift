@@ -11,6 +11,7 @@ struct VoiceCaptureView: View {
     @State private var audioDuration: TimeInterval?
     @State private var confidence: Float?
     @State private var voiceService: OnDeviceVoiceCaptureService?
+    @State private var errorMessage: String?
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -72,14 +73,25 @@ struct VoiceCaptureView: View {
                     Button("Cancel") { dismiss() }
                 }
             }
+            .alert("Voice Capture Error", isPresented: .init(
+                get: { errorMessage != nil },
+                set: { if !$0 { errorMessage = nil } }
+            )) {
+                Button("OK") { errorMessage = nil }
+            } message: {
+                if let errorMessage {
+                    Text(errorMessage)
+                }
+            }
         }
     }
 
     private func startRecording() {
+        errorMessage = nil
         let service = OnDeviceVoiceCaptureService()
         self.voiceService = service
 
-        Task {
+        Task { @MainActor in
             do {
                 let stream = try await service.startCapture()
                 isRecording = true
@@ -96,15 +108,26 @@ struct VoiceCaptureView: View {
                     }
                 }
                 isRecording = false
+            } catch let error as VoiceCaptureError {
+                isRecording = false
+                switch error {
+                case .notAuthorized:
+                    errorMessage = "Microphone or speech recognition permission is required. Enable it in Settings."
+                case .recognizerUnavailable:
+                    errorMessage = "Speech recognition is not available on this device."
+                case .alreadyCapturing:
+                    errorMessage = "A recording is already in progress."
+                }
             } catch {
                 FNLog.voice.error("Voice capture failed: \(error)")
                 isRecording = false
+                errorMessage = "Voice capture failed. Please try again."
             }
         }
     }
 
     private func stopRecording() {
-        Task {
+        Task { @MainActor in
             if let result = await voiceService?.stopCapture() {
                 audioDuration = result.audioDuration
             }
