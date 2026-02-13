@@ -27,23 +27,24 @@ enum BufferSyncService {
             context.insert(note)
         }
 
-        // Clear the file buffer FIRST to prevent double-flush if clear() fails.
-        // If the clear succeeds but save() fails, entries are lost — but that's
-        // preferable to duplicating entries on every foreground launch.
+        // Save to SwiftData FIRST. If save fails, rollback the inserts and leave
+        // the buffer intact so entries survive for the next flush attempt.
+        // Lost thoughts are unrecoverable; duplicate entries can be cleaned up.
         do {
-            try buffer.clear()
+            try context.save()
         } catch {
-            FNLog.sync.error("Failed to clear buffer, aborting flush to avoid duplicates: \(error)")
+            FNLog.sync.error("Failed to save flushed entries, rolling back — will retry next launch: \(error)")
+            context.rollback()
             return
         }
 
+        // Save succeeded — now clear the buffer. If clear fails, next flush may
+        // re-insert duplicates, but that's far better than losing data.
         do {
-            try context.save()
+            try buffer.clear()
             FNLog.sync.info("Successfully flushed \(entries.count) entries")
         } catch {
-            // Buffer is already cleared; entries are in the context but unsaved.
-            // SwiftData will retry on next save() call.
-            FNLog.sync.error("Failed to save flushed entries (buffer already cleared): \(error)")
+            FNLog.sync.error("Buffer clear failed after successful save — duplicates possible on next flush: \(error)")
         }
     }
 }

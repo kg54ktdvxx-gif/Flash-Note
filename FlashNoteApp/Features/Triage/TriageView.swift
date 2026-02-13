@@ -7,44 +7,51 @@ struct TriageView: View {
     @State private var viewModel = TriageViewModel()
 
     var body: some View {
-        VStack(spacing: AppSpacing.md) {
-            TriageProgressBar(progress: viewModel.progress, remaining: viewModel.remaining)
-                .padding(.horizontal, AppSpacing.screenHorizontal)
+        ZStack {
+            AppColors.darkBackground
+                .ignoresSafeArea()
 
-            if viewModel.isComplete {
-                triageCompleteView
-            } else if let note = viewModel.currentNote {
-                ZStack {
-                    // Next card preview (behind)
-                    if viewModel.currentIndex + 1 < viewModel.triageNotes.count {
-                        let nextNote = viewModel.triageNotes[viewModel.currentIndex + 1]
-                        GlassCard {
-                            Text(nextNote.previewText)
-                                .font(AppTypography.body)
-                                .foregroundStyle(AppColors.textSecondary)
-                                .lineLimit(3)
+            VStack(spacing: AppSpacing.md) {
+                TriageProgressBar(progress: viewModel.progress, remaining: viewModel.remaining)
+                    .padding(.horizontal, AppSpacing.screenHorizontal)
+
+                if viewModel.isComplete {
+                    triageCompleteView
+                } else if let note = viewModel.currentNote {
+                    ZStack {
+                        // Next card preview (behind)
+                        if viewModel.currentIndex + 1 < viewModel.triageNotes.count {
+                            let nextNote = viewModel.triageNotes[viewModel.currentIndex + 1]
+                            GlassCard {
+                                Text(nextNote.previewText)
+                                    .font(AppTypography.body)
+                                    .foregroundStyle(AppColors.textSecondary)
+                                    .lineLimit(3)
+                            }
+                            .scaleEffect(0.95)
+                            .opacity(0.5)
                         }
-                        .scaleEffect(0.95)
-                        .opacity(0.5)
-                    }
 
-                    TriageCardView(note: note) { action in
-                        DependencyContainer.shared.hapticService.triageAction()
-                        viewModel.performAction(action, context: modelContext)
+                        TriageCardView(note: note) { action in
+                            DependencyContainer.shared.hapticService.triageAction()
+                            viewModel.performAction(action, context: modelContext)
+                        }
+                        .id(note.id)
                     }
-                    .id(note.id)
+                    .padding(.horizontal, AppSpacing.screenHorizontal)
+
+                    // Swipe legend
+                    swipeLegend
                 }
-                .padding(.horizontal, AppSpacing.screenHorizontal)
 
-                // Swipe legend
-                swipeLegend
+                Spacer()
             }
-
-            Spacer()
+            .padding(.top, AppSpacing.md)
         }
-        .padding(.top, AppSpacing.md)
         .navigationTitle("Triage")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(AppColors.darkSurface, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {

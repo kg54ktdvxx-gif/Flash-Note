@@ -36,4 +36,17 @@ public enum AppGroupContainer {
     public static func audioFileURL(for fileName: String) -> URL {
         audioDirectory.appendingPathComponent(fileName)
     }
+
+    /// Deletes an audio file from the shared Audio directory.
+    /// Returns silently if the file doesn't exist (already cleaned or never created).
+    public static func deleteAudioFile(named fileName: String) {
+        let url = audioFileURL(for: fileName)
+        guard FileManager.default.fileExists(atPath: url.path) else { return }
+        do {
+            try FileManager.default.removeItem(at: url)
+            FNLog.voice.debug("Deleted audio file: \(fileName)")
+        } catch {
+            FNLog.voice.error("Failed to delete audio file '\(fileName)': \(error)")
+        }
+    }
 }
