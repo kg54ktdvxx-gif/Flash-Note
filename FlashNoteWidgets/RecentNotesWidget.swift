@@ -50,36 +50,57 @@ struct RecentNotesWidgetView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Image(systemName: "tray.fill")
-                    .foregroundStyle(.blue)
-                Text("Recent Notes")
-                    .font(.system(.caption, design: .rounded))
-                    .fontWeight(.semibold)
+            // Header — editorial section style
+            HStack(spacing: 0) {
+                Text("INBOX")
+                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                    .tracking(2)
+                    .foregroundStyle(.secondary)
+
                 Spacer()
+
+                Text("\(entry.notes.count)")
+                    .font(.system(size: 10, weight: .medium, design: .monospaced))
+                    .foregroundStyle(WidgetColors.accent)
             }
 
+            // Thin rule
+            Rectangle()
+                .fill(.primary)
+                .frame(height: 1)
+
             if entry.notes.isEmpty {
+                Spacer()
                 Text("No notes yet")
-                    .font(.system(.caption2, design: .rounded))
+                    .font(.system(.caption, design: .serif))
                     .foregroundStyle(.secondary)
+                Spacer()
             } else {
                 ForEach(entry.notes) { note in
                     VStack(alignment: .leading, spacing: 2) {
                         Text(note.text)
-                            .font(.system(.caption, design: .rounded))
+                            .font(.system(.caption, design: .default))
+                            .foregroundStyle(.primary)
                             .lineLimit(1)
 
                         Text(note.timeAgo)
-                            .font(.system(.caption2, design: .rounded))
-                            .foregroundStyle(.secondary)
+                            .font(.system(size: 10, design: .monospaced))
+                            .foregroundStyle(.tertiary)
+                    }
+
+                    if note.id != entry.notes.last?.id {
+                        Rectangle()
+                            .fill(.quaternary)
+                            .frame(height: 0.5)
                     }
                 }
             }
 
             Spacer(minLength: 0)
         }
-        .containerBackground(.fill.tertiary, for: .widget)
+        .containerBackground(for: .widget) {
+            Color(WidgetColors.background)
+        }
     }
 }
 

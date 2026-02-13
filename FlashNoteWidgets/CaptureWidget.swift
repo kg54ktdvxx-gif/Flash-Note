@@ -28,18 +28,28 @@ struct CaptureWidgetView: View {
 
     var body: some View {
         Link(destination: Self.captureURL) {
-            VStack(spacing: 8) {
-                Image(systemName: "plus.circle.fill")
-                    .font(.system(size: 36))
-                    .foregroundStyle(.blue)
-
-                Text("Capture")
-                    .font(.system(.headline, design: .rounded))
+            VStack(spacing: 10) {
+                // Editorial "Write" prompt — serif, bold
+                Text("Write")
+                    .font(.system(.title2, design: .serif, weight: .bold))
                     .foregroundStyle(.primary)
+
+                // Vermillion accent line
+                Rectangle()
+                    .fill(WidgetColors.accent)
+                    .frame(width: 20, height: 1.5)
+
+                // Monospace hint
+                Text("TAP TO CAPTURE")
+                    .font(.system(size: 9, weight: .medium, design: .monospaced))
+                    .tracking(1.5)
+                    .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .containerBackground(.fill.tertiary, for: .widget)
+        .containerBackground(for: .widget) {
+            Color(WidgetColors.background)
+        }
     }
 }
 
