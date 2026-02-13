@@ -14,42 +14,38 @@ struct InboxView: View {
 
     @State private var viewModel = InboxViewModel()
     @State private var selectedNote: Note?
+    @State private var showSearch = false
+    @FocusState private var searchFocused: Bool
 
     var body: some View {
         NavigationStack {
-            ZStack {
-                AppColors.inboxBackground
-                    .ignoresSafeArea()
+            VStack(spacing: 0) {
+                // Editorial inline header — search + triage
+                inboxHeader
 
-                Group {
-                    if viewModel.isSearchActive && displayedNotes.isEmpty {
-                        ContentUnavailableView.search(text: viewModel.searchText)
-                    } else if notes.isEmpty && !viewModel.isSearchActive {
-                        EmptyInboxView()
-                    } else {
-                        notesList
-                    }
+                EditorialRule()
+
+                // Inline search field (toggled)
+                if showSearch {
+                    searchField
+                    EditorialRule()
+                }
+
+                // Content
+                if viewModel.isSearchActive && displayedNotes.isEmpty {
+                    Spacer()
+                    Text("No results for \"\(viewModel.searchText)\"")
+                        .font(AppTypography.body)
+                        .foregroundStyle(AppColors.textTertiary)
+                    Spacer()
+                } else if notes.isEmpty && !viewModel.isSearchActive {
+                    EmptyInboxView()
+                } else {
+                    notesList
                 }
             }
-            .navigationTitle("Inbox")
-            .toolbarBackground(AppColors.background, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .searchable(text: $viewModel.searchText, prompt: "Search...")
-            .onChange(of: viewModel.searchText) {
-                viewModel.search(in: modelContext)
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        TriageView()
-                    } label: {
-                        Text("TRIAGE")
-                            .font(AppTypography.captionSmall)
-                            .tracking(1)
-                            .foregroundStyle(AppColors.accent)
-                    }
-                }
-            }
+            .background(AppColors.background)
+            .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(item: $selectedNote) { note in
                 NoteDetailView(note: note)
             }
@@ -65,6 +61,65 @@ struct InboxView: View {
             }
         }
     }
+
+    // MARK: - Inline Header
+
+    private var inboxHeader: some View {
+        HStack {
+            // Search toggle
+            Button {
+                withAnimation(.easeInOut(duration: 0.15)) {
+                    showSearch.toggle()
+                    if showSearch {
+                        searchFocused = true
+                    } else {
+                        viewModel.searchText = ""
+                        searchFocused = false
+                    }
+                }
+            } label: {
+                Image(systemName: showSearch ? "xmark" : "magnifyingglass")
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(showSearch ? AppColors.textSecondary : AppColors.textTertiary)
+            }
+
+            Spacer()
+
+            // Triage link
+            NavigationLink {
+                TriageView()
+            } label: {
+                Text("TRIAGE")
+                    .font(AppTypography.captionSmall)
+                    .tracking(1)
+                    .foregroundStyle(AppColors.accent)
+            }
+        }
+        .padding(.horizontal, AppSpacing.screenHorizontal)
+        .padding(.vertical, 8)
+    }
+
+    private var searchField: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 12))
+                .foregroundStyle(AppColors.textTertiary)
+
+            TextField("Search notes...", text: $viewModel.searchText)
+                .font(AppTypography.body)
+                .foregroundStyle(AppColors.textPrimary)
+                .focused($searchFocused)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+                .onChange(of: viewModel.searchText) {
+                    viewModel.search(in: modelContext)
+                }
+        }
+        .padding(.horizontal, AppSpacing.screenHorizontal)
+        .padding(.vertical, 8)
+    }
+
+    // MARK: - Notes List
 
     private var displayedNotes: [Note] {
         viewModel.isSearchActive ? viewModel.searchResults : notes
@@ -102,7 +157,6 @@ struct InboxView: View {
                             noteRow(note)
                         }
                     } header: {
-                        // Editorial section header: uppercase monospace
                         Text(section.title)
                             .font(AppTypography.sectionHeader)
                             .tracking(2)
