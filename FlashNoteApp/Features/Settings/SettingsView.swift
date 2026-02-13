@@ -26,6 +26,11 @@ struct SettingsView: View {
                     }
                 }
 
+                Section("Capture") {
+                    Toggle("Daily Review Reminder", isOn: $viewModel.dailyReflectionEnabled)
+                    Toggle("Shake to Capture", isOn: $viewModel.shakeEnabled)
+                }
+
                 Section("Statistics") {
                     LabeledContent("Total Notes", value: "\(viewModel.noteCount)")
                     LabeledContent("Active", value: "\(viewModel.activeNoteCount)")

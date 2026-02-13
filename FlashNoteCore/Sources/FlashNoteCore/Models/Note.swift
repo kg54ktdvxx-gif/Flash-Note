@@ -19,6 +19,8 @@ public final class Note {
     public var isTask: Bool
     public var isTaskCompleted: Bool
     public var spotlightID: String?
+    public var isPinned: Bool
+    public var pinnedAt: Date?
 
     @Transient
     public var status: NoteStatus {
@@ -39,6 +41,11 @@ public final class Note {
     }
 
     @Transient
+    public var wordCount: Int {
+        text.split(whereSeparator: \.isWhitespace).count
+    }
+
+    @Transient
     public var previewText: String {
         if text.count <= 100 { return text }
         return String(text.prefix(100)) + "..."
@@ -47,6 +54,12 @@ public final class Note {
     @Transient
     public var relativeTimestamp: String {
         DateHelpers.relativeString(from: createdAt)
+    }
+
+    public func togglePin() {
+        isPinned.toggle()
+        pinnedAt = isPinned ? .now : nil
+        updatedAt = .now
     }
 
     public init(
@@ -72,5 +85,7 @@ public final class Note {
         self.isTask = false
         self.isTaskCompleted = false
         self.spotlightID = nil
+        self.isPinned = false
+        self.pinnedAt = nil
     }
 }

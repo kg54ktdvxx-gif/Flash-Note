@@ -13,6 +13,19 @@ final class SettingsViewModel {
     var quietHoursEnabled: Bool {
         didSet { UserDefaults.standard.set(quietHoursEnabled, forKey: "quietHoursEnabled") }
     }
+    var dailyReflectionEnabled: Bool {
+        didSet {
+            UserDefaults.standard.set(dailyReflectionEnabled, forKey: "dailyReflectionEnabled")
+            if dailyReflectionEnabled {
+                ResurfacingScheduler.scheduleDailyReflection()
+            } else {
+                ResurfacingScheduler.cancelDailyReflection()
+            }
+        }
+    }
+    var shakeEnabled: Bool {
+        didSet { UserDefaults.standard.set(shakeEnabled, forKey: "shakeEnabled") }
+    }
 
     var noteCount = 0
     var activeNoteCount = 0
@@ -24,6 +37,8 @@ final class SettingsViewModel {
         self.resurfacingEnabled = UserDefaults.standard.object(forKey: "resurfacingEnabled") as? Bool ?? true
         self.maxDailyNotifications = UserDefaults.standard.object(forKey: "maxDailyNotifications") as? Int ?? 3
         self.quietHoursEnabled = UserDefaults.standard.object(forKey: "quietHoursEnabled") as? Bool ?? true
+        self.dailyReflectionEnabled = UserDefaults.standard.object(forKey: "dailyReflectionEnabled") as? Bool ?? false
+        self.shakeEnabled = UserDefaults.standard.object(forKey: "shakeEnabled") as? Bool ?? true
     }
 
     func loadStats(context: ModelContext) {

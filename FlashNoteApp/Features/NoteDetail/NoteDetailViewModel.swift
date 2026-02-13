@@ -38,10 +38,24 @@ final class NoteDetailViewModel {
         SpotlightIndexer.remove(noteID: note.id)
         ResurfacingScheduler.cancelResurfacing(for: note.id)
 
+        if let audioFileName = note.audioFileName {
+            AppGroupContainer.deleteAudioFile(named: audioFileName)
+        }
+
         do {
             try context.save()
         } catch {
             FNLog.capture.error("Failed to delete note: \(error)")
+        }
+    }
+
+    func togglePin(context: ModelContext) {
+        note.togglePin()
+
+        do {
+            try context.save()
+        } catch {
+            FNLog.capture.error("Failed to toggle pin: \(error)")
         }
     }
 

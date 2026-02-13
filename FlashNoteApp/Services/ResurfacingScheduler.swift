@@ -93,4 +93,65 @@ enum ResurfacingScheduler {
             center.removePendingNotificationRequests(withIdentifiers: ids)
         }
     }
+
+    // MARK: - Daily Reflection (Feature 8)
+
+    private static let dailyReflectionIdentifier = "flashnote-daily-reflection"
+    private static let dailyReflectionCategoryIdentifier = "FLASHNOTE_DAILY_REFLECTION"
+
+    static func registerDailyReflectionCategory() {
+        let openTriageAction = UNNotificationAction(
+            identifier: "OPEN_TRIAGE",
+            title: "Review Notes",
+            options: .foreground
+        )
+
+        let category = UNNotificationCategory(
+            identifier: dailyReflectionCategoryIdentifier,
+            actions: [openTriageAction],
+            intentIdentifiers: [],
+            hiddenPreviewsBodyPlaceholder: "Review yesterday's captures"
+        )
+
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationCategories { existing in
+            var categories = existing
+            categories.insert(category)
+            center.setNotificationCategories(categories)
+        }
+    }
+
+    static func scheduleDailyReflection() {
+        let content = UNMutableNotificationContent()
+        content.title = "Yesterday's thoughts"
+        content.body = "Tap to review and triage your captures"
+        content.categoryIdentifier = dailyReflectionCategoryIdentifier
+        content.sound = .default
+
+        // Schedule at 8am daily
+        var dateComponents = DateComponents()
+        dateComponents.hour = 8
+        dateComponents.minute = 0
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+
+        let request = UNNotificationRequest(
+            identifier: dailyReflectionIdentifier,
+            content: content,
+            trigger: trigger
+        )
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error {
+                FNLog.resurfacing.error("Failed to schedule daily reflection: \(error)")
+            } else {
+                FNLog.resurfacing.info("Daily reflection notification scheduled at 8am")
+            }
+        }
+    }
+
+    static func cancelDailyReflection() {
+        UNUserNotificationCenter.current()
+            .removePendingNotificationRequests(withIdentifiers: [dailyReflectionIdentifier])
+    }
 }
