@@ -9,7 +9,7 @@ struct MergePromptBanner: View {
     var body: some View {
         if isVisible {
             HStack(spacing: AppSpacing.xs) {
-                Text("Combine with previous note?")
+                Text("Combine with previous?")
                     .font(AppTypography.caption)
                     .foregroundStyle(AppColors.textSecondary)
 
@@ -19,9 +19,10 @@ struct MergePromptBanner: View {
                     onMerge()
                     dismiss()
                 } label: {
-                    Text("Merge")
-                        .font(AppTypography.caption)
-                        .foregroundStyle(AppColors.primary)
+                    Text("MERGE")
+                        .font(AppTypography.captionSmall)
+                        .tracking(1)
+                        .foregroundStyle(AppColors.accent)
                 }
 
                 Button {
@@ -29,15 +30,22 @@ struct MergePromptBanner: View {
                     dismiss()
                 } label: {
                     Image(systemName: "xmark")
-                        .font(.caption2)
+                        .font(.system(size: 10, weight: .medium))
                         .foregroundStyle(AppColors.textTertiary)
                 }
             }
             .padding(.horizontal, AppSpacing.md)
             .padding(.vertical, AppSpacing.xs)
-            .background(AppColors.darkElevated, in: RoundedRectangle(cornerRadius: AppBorderRadius.md))
+            .background(
+                RoundedRectangle(cornerRadius: AppBorderRadius.md)
+                    .fill(AppColors.surface)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: AppBorderRadius.md)
+                            .stroke(AppColors.border, lineWidth: 0.5)
+                    )
+            )
             .padding(.horizontal, AppSpacing.screenHorizontal)
-            .transition(.move(edge: .top).combined(with: .opacity))
+            .transition(.move(edge: .bottom).combined(with: .opacity))
             .onAppear {
                 dismissTask = Task { @MainActor in
                     try? await Task.sleep(for: .seconds(5))

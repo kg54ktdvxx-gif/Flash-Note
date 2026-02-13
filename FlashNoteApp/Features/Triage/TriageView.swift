@@ -8,7 +8,7 @@ struct TriageView: View {
 
     var body: some View {
         ZStack {
-            AppColors.darkBackground
+            AppColors.background
                 .ignoresSafeArea()
 
             VStack(spacing: AppSpacing.md) {
@@ -25,11 +25,11 @@ struct TriageView: View {
                             GlassCard {
                                 Text(nextNote.previewText)
                                     .font(AppTypography.body)
-                                    .foregroundStyle(AppColors.textSecondary)
+                                    .foregroundStyle(AppColors.textTertiary)
                                     .lineLimit(3)
                             }
-                            .scaleEffect(0.95)
-                            .opacity(0.5)
+                            .scaleEffect(0.97)
+                            .opacity(0.4)
                         }
 
                         TriageCardView(note: note) { action in
@@ -40,7 +40,7 @@ struct TriageView: View {
                     }
                     .padding(.horizontal, AppSpacing.screenHorizontal)
 
-                    // Swipe legend
+                    // Swipe legend — monospace, understated
                     swipeLegend
                 }
 
@@ -50,14 +50,17 @@ struct TriageView: View {
         }
         .navigationTitle("Triage")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(AppColors.darkSurface, for: .navigationBar)
+        .toolbarBackground(AppColors.background, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     viewModel.undo(context: modelContext)
                 } label: {
-                    Image(systemName: "arrow.uturn.backward")
+                    Text("UNDO")
+                        .font(AppTypography.captionSmall)
+                        .tracking(1)
+                        .foregroundStyle(viewModel.undoStack.isEmpty ? AppColors.textTertiary : AppColors.textSecondary)
                 }
                 .disabled(viewModel.undoStack.isEmpty)
             }
@@ -68,28 +71,34 @@ struct TriageView: View {
     }
 
     private var triageCompleteView: some View {
-        ContentUnavailableView {
-            Label("All Caught Up", systemImage: "checkmark.seal.fill")
-        } description: {
-            Text("You've triaged all your recent notes. Nice work!")
+        VStack(spacing: AppSpacing.md) {
+            Spacer()
+
+            Text("All caught up")
+                .font(AppTypography.title2)
+                .foregroundStyle(AppColors.textPrimary)
+
+            Text("Every note has been triaged.")
                 .font(AppTypography.body)
+                .foregroundStyle(AppColors.textTertiary)
+
+            Spacer()
         }
-        .padding(.top, AppSpacing.xxxl)
     }
 
     private var swipeLegend: some View {
         HStack(spacing: AppSpacing.xl) {
-            legendItem(icon: "arrow.left", label: "Archive", color: AppColors.archiveGray)
-            legendItem(icon: "arrow.up", label: "Task", color: AppColors.taskOrange)
-            legendItem(icon: "arrow.right", label: "Keep", color: AppColors.keepGreen)
+            legendItem(direction: "\u{2190}", label: "archive", color: AppColors.archiveGray)
+            legendItem(direction: "\u{2191}", label: "task", color: AppColors.taskOrange)
+            legendItem(direction: "\u{2192}", label: "keep", color: AppColors.keepGreen)
         }
-        .font(AppTypography.caption)
+        .font(AppTypography.captionSmall)
         .padding(.top, AppSpacing.sm)
     }
 
-    private func legendItem(icon: String, label: String, color: Color) -> some View {
-        VStack(spacing: AppSpacing.xxxs) {
-            Image(systemName: icon)
+    private func legendItem(direction: String, label: String, color: Color) -> some View {
+        HStack(spacing: 4) {
+            Text(direction)
                 .foregroundStyle(color)
             Text(label)
                 .foregroundStyle(AppColors.textTertiary)

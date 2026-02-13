@@ -25,34 +25,39 @@ struct TriageCardView: View {
                 .padding(.horizontal, AppSpacing.xl)
             }
 
-            // The card itself
+            // The card
             GlassCard {
                 VStack(alignment: .leading, spacing: AppSpacing.sm) {
                     Text(note.text)
-                        .font(AppTypography.body)
+                        .font(.system(.body, design: .serif))
                         .foregroundStyle(AppColors.textPrimary)
                         .lineLimit(8)
+                        .lineSpacing(3)
 
-                    HStack {
-                        Label(note.source.displayName, systemImage: note.source.iconName)
-                            .font(AppTypography.caption)
+                    EditorialRule()
+
+                    HStack(spacing: 0) {
+                        Text(note.source.displayName.lowercased())
+                            .foregroundStyle(AppColors.textTertiary)
+
+                        Text(" \u{00B7} ")
+                            .foregroundStyle(AppColors.textTertiary)
+
+                        Text(note.relativeTimestamp)
                             .foregroundStyle(AppColors.textTertiary)
 
                         Spacer()
-
-                        Text(note.relativeTimestamp)
-                            .font(AppTypography.caption)
-                            .foregroundStyle(AppColors.textTertiary)
                     }
+                    .font(AppTypography.captionSmall)
                 }
             }
             .offset(x: offset.width, y: verticalOffset)
-            .rotationEffect(.degrees(Double(offset.width / 20)))
+            .rotationEffect(.degrees(Double(offset.width / 25)))
             .gesture(
                 DragGesture()
                     .onChanged { gesture in
                         offset = gesture.translation
-                        verticalOffset = min(gesture.translation.height, 0) // Only allow upward
+                        verticalOffset = min(gesture.translation.height, 0)
 
                         let isPastAction = abs(gesture.translation.width) > 30
                             || gesture.translation.height < -30
@@ -81,7 +86,7 @@ struct TriageCardView: View {
                         } else if gesture.translation.height < verticalThreshold {
                             completeSwipe(.task)
                         } else {
-                            withAnimation(.spring()) {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                                 offset = .zero
                                 verticalOffset = 0
                             }
@@ -115,15 +120,12 @@ struct TriageCardView: View {
             flyAway = CGSize(width: 0, height: -500)
         }
 
-        withAnimation(.easeIn(duration: 0.25)) {
+        withAnimation(.easeIn(duration: 0.2)) {
             offset = flyAway
             if action == .task { verticalOffset = -500 }
         }
 
-        // Reset state synchronously before notifying parent.
-        // Parent should use .id(note.id) on TriageCardView so SwiftUI
-        // creates a fresh view (with fresh @State) for the next card.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             offset = .zero
             verticalOffset = 0
             onAction(action)

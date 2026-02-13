@@ -4,30 +4,36 @@ import UIKit
 struct CaptureTextField: UIViewRepresentable {
     @Binding var text: String
     var placeholder: String = "What's on your mind?"
-    var font: UIFont = .preferredFont(forTextStyle: .title3)
     var onSubmit: (() -> Void)?
     var autoFocus: Bool = true
 
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView()
         textView.delegate = context.coordinator
-        textView.font = UIFont.systemFont(
-            ofSize: font.pointSize,
-            weight: .regular
-        ).rounded()
+
+        // Editorial serif font for the writing surface
+        let baseFont = UIFont.preferredFont(forTextStyle: .title3)
+        textView.font = UIFont.systemFont(ofSize: baseFont.pointSize, weight: .regular).withSerif()
+
         textView.backgroundColor = .clear
-        textView.textContainerInset = UIEdgeInsets(top: 8, left: 4, bottom: 8, right: 4)
+        textView.textContainerInset = UIEdgeInsets(top: 12, left: 4, bottom: 12, right: 4)
         textView.isScrollEnabled = true
         textView.alwaysBounceVertical = true
         textView.keyboardDismissMode = .interactive
         textView.returnKeyType = .default
-        textView.textColor = .white
-        textView.keyboardAppearance = .dark
+        textView.tintColor = UIColor(AppColors.accent)
+
+        // Adaptive text color
+        textView.textColor = UIColor.label
+        textView.keyboardAppearance = .default
+
+        // Keyboard toolbar with Done button
+        textView.inputAccessoryView = makeKeyboardToolbar(coordinator: context.coordinator)
 
         // Placeholder setup
         if text.isEmpty {
             textView.text = placeholder
-            textView.textColor = UIColor.white.withAlphaComponent(0.45)
+            textView.textColor = Self.placeholderColor
         } else {
             textView.text = text
         }
@@ -43,7 +49,30 @@ struct CaptureTextField: UIViewRepresentable {
         return textView
     }
 
-    private static let placeholderColor = UIColor.white.withAlphaComponent(0.45)
+    private func makeKeyboardToolbar(coordinator: Coordinator) -> UIToolbar {
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 0, height: 36))
+        toolbar.barStyle = .default
+
+        // Transparent, minimal styling
+        toolbar.setShadowImage(UIImage(), forToolbarPosition: .any)
+
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+
+        let doneButton = UIBarButtonItem(
+            title: "Done",
+            style: .prominent,
+            target: coordinator,
+            action: #selector(Coordinator.dismissKeyboard)
+        )
+        doneButton.setTitleTextAttributes([
+            .font: UIFont.monospacedSystemFont(ofSize: 13, weight: .medium)
+        ], for: .normal)
+
+        toolbar.items = [spacer, doneButton]
+        return toolbar
+    }
+
+    private static let placeholderColor = UIColor.tertiaryLabel
 
     func updateUIView(_ textView: UITextView, context: Context) {
         // Skip if this update was triggered by our own delegate callback
@@ -57,7 +86,7 @@ struct CaptureTextField: UIViewRepresentable {
             textView.textColor = Self.placeholderColor
         } else if textView.textColor == Self.placeholderColor && !text.isEmpty {
             textView.text = text
-            textView.textColor = .white
+            textView.textColor = .label
         } else if textView.text != text && textView.textColor != Self.placeholderColor {
             textView.text = text
         }
@@ -93,19 +122,21 @@ struct CaptureTextField: UIViewRepresentable {
             }
         }
 
-        private static let placeholderColor = UIColor.white.withAlphaComponent(0.45)
+        @objc func dismissKeyboard() {
+            textView?.resignFirstResponder()
+        }
 
         func textViewDidBeginEditing(_ textView: UITextView) {
-            if textView.textColor == Self.placeholderColor {
+            if textView.textColor == CaptureTextField.placeholderColor {
                 textView.text = ""
-                textView.textColor = .white
+                textView.textColor = .label
             }
         }
 
         func textViewDidEndEditing(_ textView: UITextView) {
             if textView.text.isEmpty {
                 textView.text = placeholder
-                textView.textColor = Self.placeholderColor
+                textView.textColor = CaptureTextField.placeholderColor
             }
         }
 
@@ -119,8 +150,8 @@ struct CaptureTextField: UIViewRepresentable {
 }
 
 private extension UIFont {
-    func rounded() -> UIFont {
-        guard let descriptor = fontDescriptor.withDesign(.rounded) else { return self }
+    func withSerif() -> UIFont {
+        guard let descriptor = fontDescriptor.withDesign(.serif) else { return self }
         return UIFont(descriptor: descriptor, size: pointSize)
     }
 }

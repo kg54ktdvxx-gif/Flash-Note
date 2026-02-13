@@ -32,9 +32,9 @@ struct InboxView: View {
                 }
             }
             .navigationTitle("Inbox")
-            .toolbarBackground(AppColors.darkSurface, for: .navigationBar)
+            .toolbarBackground(AppColors.background, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
-            .searchable(text: $viewModel.searchText, prompt: "Search notes...")
+            .searchable(text: $viewModel.searchText, prompt: "Search...")
             .onChange(of: viewModel.searchText) {
                 viewModel.search(in: modelContext)
             }
@@ -43,8 +43,10 @@ struct InboxView: View {
                     NavigationLink {
                         TriageView()
                     } label: {
-                        Image(systemName: "rectangle.stack")
-                            .foregroundStyle(AppColors.primary)
+                        Text("TRIAGE")
+                            .font(AppTypography.captionSmall)
+                            .tracking(1)
+                            .foregroundStyle(AppColors.accent)
                     }
                 }
             }
@@ -78,32 +80,32 @@ struct InboxView: View {
 
     private var notesList: some View {
         List {
-            // Capture streak banner (only when not searching, streak >= 2)
+            // Capture streak banner
             if !viewModel.isSearchActive && captureStreak >= 2 {
                 HStack(spacing: AppSpacing.xxs) {
-                    Text("\(captureStreak) day streak")
+                    Text("\(captureStreak)-day streak")
                         .font(AppTypography.caption)
-                        .foregroundStyle(AppColors.textSecondary)
+                        .foregroundStyle(AppColors.textTertiary)
                 }
                 .listRowBackground(Color.clear)
                 .listRowSeparator(.hidden)
             }
 
             if viewModel.isSearchActive {
-                // Flat list for search results
                 ForEach(displayedNotes) { note in
                     noteRow(note)
                 }
             } else {
-                // Time-grouped sections
                 ForEach(sections) { section in
                     Section {
                         ForEach(section.notes) { note in
                             noteRow(note)
                         }
                     } header: {
+                        // Editorial section header: uppercase monospace
                         Text(section.title)
-                            .font(AppTypography.caption)
+                            .font(AppTypography.sectionHeader)
+                            .tracking(2)
                             .foregroundStyle(AppColors.textTertiary)
                             .textCase(.uppercase)
                     }
@@ -113,7 +115,6 @@ struct InboxView: View {
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .refreshable {
-            // Sync any pending buffer entries and trigger haptic
             BufferSyncService.flush(to: modelContext)
             DependencyContainer.shared.hapticService.lightTap()
         }
@@ -125,14 +126,15 @@ struct InboxView: View {
         } label: {
             NoteRowView(note: note)
         }
-        .listRowBackground(AppColors.cardBackground)
+        .listRowBackground(AppColors.background)
+        .listRowSeparatorTint(AppColors.divider)
         .swipeActions(edge: .leading) {
             Button {
                 viewModel.togglePin(note, context: modelContext)
             } label: {
                 Label(note.isPinned ? "Unpin" : "Pin", systemImage: note.isPinned ? "pin.slash" : "pin")
             }
-            .tint(AppColors.primary)
+            .tint(AppColors.textPrimary)
         }
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
             Button {

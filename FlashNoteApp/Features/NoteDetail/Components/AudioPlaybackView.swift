@@ -14,29 +14,43 @@ struct AudioPlaybackView: View {
 
     var body: some View {
         VStack(spacing: AppSpacing.xs) {
-            ProgressView(value: progress, total: max(duration, 1))
-                .tint(AppColors.primary)
+            // Progress bar — thin editorial line
+            GeometryReader { geometry in
+                ZStack(alignment: .leading) {
+                    Rectangle()
+                        .fill(AppColors.border)
+                        .frame(height: 1.5)
+
+                    Rectangle()
+                        .fill(AppColors.accent)
+                        .frame(width: geometry.size.width * (duration > 0 ? progress / duration : 0), height: 1.5)
+                }
+            }
+            .frame(height: 1.5)
 
             HStack {
                 Button {
                     togglePlayback()
                 } label: {
-                    Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
-                        .font(.system(size: 36))
-                        .foregroundStyle(setupFailed ? AppColors.textTertiary : AppColors.primary)
+                    Image(systemName: isPlaying ? "pause" : "play.fill")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(setupFailed ? AppColors.textTertiary : AppColors.textPrimary)
                 }
                 .disabled(setupFailed)
 
                 Spacer()
 
-                Text(setupFailed ? "Audio unavailable" : DateHelpers.durationString(from: progress) + " / " + DateHelpers.durationString(from: duration))
-                    .font(AppTypography.caption)
-                    .foregroundStyle(AppColors.textSecondary)
+                Text(setupFailed ? "unavailable" : DateHelpers.durationString(from: progress) + " / " + DateHelpers.durationString(from: duration))
+                    .font(AppTypography.captionSmall)
+                    .foregroundStyle(AppColors.textTertiary)
                     .monospacedDigit()
             }
         }
         .padding(AppSpacing.sm)
-        .background(AppColors.cardBackground, in: RoundedRectangle(cornerRadius: AppBorderRadius.md))
+        .background(
+            RoundedRectangle(cornerRadius: AppBorderRadius.md)
+                .stroke(AppColors.border, lineWidth: 0.5)
+        )
         .onAppear { setupPlayer() }
         .onDisappear { tearDown() }
     }

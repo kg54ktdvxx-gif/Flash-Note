@@ -16,39 +16,43 @@ struct NoteDetailView: View {
 
     var body: some View {
         ZStack {
-            AppColors.darkBackground
+            AppColors.background
                 .ignoresSafeArea()
 
             ScrollView {
-                VStack(alignment: .leading, spacing: AppSpacing.md) {
-                    // Source badge + timestamp
-                    HStack(spacing: AppSpacing.xs) {
-                        Label(note.source.displayName, systemImage: note.source.iconName)
+                VStack(alignment: .leading, spacing: AppSpacing.lg) {
+                    // Source + timestamp — monospace metadata
+                    HStack(spacing: 0) {
+                        Text(note.source.displayName.lowercased())
                             .font(AppTypography.caption)
-                            .foregroundStyle(AppColors.primary)
-                            .padding(.horizontal, AppSpacing.xs)
-                            .padding(.vertical, AppSpacing.xxxs)
-                            .background(AppColors.primarySoft, in: Capsule())
+                            .foregroundStyle(AppColors.textTertiary)
 
-                        Spacer()
+                        Text(" \u{00B7} ")
+                            .font(AppTypography.caption)
+                            .foregroundStyle(AppColors.textTertiary)
 
                         Text(DateFormatters.fullTimestamp(for: note.createdAt))
                             .font(AppTypography.caption)
                             .foregroundStyle(AppColors.textTertiary)
+
+                        Spacer()
                     }
 
-                    // Note text
+                    EditorialRule()
+
+                    // Note text — serif for reading
                     if viewModel.isEditing {
                         TextEditor(text: $viewModel.editedText)
-                            .font(AppTypography.body)
+                            .font(AppTypography.captureInput)
                             .foregroundStyle(AppColors.textPrimary)
                             .frame(minHeight: 200)
                             .scrollContentBackground(.hidden)
                     } else {
                         Text(note.text)
-                            .font(AppTypography.body)
+                            .font(.system(.body, design: .serif))
                             .foregroundStyle(AppColors.textPrimary)
                             .textSelection(.enabled)
+                            .lineSpacing(4)
                     }
 
                     // Audio playback
@@ -56,26 +60,29 @@ struct NoteDetailView: View {
                         AudioPlaybackView(audioURL: audioURL)
                     }
 
-                    // Metadata
+                    // Edit timestamp
                     if note.updatedAt != note.createdAt {
-                        Text("Edited \(DateFormatters.relativeTimestamp(for: note.updatedAt))")
-                            .font(AppTypography.footnote)
+                        EditorialRule()
+                        Text("edited \(DateFormatters.relativeTimestamp(for: note.updatedAt))")
+                            .font(AppTypography.captionSmall)
                             .foregroundStyle(AppColors.textTertiary)
                     }
                 }
                 .padding(AppSpacing.screenHorizontal)
             }
         }
-        .navigationTitle("Note")
+        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(AppColors.darkSurface, for: .navigationBar)
+        .toolbarBackground(AppColors.background, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 if viewModel.isEditing {
                     Button("Cancel") { viewModel.cancelEdit() }
+                        .foregroundStyle(AppColors.textSecondary)
                     Button("Save") { viewModel.saveEdit(context: modelContext) }
                         .fontWeight(.semibold)
+                        .foregroundStyle(AppColors.accent)
                 } else {
                     Menu {
                         Button {
@@ -116,7 +123,9 @@ struct NoteDetailView: View {
                             Label("Delete", systemImage: "trash")
                         }
                     } label: {
-                        Image(systemName: "ellipsis.circle")
+                        Image(systemName: "ellipsis")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundStyle(AppColors.textSecondary)
                     }
                 }
             }

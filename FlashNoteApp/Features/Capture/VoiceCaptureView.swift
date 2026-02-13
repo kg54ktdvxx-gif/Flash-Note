@@ -23,7 +23,7 @@ struct VoiceCaptureView: View {
                 VoiceWaveformView(audioLevel: audioLevel, isRecording: isRecording)
                     .padding(.horizontal, AppSpacing.xl)
 
-                // Transcription display
+                // Transcription display — serif for editorial feel
                 ScrollView {
                     Text(transcribedText.isEmpty ? "Tap to start speaking..." : transcribedText)
                         .font(AppTypography.captureInput)
@@ -35,7 +35,7 @@ struct VoiceCaptureView: View {
 
                 Spacer()
 
-                // Record button
+                // Record button — sharp circle, accent color
                 Button {
                     if isRecording {
                         stopRecording()
@@ -45,33 +45,42 @@ struct VoiceCaptureView: View {
                 } label: {
                     ZStack {
                         Circle()
-                            .fill(isRecording ? AppColors.deleteRed : AppColors.primary)
-                            .frame(width: 72, height: 72)
+                            .fill(isRecording ? AppColors.accent : AppColors.textPrimary)
+                            .frame(width: 64, height: 64)
 
                         Image(systemName: isRecording ? "stop.fill" : "mic.fill")
-                            .font(.system(size: 28))
-                            .foregroundStyle(.white)
+                            .font(.system(size: 24, weight: .medium))
+                            .foregroundStyle(isRecording ? .white : AppColors.background)
                     }
                 }
                 .padding(.bottom, AppSpacing.lg)
 
-                // Save button (appears after recording)
+                // Save button
                 if !transcribedText.isEmpty && !isRecording {
                     Button {
                         onSave(transcribedText, audioFileName, audioDuration, confidence)
                         dismiss()
                     } label: {
-                        Label("Save Note", systemImage: "checkmark.circle.fill")
+                        HStack(spacing: 6) {
+                            Text("Save")
+                                .font(AppTypography.caption)
+                                .tracking(1)
+                                .textCase(.uppercase)
+                            Image(systemName: "arrow.up")
+                                .font(.system(size: 10, weight: .bold))
+                        }
                     }
                     .buttonStyle(.primary)
                     .padding(.bottom, AppSpacing.lg)
                 }
             }
-            .navigationTitle("Voice Capture")
+            .background(AppColors.background)
+            .navigationTitle("Voice")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
+                        .foregroundStyle(AppColors.textSecondary)
                 }
             }
             .onDisappear { recordingTask?.cancel() }

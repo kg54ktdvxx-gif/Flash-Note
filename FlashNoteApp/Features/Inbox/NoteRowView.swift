@@ -6,11 +6,13 @@ struct NoteRowView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: AppSpacing.xxs) {
-            HStack {
+            // Note text — clean, undecorated
+            HStack(alignment: .top) {
                 if note.isPinned {
-                    Image(systemName: "pin.fill")
-                        .font(.caption2)
-                        .foregroundStyle(AppColors.textTertiary)
+                    Rectangle()
+                        .fill(AppColors.accent)
+                        .frame(width: 2)
+                        .padding(.trailing, 4)
                 }
 
                 Text(note.previewText)
@@ -18,42 +20,45 @@ struct NoteRowView: View {
                     .foregroundStyle(AppColors.textPrimary)
                     .lineLimit(2)
 
-                Spacer()
+                Spacer(minLength: 8)
 
                 if note.audioFileName != nil {
                     Image(systemName: "waveform")
-                        .font(.caption)
+                        .font(.system(size: 10))
                         .foregroundStyle(AppColors.textTertiary)
                 }
             }
 
-            HStack(spacing: AppSpacing.xs) {
-                Image(systemName: note.source.iconName)
-                    .font(.caption2)
+            // Metadata line — monospace, compact
+            HStack(spacing: 0) {
+                Text(note.source.displayName.lowercased())
+                    .foregroundStyle(AppColors.textTertiary)
+
+                Text(" \u{00B7} ")
                     .foregroundStyle(AppColors.textTertiary)
 
                 Text(note.relativeTimestamp)
-                    .font(AppTypography.noteTimestamp)
                     .foregroundStyle(AppColors.textTertiary)
 
-                Text("·")
-                    .font(AppTypography.noteTimestamp)
+                Text(" \u{00B7} ")
                     .foregroundStyle(AppColors.textTertiary)
 
-                Text("\(note.wordCount) words")
-                    .font(AppTypography.noteTimestamp)
+                Text("\(note.wordCount)w")
                     .foregroundStyle(AppColors.textTertiary)
 
                 if note.isTask {
-                    Label("Task", systemImage: note.isTaskCompleted ? "checkmark.circle.fill" : "circle")
-                        .font(.caption2)
+                    Text(" \u{00B7} ")
+                        .foregroundStyle(AppColors.textTertiary)
+
+                    Text(note.isTaskCompleted ? "done" : "task")
                         .foregroundStyle(note.isTaskCompleted ? AppColors.success : AppColors.taskOrange)
                 }
 
                 Spacer()
             }
+            .font(AppTypography.noteTimestamp)
         }
-        .padding(.vertical, AppSpacing.xxs)
+        .padding(.vertical, AppSpacing.xs)
         .contentShape(Rectangle())
     }
 }

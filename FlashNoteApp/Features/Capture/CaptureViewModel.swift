@@ -6,7 +6,6 @@ import FlashNoteCore
 final class CaptureViewModel {
     var text = ""
     var showSaveConfirmation = false
-    var isVoiceMode = false
 
     // Task suggestion (Feature 7)
     var showTaskSuggestion = false
