@@ -5,54 +5,87 @@ import FlashNoteCore
 struct CaptureView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(NavigationRouter.self) private var router
+    @Environment(\.scenePhase) private var scenePhase
     @State private var viewModel = CaptureViewModel()
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                AppColors.captureBackground
-                    .ignoresSafeArea()
-
-                VStack(spacing: 0) {
-                    CaptureTextField(text: $viewModel.text)
-                        .frame(maxHeight: .infinity)
-                        .padding(.horizontal, AppSpacing.screenHorizontal)
-                        .padding(.top, AppSpacing.sm)
-
-                    bottomBar
+        ZStack {
+            AppColors.captureBackground
+                .ignoresSafeArea()
+                .onTapGesture {
+                    dismissKeyboard()
                 }
 
-                SaveConfirmationView(isVisible: $viewModel.showSaveConfirmation)
-            }
-            .navigationTitle("Capture")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+            VStack(spacing: 0) {
+                // Voice mode button
+                HStack {
+                    Spacer()
                     Button {
                         viewModel.isVoiceMode = true
                     } label: {
                         Image(systemName: "mic.fill")
                             .font(.title3)
+                            .foregroundStyle(AppColors.primary)
+                            .padding(AppSpacing.sm)
                     }
                 }
+                .padding(.horizontal, AppSpacing.screenHorizontal)
+
+                CaptureTextField(text: $viewModel.text)
+                    .frame(maxHeight: .infinity)
+                    .padding(.horizontal, AppSpacing.screenHorizontal)
+
+                bottomBar
             }
-            .sheet(isPresented: $viewModel.isVoiceMode) {
-                VoiceCaptureView(onSave: { text, audioFile, duration, confidence in
-                    viewModel.saveVoiceNote(
-                        text: text,
-                        audioFileName: audioFile,
-                        audioDuration: duration,
-                        confidence: confidence,
-                        context: modelContext
-                    )
-                })
-                .presentationDetents([.medium, .large])
+
+            // Save confirmation overlay
+            SaveConfirmationView(isVisible: $viewModel.showSaveConfirmation)
+
+            // Post-save banners
+            VStack(spacing: AppSpacing.xs) {
+                Spacer()
+
+                TaskSuggestionBanner(
+                    onAccept: { viewModel.markAsTask(context: modelContext) },
+                    isVisible: $viewModel.showTaskSuggestion
+                )
+
+                MergePromptBanner(
+                    onMerge: { viewModel.mergeWithPrevious(context: modelContext) },
+                    onDismiss: { viewModel.dismissMerge() },
+                    isVisible: $viewModel.showMergePrompt
+                )
             }
-            .onAppear {
-                viewModel.handlePrefill(router.prefillText)
-                router.prefillText = nil
+            .padding(.bottom, 80) // Above bottom bar
+        }
+        .sheet(isPresented: $viewModel.isVoiceMode) {
+            VoiceCaptureView(onSave: { text, audioFile, duration, confidence in
+                viewModel.saveVoiceNote(
+                    text: text,
+                    audioFileName: audioFile,
+                    audioDuration: duration,
+                    confidence: confidence,
+                    context: modelContext
+                )
+            })
+            .presentationDetents([.medium, .large])
+        }
+        .onAppear {
+            viewModel.handlePrefill(router.prefillText)
+            router.prefillText = nil
+        }
+        .onChange(of: viewModel.text) {
+            viewModel.scheduleDraftSave()
+        }
+        .onChange(of: scenePhase) {
+            if scenePhase == .background || scenePhase == .inactive {
+                viewModel.saveDraft()
             }
         }
+    }
+
+    private func dismissKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 
     private var bottomBar: some View {
@@ -74,6 +107,6 @@ struct CaptureView: View {
         }
         .padding(.horizontal, AppSpacing.screenHorizontal)
         .padding(.vertical, AppSpacing.sm)
-        .background(.bar)
+        .background(AppColors.darkSurface)
     }
 }

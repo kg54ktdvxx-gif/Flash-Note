@@ -29,5 +29,10 @@ final class DependencyContainer: Sendable {
 
     func setupNotifications() {
         ResurfacingScheduler.registerCategories()
+        ResurfacingScheduler.registerDailyReflectionCategory()
+
+        if UserDefaults.standard.object(forKey: "dailyReflectionEnabled") as? Bool ?? false {
+            ResurfacingScheduler.scheduleDailyReflection()
+        }
     }
 }

@@ -17,16 +17,23 @@ struct InboxView: View {
 
     var body: some View {
         NavigationStack {
-            Group {
-                if viewModel.isSearchActive && displayedNotes.isEmpty {
-                    ContentUnavailableView.search(text: viewModel.searchText)
-                } else if notes.isEmpty && !viewModel.isSearchActive {
-                    EmptyInboxView()
-                } else {
-                    notesList
+            ZStack {
+                AppColors.inboxBackground
+                    .ignoresSafeArea()
+
+                Group {
+                    if viewModel.isSearchActive && displayedNotes.isEmpty {
+                        ContentUnavailableView.search(text: viewModel.searchText)
+                    } else if notes.isEmpty && !viewModel.isSearchActive {
+                        EmptyInboxView()
+                    } else {
+                        notesList
+                    }
                 }
             }
             .navigationTitle("Inbox")
+            .toolbarBackground(AppColors.darkSurface, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .searchable(text: $viewModel.searchText, prompt: "Search notes...")
             .onChange(of: viewModel.searchText) {
                 viewModel.search(in: modelContext)
@@ -37,6 +44,7 @@ struct InboxView: View {
                         TriageView()
                     } label: {
                         Image(systemName: "rectangle.stack")
+                            .foregroundStyle(AppColors.primary)
                     }
                 }
             }
@@ -60,30 +68,85 @@ struct InboxView: View {
         viewModel.isSearchActive ? viewModel.searchResults : notes
     }
 
+    private var sections: [InboxSectionBuilder.Section] {
+        InboxSectionBuilder.build(from: notes)
+    }
+
+    private var captureStreak: Int {
+        CaptureStreakService.currentStreak(in: modelContext)
+    }
+
     private var notesList: some View {
         List {
-            ForEach(displayedNotes) { note in
-                Button {
-                    selectedNote = note
-                } label: {
-                    NoteRowView(note: note)
+            // Capture streak banner (only when not searching, streak >= 2)
+            if !viewModel.isSearchActive && captureStreak >= 2 {
+                HStack(spacing: AppSpacing.xxs) {
+                    Text("\(captureStreak) day streak")
+                        .font(AppTypography.caption)
+                        .foregroundStyle(AppColors.textSecondary)
                 }
-                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                    Button(role: .destructive) {
-                        viewModel.deleteNote(note, context: modelContext)
-                    } label: {
-                        Label("Delete", systemImage: "trash")
-                    }
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+            }
 
-                    Button {
-                        viewModel.archiveNote(note, context: modelContext)
-                    } label: {
-                        Label("Archive", systemImage: "archivebox")
+            if viewModel.isSearchActive {
+                // Flat list for search results
+                ForEach(displayedNotes) { note in
+                    noteRow(note)
+                }
+            } else {
+                // Time-grouped sections
+                ForEach(sections) { section in
+                    Section {
+                        ForEach(section.notes) { note in
+                            noteRow(note)
+                        }
+                    } header: {
+                        Text(section.title)
+                            .font(AppTypography.caption)
+                            .foregroundStyle(AppColors.textTertiary)
+                            .textCase(.uppercase)
                     }
-                    .tint(AppColors.archiveGray)
                 }
             }
         }
         .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .refreshable {
+            // Sync any pending buffer entries and trigger haptic
+            BufferSyncService.flush(to: modelContext)
+            DependencyContainer.shared.hapticService.lightTap()
+        }
+    }
+
+    private func noteRow(_ note: Note) -> some View {
+        Button {
+            selectedNote = note
+        } label: {
+            NoteRowView(note: note)
+        }
+        .listRowBackground(AppColors.cardBackground)
+        .swipeActions(edge: .leading) {
+            Button {
+                viewModel.togglePin(note, context: modelContext)
+            } label: {
+                Label(note.isPinned ? "Unpin" : "Pin", systemImage: note.isPinned ? "pin.slash" : "pin")
+            }
+            .tint(AppColors.primary)
+        }
+        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+            Button {
+                viewModel.archiveNote(note, context: modelContext)
+            } label: {
+                Label("Archive", systemImage: "archivebox")
+            }
+            .tint(AppColors.archiveGray)
+
+            Button(role: .destructive) {
+                viewModel.deleteNote(note, context: modelContext)
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
     }
 }

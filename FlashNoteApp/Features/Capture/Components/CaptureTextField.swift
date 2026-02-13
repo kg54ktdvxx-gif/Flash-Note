@@ -21,15 +21,18 @@ struct CaptureTextField: UIViewRepresentable {
         textView.alwaysBounceVertical = true
         textView.keyboardDismissMode = .interactive
         textView.returnKeyType = .default
-        textView.textColor = .label
+        textView.textColor = .white
+        textView.keyboardAppearance = .dark
 
         // Placeholder setup
         if text.isEmpty {
             textView.text = placeholder
-            textView.textColor = .placeholderText
+            textView.textColor = UIColor.white.withAlphaComponent(0.45)
         } else {
             textView.text = text
         }
+
+        context.coordinator.textView = textView
 
         if autoFocus {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -40,6 +43,8 @@ struct CaptureTextField: UIViewRepresentable {
         return textView
     }
 
+    private static let placeholderColor = UIColor.white.withAlphaComponent(0.45)
+
     func updateUIView(_ textView: UITextView, context: Context) {
         // Skip if this update was triggered by our own delegate callback
         guard !context.coordinator.isUpdating else { return }
@@ -49,11 +54,11 @@ struct CaptureTextField: UIViewRepresentable {
 
         if text.isEmpty && !textView.isFirstResponder {
             textView.text = placeholder
-            textView.textColor = .placeholderText
-        } else if textView.textColor == .placeholderText && !text.isEmpty {
+            textView.textColor = Self.placeholderColor
+        } else if textView.textColor == Self.placeholderColor && !text.isEmpty {
             textView.text = text
-            textView.textColor = .label
-        } else if textView.text != text && textView.textColor != .placeholderText {
+            textView.textColor = .white
+        } else if textView.text != text && textView.textColor != Self.placeholderColor {
             textView.text = text
         }
     }
@@ -66,23 +71,41 @@ struct CaptureTextField: UIViewRepresentable {
         var text: Binding<String>
         var placeholder: String
         var isUpdating = false
+        weak var textView: UITextView?
+        private nonisolated(unsafe) var focusObserver: (any NSObjectProtocol)?
 
         init(text: Binding<String>, placeholder: String) {
             self.text = text
             self.placeholder = placeholder
+            super.init()
+            focusObserver = NotificationCenter.default.addObserver(
+                forName: .focusCaptureTextField,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                self?.textView?.becomeFirstResponder()
+            }
         }
 
+        deinit {
+            if let focusObserver {
+                NotificationCenter.default.removeObserver(focusObserver)
+            }
+        }
+
+        private static let placeholderColor = UIColor.white.withAlphaComponent(0.45)
+
         func textViewDidBeginEditing(_ textView: UITextView) {
-            if textView.textColor == .placeholderText {
+            if textView.textColor == Self.placeholderColor {
                 textView.text = ""
-                textView.textColor = .label
+                textView.textColor = .white
             }
         }
 
         func textViewDidEndEditing(_ textView: UITextView) {
             if textView.text.isEmpty {
                 textView.text = placeholder
-                textView.textColor = .placeholderText
+                textView.textColor = Self.placeholderColor
             }
         }
 

@@ -15,53 +15,61 @@ struct NoteDetailView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: AppSpacing.md) {
-                // Source badge + timestamp
-                HStack(spacing: AppSpacing.xs) {
-                    Label(note.source.displayName, systemImage: note.source.iconName)
-                        .font(AppTypography.caption)
-                        .foregroundStyle(AppColors.textTertiary)
-                        .padding(.horizontal, AppSpacing.xs)
-                        .padding(.vertical, AppSpacing.xxxs)
-                        .background(AppColors.primarySoft, in: Capsule())
+        ZStack {
+            AppColors.darkBackground
+                .ignoresSafeArea()
 
-                    Spacer()
+            ScrollView {
+                VStack(alignment: .leading, spacing: AppSpacing.md) {
+                    // Source badge + timestamp
+                    HStack(spacing: AppSpacing.xs) {
+                        Label(note.source.displayName, systemImage: note.source.iconName)
+                            .font(AppTypography.caption)
+                            .foregroundStyle(AppColors.primary)
+                            .padding(.horizontal, AppSpacing.xs)
+                            .padding(.vertical, AppSpacing.xxxs)
+                            .background(AppColors.primarySoft, in: Capsule())
 
-                    Text(DateFormatters.fullTimestamp(for: note.createdAt))
-                        .font(AppTypography.caption)
-                        .foregroundStyle(AppColors.textTertiary)
+                        Spacer()
+
+                        Text(DateFormatters.fullTimestamp(for: note.createdAt))
+                            .font(AppTypography.caption)
+                            .foregroundStyle(AppColors.textTertiary)
+                    }
+
+                    // Note text
+                    if viewModel.isEditing {
+                        TextEditor(text: $viewModel.editedText)
+                            .font(AppTypography.body)
+                            .foregroundStyle(AppColors.textPrimary)
+                            .frame(minHeight: 200)
+                            .scrollContentBackground(.hidden)
+                    } else {
+                        Text(note.text)
+                            .font(AppTypography.body)
+                            .foregroundStyle(AppColors.textPrimary)
+                            .textSelection(.enabled)
+                    }
+
+                    // Audio playback
+                    if let audioURL = note.audioURL {
+                        AudioPlaybackView(audioURL: audioURL)
+                    }
+
+                    // Metadata
+                    if note.updatedAt != note.createdAt {
+                        Text("Edited \(DateFormatters.relativeTimestamp(for: note.updatedAt))")
+                            .font(AppTypography.footnote)
+                            .foregroundStyle(AppColors.textTertiary)
+                    }
                 }
-
-                // Note text
-                if viewModel.isEditing {
-                    TextEditor(text: $viewModel.editedText)
-                        .font(AppTypography.body)
-                        .frame(minHeight: 200)
-                        .scrollContentBackground(.hidden)
-                } else {
-                    Text(note.text)
-                        .font(AppTypography.body)
-                        .foregroundStyle(AppColors.textPrimary)
-                        .textSelection(.enabled)
-                }
-
-                // Audio playback
-                if let audioURL = note.audioURL {
-                    AudioPlaybackView(audioURL: audioURL)
-                }
-
-                // Metadata
-                if note.updatedAt != note.createdAt {
-                    Text("Edited \(DateFormatters.relativeTimestamp(for: note.updatedAt))")
-                        .font(AppTypography.footnote)
-                        .foregroundStyle(AppColors.textTertiary)
-                }
+                .padding(AppSpacing.screenHorizontal)
             }
-            .padding(AppSpacing.screenHorizontal)
         }
         .navigationTitle("Note")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(AppColors.darkSurface, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 if viewModel.isEditing {
@@ -74,6 +82,15 @@ struct NoteDetailView: View {
                             viewModel.isEditing = true
                         } label: {
                             Label("Edit", systemImage: "pencil")
+                        }
+
+                        Button {
+                            viewModel.togglePin(context: modelContext)
+                        } label: {
+                            Label(
+                                note.isPinned ? "Unpin" : "Pin",
+                                systemImage: note.isPinned ? "pin.slash" : "pin"
+                            )
                         }
 
                         Button {

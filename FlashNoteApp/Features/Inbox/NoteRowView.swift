@@ -7,6 +7,12 @@ struct NoteRowView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: AppSpacing.xxs) {
             HStack {
+                if note.isPinned {
+                    Image(systemName: "pin.fill")
+                        .font(.caption2)
+                        .foregroundStyle(AppColors.textTertiary)
+                }
+
                 Text(note.previewText)
                     .font(AppTypography.notePreview)
                     .foregroundStyle(AppColors.textPrimary)
@@ -27,6 +33,14 @@ struct NoteRowView: View {
                     .foregroundStyle(AppColors.textTertiary)
 
                 Text(note.relativeTimestamp)
+                    .font(AppTypography.noteTimestamp)
+                    .foregroundStyle(AppColors.textTertiary)
+
+                Text("·")
+                    .font(AppTypography.noteTimestamp)
+                    .foregroundStyle(AppColors.textTertiary)
+
+                Text("\(note.wordCount) words")
                     .font(AppTypography.noteTimestamp)
                     .foregroundStyle(AppColors.textTertiary)
 
