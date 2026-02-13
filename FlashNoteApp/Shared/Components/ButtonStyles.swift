@@ -4,12 +4,12 @@ struct PrimaryButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(AppTypography.headline)
-            .foregroundStyle(AppColors.textOnPrimary)
+            .foregroundStyle(AppColors.textOnAccent)
             .padding(.horizontal, AppSpacing.lg)
             .padding(.vertical, AppSpacing.sm)
-            .background(AppColors.primary, in: RoundedRectangle(cornerRadius: AppBorderRadius.button))
-            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
+            .background(AppColors.accent, in: RoundedRectangle(cornerRadius: AppBorderRadius.button))
+            .opacity(configuration.isPressed ? 0.75 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 
@@ -17,23 +17,26 @@ struct SecondaryButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(AppTypography.headline)
-            .foregroundStyle(AppColors.primary)
+            .foregroundStyle(AppColors.textPrimary)
             .padding(.horizontal, AppSpacing.lg)
             .padding(.vertical, AppSpacing.sm)
-            .background(AppColors.primarySoft, in: RoundedRectangle(cornerRadius: AppBorderRadius.button))
-            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
+            .background(
+                RoundedRectangle(cornerRadius: AppBorderRadius.button)
+                    .stroke(AppColors.border, lineWidth: 1)
+            )
+            .opacity(configuration.isPressed ? 0.6 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 
 struct IconButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundStyle(AppColors.primary)
+            .foregroundStyle(AppColors.textPrimary)
             .padding(AppSpacing.xs)
             .contentShape(Circle())
-            .scaleEffect(configuration.isPressed ? 0.88 : 1.0)
-            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
+            .opacity(configuration.isPressed ? 0.5 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 

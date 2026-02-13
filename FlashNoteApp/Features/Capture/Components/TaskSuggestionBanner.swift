@@ -8,8 +8,9 @@ struct TaskSuggestionBanner: View {
     var body: some View {
         if isVisible {
             HStack(spacing: AppSpacing.xs) {
-                Text("Looks like a task")
-                    .font(AppTypography.caption)
+                Text("TASK DETECTED")
+                    .font(AppTypography.captionSmall)
+                    .tracking(1)
                     .foregroundStyle(AppColors.textSecondary)
 
                 Spacer()
@@ -18,16 +19,24 @@ struct TaskSuggestionBanner: View {
                     onAccept()
                     dismiss()
                 } label: {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.body)
+                    Text("MARK")
+                        .font(AppTypography.captionSmall)
+                        .tracking(1)
                         .foregroundStyle(AppColors.taskOrange)
                 }
             }
             .padding(.horizontal, AppSpacing.md)
             .padding(.vertical, AppSpacing.xs)
-            .background(AppColors.darkElevated, in: RoundedRectangle(cornerRadius: AppBorderRadius.md))
+            .background(
+                RoundedRectangle(cornerRadius: AppBorderRadius.md)
+                    .fill(AppColors.surface)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: AppBorderRadius.md)
+                            .stroke(AppColors.border, lineWidth: 0.5)
+                    )
+            )
             .padding(.horizontal, AppSpacing.screenHorizontal)
-            .transition(.move(edge: .top).combined(with: .opacity))
+            .transition(.move(edge: .bottom).combined(with: .opacity))
             .onAppear {
                 dismissTask = Task { @MainActor in
                     try? await Task.sleep(for: .seconds(3))

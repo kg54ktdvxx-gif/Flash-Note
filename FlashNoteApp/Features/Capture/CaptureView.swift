@@ -7,6 +7,7 @@ struct CaptureView: View {
     @Environment(NavigationRouter.self) private var router
     @Environment(\.scenePhase) private var scenePhase
     @State private var viewModel = CaptureViewModel()
+    @State private var isChecklistMode = false
 
     var body: some View {
         ZStack {
@@ -17,25 +18,43 @@ struct CaptureView: View {
                 }
 
             VStack(spacing: 0) {
-                // Voice mode button
+                // Mode toggle — checklist on/off
                 HStack {
                     Spacer()
                     Button {
-                        viewModel.isVoiceMode = true
+                        withAnimation(.easeInOut(duration: 0.15)) {
+                            isChecklistMode.toggle()
+                        }
                     } label: {
-                        Image(systemName: "mic.fill")
-                            .font(.title3)
-                            .foregroundStyle(AppColors.primary)
-                            .padding(AppSpacing.sm)
+                        HStack(spacing: 5) {
+                            Image(systemName: isChecklistMode ? "checklist.checked" : "checklist")
+                                .font(.system(size: 14, weight: .medium))
+                            if isChecklistMode {
+                                Text("LIST")
+                                    .font(AppTypography.captionSmall)
+                                    .tracking(1)
+                            }
+                        }
+                        .foregroundStyle(isChecklistMode ? AppColors.accent : AppColors.textTertiary)
+                        .padding(.horizontal, AppSpacing.sm)
+                        .padding(.vertical, 6)
                     }
                 }
                 .padding(.horizontal, AppSpacing.screenHorizontal)
 
-                CaptureTextField(text: $viewModel.text)
-                    .frame(maxHeight: .infinity)
-                    .padding(.horizontal, AppSpacing.screenHorizontal)
+                // Editor — text or checklist
+                if isChecklistMode {
+                    ChecklistEditor(text: $viewModel.text)
+                        .frame(maxHeight: .infinity)
+                } else {
+                    CaptureTextField(text: $viewModel.text)
+                        .frame(maxHeight: .infinity)
+                        .padding(.horizontal, AppSpacing.screenHorizontal)
+                }
 
-                bottomBar
+                EditorialRule()
+
+                captureBottomBar
             }
 
             // Save confirmation overlay
@@ -56,19 +75,7 @@ struct CaptureView: View {
                     isVisible: $viewModel.showMergePrompt
                 )
             }
-            .padding(.bottom, 80) // Above bottom bar
-        }
-        .sheet(isPresented: $viewModel.isVoiceMode) {
-            VoiceCaptureView(onSave: { text, audioFile, duration, confidence in
-                viewModel.saveVoiceNote(
-                    text: text,
-                    audioFileName: audioFile,
-                    audioDuration: duration,
-                    confidence: confidence,
-                    context: modelContext
-                )
-            })
-            .presentationDetents([.medium, .large])
+            .padding(.bottom, 72) // Above bottom bar
         }
         .onAppear {
             viewModel.handlePrefill(router.prefillText)
@@ -88,25 +95,35 @@ struct CaptureView: View {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 
-    private var bottomBar: some View {
+    private var captureBottomBar: some View {
         HStack {
-            Text(viewModel.canSave ? "\(viewModel.text.count) chars" : "")
-                .font(AppTypography.caption)
+            // Character count in monospace
+            Text(viewModel.canSave ? "\(viewModel.text.count)" : "")
+                .font(AppTypography.captionSmall)
                 .foregroundStyle(AppColors.textTertiary)
 
             Spacer()
 
             Button {
                 viewModel.save(context: modelContext)
+                if isChecklistMode {
+                    isChecklistMode = false
+                }
             } label: {
-                Label("Save", systemImage: "arrow.up.circle.fill")
-                    .font(AppTypography.headline)
+                HStack(spacing: 6) {
+                    Text("Save")
+                        .font(AppTypography.caption)
+                        .tracking(1)
+                        .textCase(.uppercase)
+                    Image(systemName: "arrow.up")
+                        .font(.system(size: 10, weight: .bold))
+                }
             }
             .disabled(!viewModel.canSave)
             .buttonStyle(.primary)
         }
         .padding(.horizontal, AppSpacing.screenHorizontal)
         .padding(.vertical, AppSpacing.sm)
-        .background(AppColors.darkSurface)
+        .background(AppColors.background)
     }
 }

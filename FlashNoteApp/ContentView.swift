@@ -14,12 +14,14 @@ struct ContentView: View {
         @Bindable var router = router
 
         VStack(spacing: 0) {
-            // Top tab bar with settings
-            TopTabBar(
+            // Editorial top bar
+            EditorialTabBar(
                 selectedTab: $router.selectedTab,
                 noteCount: notes.count,
                 onSettingsTap: { showSettings = true }
             )
+
+            EditorialRule(weight: 1, color: AppColors.rule)
 
             // Content
             Group {
@@ -32,6 +34,7 @@ struct ContentView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        .background(AppColors.background)
         .onOpenURL { url in
             router.handle(url: url)
         }
@@ -50,77 +53,91 @@ struct ContentView: View {
     }
 }
 
-struct TopTabBar: View {
+// MARK: - Editorial Tab Bar
+
+struct EditorialTabBar: View {
     @Binding var selectedTab: AppTab
     var noteCount: Int = 0
     var onSettingsTap: () -> Void
 
     var body: some View {
-        HStack(spacing: 0) {
-            // Settings button
+        HStack(alignment: .lastTextBaseline, spacing: 0) {
+            // Settings — minimal icon
             Button(action: onSettingsTap) {
-                Image(systemName: "gearshape.fill")
-                    .font(.title3)
-                    .foregroundStyle(AppColors.textSecondary)
+                Image(systemName: "gearshape")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(AppColors.textTertiary)
             }
-            .frame(width: 44)
+            .frame(width: 40)
 
-            TopTabButton(
-                title: "Capture",
-                systemImage: "plus.circle.fill",
-                isSelected: selectedTab == .capture
-            ) {
-                selectedTab = .capture
+            Spacer()
+
+            // Tab labels — editorial text with underline
+            HStack(spacing: AppSpacing.lg) {
+                EditorialTabLabel(
+                    title: "Write",
+                    isSelected: selectedTab == .capture
+                ) {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        selectedTab = .capture
+                    }
+                }
+
+                EditorialTabLabel(
+                    title: "Inbox",
+                    isSelected: selectedTab == .inbox,
+                    badge: noteCount > 0 ? "\(noteCount)" : nil
+                ) {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        selectedTab = .inbox
+                    }
+                }
             }
 
-            TopTabButton(
-                title: "Inbox",
-                systemImage: "tray.fill",
-                isSelected: selectedTab == .inbox,
-                badgeCount: noteCount
-            ) {
-                selectedTab = .inbox
-            }
+            Spacer()
 
-            // Spacer for symmetry
-            Color.clear
-                .frame(width: 44)
+            // Balance spacer
+            Spacer()
+                .frame(width: 40)
         }
-        .padding(.horizontal, AppSpacing.sm)
-        .padding(.vertical, AppSpacing.sm)
-        .background(AppColors.darkSurface)
+        .padding(.horizontal, AppSpacing.screenHorizontal)
+        .padding(.top, AppSpacing.sm)
+        .padding(.bottom, AppSpacing.xs)
+        .background(AppColors.background)
     }
 }
 
-struct TopTabButton: View {
+struct EditorialTabLabel: View {
     let title: String
-    let systemImage: String
     let isSelected: Bool
-    var badgeCount: Int = 0
+    var badge: String? = nil
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: AppSpacing.xs) {
-                Image(systemName: systemImage)
-                Text(title)
-                if badgeCount > 0 {
-                    Text("\(badgeCount)")
+            VStack(spacing: 4) {
+                HStack(spacing: 4) {
+                    Text(title)
                         .font(AppTypography.caption)
-                        .foregroundStyle(AppColors.textOnPrimary)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(AppColors.primary, in: Capsule())
+                        .tracking(1.5)
+                        .textCase(.uppercase)
+                        .foregroundStyle(isSelected ? AppColors.textPrimary : AppColors.textTertiary)
+
+                    if let badge {
+                        Text(badge)
+                            .font(AppTypography.captionSmall)
+                            .foregroundStyle(AppColors.textOnAccent)
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 1)
+                            .background(AppColors.accent, in: RoundedRectangle(cornerRadius: 2))
+                    }
                 }
+
+                // Underline indicator
+                Rectangle()
+                    .fill(isSelected ? AppColors.textPrimary : Color.clear)
+                    .frame(height: 1.5)
             }
-            .font(AppTypography.headline)
-            .foregroundStyle(isSelected ? AppColors.primary : AppColors.textSecondary)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, AppSpacing.sm)
-            .background(
-                RoundedRectangle(cornerRadius: AppBorderRadius.md)
-                    .fill(isSelected ? AppColors.primarySoft : Color.clear)
-            )
         }
         .buttonStyle(.plain)
     }

@@ -3,54 +3,50 @@ import SwiftUI
 struct SaveConfirmationView: View {
     @Binding var isVisible: Bool
     @State private var dismissTask: Task<Void, Never>?
-    @State private var checkmarkScale: CGFloat = 0.5
-    @State private var showRipple = false
+    @State private var opacity: Double = 0
 
     var body: some View {
         if isVisible {
-            ZStack {
-                // Ripple effect
-                Circle()
-                    .fill(AppColors.success.opacity(0.2))
-                    .frame(width: showRipple ? 120 : 60, height: showRipple ? 120 : 60)
-                    .opacity(showRipple ? 0 : 0.6)
+            // Editorial confirmation: typographic, no bouncy icons
+            VStack(spacing: 4) {
+                Text("Saved")
+                    .font(AppTypography.title3)
+                    .foregroundStyle(AppColors.textPrimary)
 
-                VStack(spacing: AppSpacing.xs) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 48))
-                        .foregroundStyle(AppColors.success)
-                        .scaleEffect(checkmarkScale)
-                        .symbolEffect(.bounce, value: isVisible)
-
-                    Text("Saved!")
-                        .font(AppTypography.headline)
-                        .foregroundStyle(AppColors.textPrimary)
-                }
-                .padding(AppSpacing.lg)
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppBorderRadius.lg))
+                Rectangle()
+                    .fill(AppColors.accent)
+                    .frame(width: 24, height: 1.5)
             }
-            .transition(.scale.combined(with: .opacity))
+            .padding(.horizontal, AppSpacing.xl)
+            .padding(.vertical, AppSpacing.lg)
+            .background(
+                RoundedRectangle(cornerRadius: AppBorderRadius.md)
+                    .fill(AppColors.surface)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: AppBorderRadius.md)
+                            .stroke(AppColors.border, lineWidth: 0.5)
+                    )
+            )
+            .opacity(opacity)
+            .transition(.opacity)
             .onAppear {
-                // Animate checkmark and ripple
-                withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
-                    checkmarkScale = 1.0
+                withAnimation(.easeIn(duration: 0.15)) {
+                    opacity = 1.0
                 }
-                withAnimation(.easeOut(duration: 0.6)) {
-                    showRipple = true
-                }
-
                 dismissTask = Task { @MainActor in
-                    try? await Task.sleep(for: .seconds(1.2))
+                    try? await Task.sleep(for: .seconds(1.0))
                     guard !Task.isCancelled else { return }
                     withAnimation(.easeOut(duration: 0.3)) {
-                        isVisible = false
+                        opacity = 0
                     }
+                    try? await Task.sleep(for: .seconds(0.3))
+                    guard !Task.isCancelled else { return }
+                    isVisible = false
                 }
             }
             .onDisappear {
                 dismissTask?.cancel()
-                checkmarkScale = 0.5
-                showRipple = false
+                opacity = 0
             }
         }
     }

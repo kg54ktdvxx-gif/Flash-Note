@@ -21,31 +21,21 @@ struct SwipeActionIndicator: View {
     }
 
     private var indicator: some View {
-        VStack(spacing: AppSpacing.xxs) {
-            Image(systemName: iconName)
-                .font(.system(size: 32))
-            Text(label)
-                .font(AppTypography.caption)
+        VStack(spacing: 4) {
+            Text(label.uppercased())
+                .font(AppTypography.captionSmall)
+                .tracking(2)
                 .fontWeight(.semibold)
         }
         .foregroundStyle(color)
         .opacity(min(intensity * 2, 1.0))
-        .scaleEffect(0.8 + min(intensity, 1.0) * 0.2)
-    }
-
-    private var iconName: String {
-        switch action {
-        case .keep: "checkmark.circle.fill"
-        case .archive: "archivebox.fill"
-        case .task: "arrow.up.circle.fill"
-        }
     }
 
     private var label: String {
         switch action {
-        case .keep: "Keep"
-        case .archive: "Archive"
-        case .task: "Task"
+        case .keep: "keep"
+        case .archive: "archive"
+        case .task: "task"
         }
     }
 

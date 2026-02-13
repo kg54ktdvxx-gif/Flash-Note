@@ -2,13 +2,19 @@ import SwiftUI
 
 struct EmptyInboxView: View {
     var body: some View {
-        ContentUnavailableView {
-            Label("No Notes Yet", systemImage: "note.text")
-        } description: {
-            Text("Your captured thoughts will appear here.\nSwitch to the Capture tab to jot something down.")
+        VStack(spacing: AppSpacing.md) {
+            Spacer()
+
+            Text("No notes yet")
+                .font(AppTypography.title2)
+                .foregroundStyle(AppColors.textPrimary)
+
+            Text("Switch to Write to capture a thought.")
                 .font(AppTypography.body)
-        } actions: {
-            // Intentionally empty — the user navigates via tabs
+                .foregroundStyle(AppColors.textTertiary)
+
+            Spacer()
         }
+        .frame(maxWidth: .infinity)
     }
 }

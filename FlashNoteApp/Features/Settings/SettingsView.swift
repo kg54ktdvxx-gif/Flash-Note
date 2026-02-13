@@ -12,7 +12,7 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section("Resurfacing") {
+                Section {
                     Toggle("Enable Resurfacing", isOn: $viewModel.resurfacingEnabled)
 
                     if viewModel.resurfacingEnabled {
@@ -22,22 +22,28 @@ struct SettingsView: View {
                             in: 1...10
                         )
 
-                        Toggle("Quiet Hours (10pm - 8am)", isOn: $viewModel.quietHoursEnabled)
+                        Toggle("Quiet Hours (10pm\u{2013}8am)", isOn: $viewModel.quietHoursEnabled)
                     }
+                } header: {
+                    sectionHeader("RESURFACING")
                 }
 
-                Section("Capture") {
+                Section {
                     Toggle("Daily Review Reminder", isOn: $viewModel.dailyReflectionEnabled)
                     Toggle("Shake to Capture", isOn: $viewModel.shakeEnabled)
+                } header: {
+                    sectionHeader("CAPTURE")
                 }
 
-                Section("Statistics") {
-                    LabeledContent("Total Notes", value: "\(viewModel.noteCount)")
-                    LabeledContent("Active", value: "\(viewModel.activeNoteCount)")
-                    LabeledContent("Archived", value: "\(viewModel.archivedNoteCount)")
+                Section {
+                    statRow("Total", value: "\(viewModel.noteCount)")
+                    statRow("Active", value: "\(viewModel.activeNoteCount)")
+                    statRow("Archived", value: "\(viewModel.archivedNoteCount)")
+                } header: {
+                    sectionHeader("STATISTICS")
                 }
 
-                Section("Export") {
+                Section {
                     ForEach(ExportFormat.allCases, id: \.self) { format in
                         Button {
                             exportURL = viewModel.exportAll(format: format, context: modelContext)
@@ -45,24 +51,37 @@ struct SettingsView: View {
                                 showExportSheet = true
                             }
                         } label: {
-                            Label("Export as \(format.displayName)", systemImage: "square.and.arrow.up")
+                            Text("Export as \(format.displayName)")
+                                .font(AppTypography.body)
+                                .foregroundStyle(AppColors.textPrimary)
                         }
                     }
+                } header: {
+                    sectionHeader("EXPORT")
                 }
 
-                Section("Data") {
+                Section {
                     Button(role: .destructive) {
                         showDeleteConfirmation = true
                     } label: {
-                        Label("Delete All Archived Notes", systemImage: "trash")
+                        Text("Delete All Archived Notes")
+                            .font(AppTypography.body)
+                            .foregroundStyle(AppColors.accent)
                     }
+                } header: {
+                    sectionHeader("DATA")
                 }
 
-                Section("About") {
-                    LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
-                    LabeledContent("Build", value: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1")
+                Section {
+                    statRow("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
+                    statRow("Build", value: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1")
+                } header: {
+                    sectionHeader("ABOUT")
                 }
             }
+            .listStyle(.insetGrouped)
+            .scrollContentBackground(.hidden)
+            .background(AppColors.background)
             .navigationTitle("Settings")
             .onAppear {
                 viewModel.loadStats(context: modelContext)
@@ -80,6 +99,25 @@ struct SettingsView: View {
             } message: {
                 Text("This will permanently delete \(viewModel.archivedNoteCount) archived notes.")
             }
+        }
+    }
+
+    private func sectionHeader(_ text: String) -> some View {
+        Text(text)
+            .font(AppTypography.captionSmall)
+            .tracking(2)
+            .foregroundStyle(AppColors.textTertiary)
+    }
+
+    private func statRow(_ label: String, value: String) -> some View {
+        HStack {
+            Text(label)
+                .font(AppTypography.body)
+                .foregroundStyle(AppColors.textPrimary)
+            Spacer()
+            Text(value)
+                .font(AppTypography.caption)
+                .foregroundStyle(AppColors.textTertiary)
         }
     }
 }
