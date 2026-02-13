@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import FlashNoteCore
 
 struct TriageCardView: View {
@@ -7,6 +8,8 @@ struct TriageCardView: View {
 
     @State private var offset: CGSize = .zero
     @State private var verticalOffset: CGFloat = 0
+    @State private var crossedActionThreshold = false
+    @State private var crossedCommitThreshold = false
 
     private let swipeThreshold: CGFloat = 100
     private let verticalThreshold: CGFloat = -80
@@ -50,8 +53,27 @@ struct TriageCardView: View {
                     .onChanged { gesture in
                         offset = gesture.translation
                         verticalOffset = min(gesture.translation.height, 0) // Only allow upward
+
+                        let isPastAction = abs(gesture.translation.width) > 30
+                            || gesture.translation.height < -30
+                        let isPastCommit = gesture.translation.width > swipeThreshold
+                            || gesture.translation.width < -swipeThreshold
+                            || gesture.translation.height < verticalThreshold
+
+                        if isPastAction, !crossedActionThreshold {
+                            UISelectionFeedbackGenerator().selectionChanged()
+                        }
+                        if isPastCommit, !crossedCommitThreshold {
+                            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        }
+
+                        crossedActionThreshold = isPastAction
+                        crossedCommitThreshold = isPastCommit
                     }
                     .onEnded { gesture in
+                        crossedActionThreshold = false
+                        crossedCommitThreshold = false
+
                         if gesture.translation.width > swipeThreshold {
                             completeSwipe(.keep)
                         } else if gesture.translation.width < -swipeThreshold {

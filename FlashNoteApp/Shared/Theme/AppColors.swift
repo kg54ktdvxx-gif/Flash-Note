@@ -4,45 +4,43 @@ import UIKit
 #endif
 
 public enum AppColors {
-    // MARK: - Primary
-    public static let primary = Color.blue
-    public static let primarySoft = Color.blue.opacity(0.12)
+    // MARK: - Primary (Refined blue for dark mode)
+    public static let primary = Color(red: 0.4, green: 0.6, blue: 1.0)
+    public static let primarySoft = Color(red: 0.4, green: 0.6, blue: 1.0).opacity(0.15)
 
-    // MARK: - Calm ADHD-Friendly Palette
-    public static let warmBackground = Color(red: 0.98, green: 0.97, blue: 0.95)
-    public static let coolBackground = Color(red: 0.95, green: 0.96, blue: 0.98)
+    // MARK: - Dark Mode Backgrounds
+    public static let darkBackground = Color(red: 0.07, green: 0.07, blue: 0.09)
+    public static let darkSurface = Color(red: 0.11, green: 0.11, blue: 0.13)
+    public static let darkElevated = Color(red: 0.15, green: 0.15, blue: 0.17)
 
     // MARK: - Semantic
-    #if canImport(UIKit)
-    public static let captureBackground = Color(uiColor: .systemBackground)
-    public static let inboxBackground = Color(uiColor: .systemGroupedBackground)
-    public static let cardBackground = Color(uiColor: .secondarySystemGroupedBackground)
-    public static let textPrimary = Color(uiColor: .label)
-    public static let textSecondary = Color(uiColor: .secondaryLabel)
-    public static let textTertiary = Color(uiColor: .tertiaryLabel)
-    #else
-    public static let captureBackground = Color.white
-    public static let inboxBackground = Color.gray.opacity(0.1)
-    public static let cardBackground = Color.gray.opacity(0.05)
-    public static let textPrimary = Color.primary
-    public static let textSecondary = Color.secondary
-    public static let textTertiary = Color.gray
-    #endif
+    public static let captureBackground = darkBackground
+    public static let inboxBackground = darkBackground
+    public static let cardBackground = darkSurface
+    public static let cardElevated = darkElevated
+
+    public static let textPrimary = Color.white
+    public static let textSecondary = Color.white.opacity(0.7)
+    public static let textTertiary = Color.white.opacity(0.45)
 
     public static let textOnPrimary = Color.white
 
-    // MARK: - Triage Actions
-    public static let keepGreen = Color.green
-    public static let archiveGray = Color.gray
-    public static let taskOrange = Color.orange
-    public static let deleteRed = Color.red
+    // MARK: - Borders & Dividers
+    public static let border = Color.white.opacity(0.1)
+    public static let divider = Color.white.opacity(0.08)
+
+    // MARK: - Triage Actions (Softer for dark mode)
+    public static let keepGreen = Color(red: 0.3, green: 0.85, blue: 0.5)
+    public static let archiveGray = Color(red: 0.55, green: 0.55, blue: 0.6)
+    public static let taskOrange = Color(red: 1.0, green: 0.7, blue: 0.3)
+    public static let deleteRed = Color(red: 1.0, green: 0.4, blue: 0.4)
 
     // MARK: - Voice
-    public static let waveformActive = Color.blue
-    public static let waveformIdle = Color.gray.opacity(0.3)
+    public static let waveformActive = primary
+    public static let waveformIdle = Color.white.opacity(0.2)
 
     // MARK: - Status
-    public static let success = Color.green
-    public static let warning = Color.orange
-    public static let error = Color.red
+    public static let success = Color(red: 0.3, green: 0.85, blue: 0.5)
+    public static let warning = Color(red: 1.0, green: 0.7, blue: 0.3)
+    public static let error = Color(red: 1.0, green: 0.4, blue: 0.4)
 }

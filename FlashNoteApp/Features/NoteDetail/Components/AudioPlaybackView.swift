@@ -9,7 +9,7 @@ struct AudioPlaybackView: View {
     @State private var progress: Double = 0
     @State private var duration: TimeInterval = 0
     @State private var player: AVAudioPlayer?
-    @State private var displayLink: Timer?
+    @State private var progressTask: Task<Void, Never>?
     @State private var setupFailed = false
 
     var body: some View {
@@ -67,19 +67,22 @@ struct AudioPlaybackView: View {
     private func startPlayback() {
         player?.play()
         isPlaying = true
-        displayLink = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
-            guard let player, player.isPlaying else {
-                stopPlayback()
-                return
+        progressTask = Task { @MainActor in
+            while !Task.isCancelled {
+                guard let player, player.isPlaying else {
+                    stopPlayback()
+                    return
+                }
+                progress = player.currentTime
+                try? await Task.sleep(for: .milliseconds(100))
             }
-            progress = player.currentTime
         }
     }
 
     private func pausePlayback() {
         player?.pause()
         isPlaying = false
-        invalidateTimer()
+        cancelProgressTask()
     }
 
     private func stopPlayback() {
@@ -87,17 +90,17 @@ struct AudioPlaybackView: View {
         player?.currentTime = 0
         isPlaying = false
         progress = 0
-        invalidateTimer()
+        cancelProgressTask()
     }
 
     private func tearDown() {
-        invalidateTimer()
+        cancelProgressTask()
         player?.stop()
         player = nil
     }
 
-    private func invalidateTimer() {
-        displayLink?.invalidate()
-        displayLink = nil
+    private func cancelProgressTask() {
+        progressTask?.cancel()
+        progressTask = nil
     }
 }

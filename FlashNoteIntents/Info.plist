@@ -26,6 +26,15 @@
 		<string>com.apple.intents-service</string>
 		<key>NSExtensionPrincipalClass</key>
 		<string>$(PRODUCT_MODULE_NAME).IntentHandler</string>
+		<key>NSExtensionAttributes</key>
+		<dict>
+			<key>IntentsSupported</key>
+			<array>
+				<string>CaptureNoteIntent</string>
+				<string>ExportNotesIntent</string>
+				<string>SearchNotesIntent</string>
+			</array>
+		</dict>
 	</dict>
 </dict>
 </plist>

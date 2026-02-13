@@ -15,6 +15,7 @@ struct FlashNoteApp: App {
         WindowGroup {
             ContentView()
                 .environment(container.navigationRouter)
+                .preferredColorScheme(.dark)
         }
         .modelContainer(container.modelContainer)
     }

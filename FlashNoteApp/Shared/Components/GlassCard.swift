@@ -12,7 +12,11 @@ struct GlassCard<Content: View>: View {
             .padding(AppSpacing.cardPadding)
             .background {
                 RoundedRectangle(cornerRadius: AppBorderRadius.card)
-                    .fill(.ultraThinMaterial)
+                    .fill(AppColors.cardElevated)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: AppBorderRadius.card)
+                            .stroke(AppColors.border, lineWidth: 1)
+                    )
             }
     }
 }
