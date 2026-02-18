@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UserNotifications
 import FlashNoteCore
 
 @MainActor
@@ -32,6 +33,19 @@ final class DependencyContainer: Sendable {
     }
 
     func setupNotifications() {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if let error {
+                FNLog.resurfacing.error("Notification authorization failed: \(error)")
+                return
+            }
+            guard granted else {
+                FNLog.resurfacing.info("Notification authorization denied by user")
+                return
+            }
+            FNLog.resurfacing.info("Notification authorization granted")
+        }
+
         ResurfacingScheduler.registerCategories()
         ResurfacingScheduler.registerDailyReflectionCategory()
 
