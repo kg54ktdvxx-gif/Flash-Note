@@ -80,11 +80,40 @@ final class SettingsViewModel {
                 note.status = .deleted
                 note.updatedAt = .now
                 SpotlightIndexer.remove(noteID: note.id)
+                if let audioFileName = note.audioFileName {
+                    AppGroupContainer.deleteAudioFile(named: audioFileName)
+                }
             }
             try context.save()
             loadStats(context: context)
         } catch {
             FNLog.capture.error("Failed to delete archived: \(error)")
+        }
+    }
+
+    /// Purges soft-deleted notes older than 30 days — called on app launch.
+    func purgeOldDeletedNotes(context: ModelContext) {
+        let deletedRaw = NoteStatus.deleted.rawValue
+        let cutoff = Date.now.addingTimeInterval(-30 * 86400)
+        let predicate = #Predicate<Note> { note in
+            note.statusRaw == deletedRaw && note.updatedAt < cutoff
+        }
+
+        do {
+            let descriptor = FetchDescriptor<Note>(predicate: predicate)
+            let staleNotes = try context.fetch(descriptor)
+            guard !staleNotes.isEmpty else { return }
+
+            for note in staleNotes {
+                if let audioFileName = note.audioFileName {
+                    AppGroupContainer.deleteAudioFile(named: audioFileName)
+                }
+                context.delete(note)
+            }
+            try context.save()
+            FNLog.capture.info("Purged \(staleNotes.count) deleted notes older than 30 days")
+        } catch {
+            FNLog.capture.error("Failed to purge old deleted notes: \(error)")
         }
     }
 }

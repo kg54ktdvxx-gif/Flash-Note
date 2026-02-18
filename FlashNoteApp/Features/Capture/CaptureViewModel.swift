@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import WidgetKit
 import FlashNoteCore
 
 @MainActor @Observable
@@ -74,6 +75,8 @@ final class CaptureViewModel {
             FNLog.capture.info("Note saved: \(note.id)")
 
             hapticService.noteSaved()
+            WidgetDataService.updateRecentNotes(context: context)
+            WidgetCenter.shared.reloadAllTimelines()
             withAnimation(.spring(duration: 0.4)) {
                 showSaveConfirmation = true
             }
@@ -126,6 +129,8 @@ final class CaptureViewModel {
             FNLog.capture.info("Voice note saved: \(note.id)")
 
             hapticService.noteSaved()
+            WidgetDataService.updateRecentNotes(context: context)
+            WidgetCenter.shared.reloadAllTimelines()
             withAnimation(.spring(duration: 0.4)) {
                 showSaveConfirmation = true
             }

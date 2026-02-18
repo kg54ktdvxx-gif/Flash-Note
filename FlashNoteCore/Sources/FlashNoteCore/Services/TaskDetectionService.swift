@@ -1,6 +1,6 @@
 import Foundation
 
-enum TaskDetectionService {
+public enum TaskDetectionService {
     private static let keywords = [
         "buy", "call", "email", "schedule", "remind", "book",
         "todo", "fix", "send", "pick up", "don't forget",
@@ -13,7 +13,7 @@ enum TaskDetectionService {
         return try? NSRegularExpression(pattern: "\\b(\(joined))\\b", options: .caseInsensitive)
     }()
 
-    static func looksLikeTask(_ text: String) -> Bool {
+    public static func looksLikeTask(_ text: String) -> Bool {
         guard let pattern else { return false }
         let range = NSRange(text.startIndex..., in: text)
         return pattern.firstMatch(in: text, range: range) != nil

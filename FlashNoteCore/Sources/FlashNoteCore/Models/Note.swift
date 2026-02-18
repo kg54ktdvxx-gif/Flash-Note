@@ -42,7 +42,17 @@ public final class Note {
 
     @Transient
     public var wordCount: Int {
-        text.split(whereSeparator: \.isWhitespace).count
+        var count = 0
+        var inWord = false
+        for scalar in text.unicodeScalars {
+            if scalar.properties.isWhitespace {
+                inWord = false
+            } else if !inWord {
+                count += 1
+                inWord = true
+            }
+        }
+        return count
     }
 
     @Transient

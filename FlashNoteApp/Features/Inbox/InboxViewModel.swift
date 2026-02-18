@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import WidgetKit
 import FlashNoteCore
 
 @MainActor @Observable
@@ -43,6 +44,8 @@ final class InboxViewModel {
 
         do {
             try context.save()
+            WidgetDataService.updateRecentNotes(context: context)
+            WidgetCenter.shared.reloadAllTimelines()
         } catch {
             FNLog.capture.error("Failed to delete note: \(error)")
         }
@@ -66,6 +69,8 @@ final class InboxViewModel {
 
         do {
             try context.save()
+            WidgetDataService.updateRecentNotes(context: context)
+            WidgetCenter.shared.reloadAllTimelines()
         } catch {
             FNLog.capture.error("Failed to archive note: \(error)")
         }

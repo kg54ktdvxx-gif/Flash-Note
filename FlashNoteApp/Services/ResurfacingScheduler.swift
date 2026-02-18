@@ -31,40 +31,26 @@ enum ResurfacingScheduler {
         UNUserNotificationCenter.current().setNotificationCategories([category])
     }
 
+    private static let resurfacingService = SpacedResurfacingService()
+    private static let schedule = ResurfacingSchedule.default
+
     static func scheduleResurfacing(for note: Note) {
-        let intervals: [TimeInterval] = [
-            1 * 86400,   // 1 day
-            3 * 86400,   // 3 days
-            7 * 86400,   // 7 days
-            14 * 86400,  // 14 days
-            30 * 86400   // 30 days
-        ]
+        guard resurfacingService.shouldResurface(note: note, schedule: schedule) else { return }
 
-        guard note.resurfaceCount < intervals.count else { return }
-
-        let interval = intervals[note.resurfaceCount]
-        let triggerDate = note.createdAt.addingTimeInterval(interval)
-
-        // Enforce quiet hours: 10pm-8am
-        var calendar = Calendar.current
-        calendar.timeZone = .current
-        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: triggerDate)
-        if let hour = components.hour, hour >= 22 || hour < 8 {
-            components.hour = 8
-            components.minute = 0
-            if hour >= 22 {
-                // Late evening → push to 8am next day
-                if let day = components.day { components.day = day + 1 }
-            }
-            // Early morning (0-7) → push to 8am same day
+        guard let triggerDate = resurfacingService.computeNextResurfaceDate(for: note, schedule: schedule) else {
+            return
         }
 
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: triggerDate)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+
+        let interval = schedule.nextInterval(for: note.resurfaceCount) ?? 86400
         let daysAgo = Int(interval / 86400)
 
         let content = UNMutableNotificationContent()
         content.title = "A thought from \(daysAgo) day\(daysAgo == 1 ? "" : "s") ago"
-        content.body = String(note.text.prefix(100))
+        content.body = "You saved a thought — tap to review"
         content.categoryIdentifier = categoryIdentifier
         content.userInfo = ["noteID": note.id.uuidString]
         content.sound = .default

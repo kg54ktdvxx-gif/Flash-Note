@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0473BFB0952938F54B89C307 /* SwipeActionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5D0657AF15A102334B2071 /* SwipeActionIndicator.swift */; };
+		069376A886528AE0D3C30177 /* TriageViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C050AC8742FA412E9E28E2 /* TriageViewModelTests.swift */; };
 		0F71EBAE9A0DB4C8A4245AA1 /* FlashNoteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F60B0CA37FD874F4EDE8A0 /* FlashNoteApp.swift */; };
 		1208D6114053BD427E39BA3F /* CaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B431BBB6BC4CA69DADB8B445 /* CaptureView.swift */; };
 		13F012252951CC617F0CC1F2 /* WatchCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C95A63CB2EBEB21FB4B9E24 /* WatchCaptureView.swift */; };
@@ -17,6 +18,7 @@
 		22A901BA8FB13538033BE834 /* TriageCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E9605EDB6D7F143A1C005F /* TriageCardView.swift */; };
 		28250A68C5065B558A115E0D /* FlashNoteShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4B9F68CA201338EDE306F7 /* FlashNoteShortcuts.swift */; };
 		2BF272C88478ED11D1E1E91D /* InboxViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1D9E1E166FEA732D845EDD /* InboxViewModel.swift */; };
+		2C01922A5BCBC6781B3B1C9A /* FlashNoteCore in Frameworks */ = {isa = PBXBuildFile; productRef = A763B18793F42470430840DC /* FlashNoteCore */; };
 		317761B89BB6E2F22820ED54 /* FlashNoteWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42EFC2A81AE2FC2FA7140CB /* FlashNoteWidgetBundle.swift */; };
 		31C7DF1E97E65279A9AE0B95 /* WidgetIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949886A2157F71253D7EE76D /* WidgetIntents.swift */; };
 		32F827B1EACCA75D0813DA68 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B66B5137A4B27CD6CA018F /* ButtonStyles.swift */; };
@@ -25,8 +27,8 @@
 		35839A2BD33F18F71957F263 /* VoiceWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2674BEC87D082F4A0262DA4B /* VoiceWaveformView.swift */; };
 		373BDC097F5AF9DEE72AB521 /* FlashNoteCore in Frameworks */ = {isa = PBXBuildFile; productRef = 37F89A93F9A1BE386DADE5CA /* FlashNoteCore */; };
 		3918A84D94D6D4954B8BEE46 /* AppSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05869DA8472782A6A3A7BF6F /* AppSpacing.swift */; };
-		3A7C8D227CB68CB9A68F2CA8 /* DateFormatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F12467C1E5CF55F4DCB833C /* DateFormatters.swift */; };
 		3C399A1DB762C12C9D2FD172 /* FlashNoteWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F339A33D13B208C158B9F45 /* FlashNoteWatchApp.swift */; };
+		3F3459E51D024A018A086934 /* NavigationRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA732F7CFD8A23875A2E357 /* NavigationRouterTests.swift */; };
 		46A58CCBD065C875F14DCE18 /* VoiceCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE22789D2608A34974C5F3D /* VoiceCaptureView.swift */; };
 		4906A28D1836BE9F44B09756 /* NoteDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBCA026D4A190DA59059204 /* NoteDetailViewModel.swift */; };
 		4A1D67B0DC2BE694001EDA4D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B5B350E93E4025AB298385 /* ContentView.swift */; };
@@ -38,16 +40,17 @@
 		75ECE4A997F9557A136F9F52 /* ExportNotesIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F4B62C6607205C87275871 /* ExportNotesIntent.swift */; };
 		75F4CFB64A8396755A753642 /* InboxSectionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32E308CABDAF77369C893E8 /* InboxSectionBuilder.swift */; };
 		7965CF37050AA65DCE5262A1 /* AudioPlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACA14FB13A39EBA65012638 /* AudioPlaybackView.swift */; };
+		7FBC11BCBAAF96AAD494136C /* NoteDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46E266E009F36C4A8C12D20 /* NoteDetailViewModelTests.swift */; };
 		80C78D2AEF61800691C9430F /* SpotlightIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBF238252E9DC2B7A234CA8 /* SpotlightIndexer.swift */; };
 		82EBFF5A0786B6A90CC293B0 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E50F6A13FD741AFC7F9725 /* SettingsView.swift */; };
 		885CBAEC5F0F719FA645E3A6 /* WatchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB74609901A4B1128E88027 /* WatchContentView.swift */; };
+		893BF14EF2350F9C2E935D91 /* CaptureViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13881A79A1A0D01F631BE35E /* CaptureViewModelTests.swift */; };
 		897C42C0650C5B0EB3192B5A /* CaptureNoteIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87F70335700B890CAE5A1FA /* CaptureNoteIntent.swift */; };
 		89A143BB6C76BC912A99DC2A /* EmptyInboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1B8B4348D80123CF3295EC /* EmptyInboxView.swift */; };
 		928EC64158BFF544C3557C08 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9404B69B3D9F3171D1BB5C /* SettingsViewModel.swift */; };
 		9290CD531DC71824FD5B9FF0 /* CaptureStreakService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3222DF73EA0C5DA228ADDF4A /* CaptureStreakService.swift */; };
 		92DBCEDF569E0C3CB2281830 /* ChecklistEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6EA87589B9F90C318568E0F /* ChecklistEditor.swift */; };
 		92E6DC69744FC6D6ACA71B61 /* CaptureWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F856223FE94CABC210ACA2 /* CaptureWidget.swift */; };
-		9337537DBEEF5D5947F4F22D /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8F7636C224ACE97B3B335F /* SearchBar.swift */; };
 		9705C8400C262D18DE975ED2 /* AppTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D5FED602C7F2CA481D9183 /* AppTypography.swift */; };
 		98194ED934F30BA94FE85553 /* ExportActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58BC74F55B465B2A412F06 /* ExportActionSheet.swift */; };
 		99315495255D80E777CA1926 /* ShakeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB773AF4E5C0C0B6BA8F6F6 /* ShakeDetector.swift */; };
@@ -66,7 +69,6 @@
 		C7ACCD061B5255CBD447E3E9 /* FlashNoteShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7A088BBD63E1AFA57755D992 /* FlashNoteShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C94B3A72B3FADB6E69086687 /* FlashNoteCore in Frameworks */ = {isa = PBXBuildFile; productRef = 2D34BB5EDD49D41CFACC60BC /* FlashNoteCore */; };
 		CC92D746B86FABB5B85D88EA /* NoteRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7DF161FD4EBB6519F2724E1 /* NoteRowView.swift */; };
-		D1847D1D59B72A1805524D57 /* TaskDetectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B7F7A76516EFB03B5F2DC5 /* TaskDetectionService.swift */; };
 		D57F2711489E2A5C9C20075D /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDF8F0BCC9D4A9D90B6C702 /* InboxView.swift */; };
 		DA434378363428F06D3C4831 /* RecentNotesWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C3E20B9B5BBC985EE6ED36 /* RecentNotesWidget.swift */; };
 		E28831D21F093E00A6045215 /* WidgetColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20A68CF9C65896FA2532B0C /* WidgetColors.swift */; };
@@ -85,6 +87,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 31C10975AE29E9D287800C12;
 			remoteInfo = FlashNoteWidgets;
+		};
+		1F8B30D163FC08D42731C2DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E198D4C6A7C8F63991FE2A55 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0F487A470522CCC46CCB76A9;
+			remoteInfo = FlashNoteApp;
 		};
 		5DD02A8BB6945EADCF0E8461 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -122,11 +131,12 @@
 		05869DA8472782A6A3A7BF6F /* AppSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSpacing.swift; sourceTree = "<group>"; };
 		0BDF8F0BCC9D4A9D90B6C702 /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxView.swift; sourceTree = "<group>"; };
 		0D1B8B4348D80123CF3295EC /* EmptyInboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyInboxView.swift; sourceTree = "<group>"; };
-		0E8F7636C224ACE97B3B335F /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		11D5FED602C7F2CA481D9183 /* AppTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTypography.swift; sourceTree = "<group>"; };
+		13881A79A1A0D01F631BE35E /* CaptureViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureViewModelTests.swift; sourceTree = "<group>"; };
+		18C050AC8742FA412E9E28E2 /* TriageViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriageViewModelTests.swift; sourceTree = "<group>"; };
 		1B7ED133B9029C2C0F567CB2 /* ResurfacingScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResurfacingScheduler.swift; sourceTree = "<group>"; };
 		1E5D0657AF15A102334B2071 /* SwipeActionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeActionIndicator.swift; sourceTree = "<group>"; };
-		1F12467C1E5CF55F4DCB833C /* DateFormatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatters.swift; sourceTree = "<group>"; };
+		1FA732F7CFD8A23875A2E357 /* NavigationRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouterTests.swift; sourceTree = "<group>"; };
 		20F4B62C6607205C87275871 /* ExportNotesIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportNotesIntent.swift; sourceTree = "<group>"; };
 		24329B17E3FA6CA6BED2C752 /* FlashNoteShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FlashNoteShareExtension.entitlements; sourceTree = "<group>"; };
 		2674BEC87D082F4A0262DA4B /* VoiceWaveformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceWaveformView.swift; sourceTree = "<group>"; };
@@ -160,6 +170,7 @@
 		8594A549AB8ED446F379CC56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8E39FA46B484014642D402AA /* FlashNoteWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FlashNoteWidgets.entitlements; sourceTree = "<group>"; };
 		949886A2157F71253D7EE76D /* WidgetIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetIntents.swift; sourceTree = "<group>"; };
+		9D9ACB812263939D493EF36E /* FlashNoteAppTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FlashNoteAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E5525CB02F95BE0355C5FEA /* SaveConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveConfirmationView.swift; sourceTree = "<group>"; };
 		9F339A33D13B208C158B9F45 /* FlashNoteWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashNoteWatchApp.swift; sourceTree = "<group>"; };
 		A42EFC2A81AE2FC2FA7140CB /* FlashNoteWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashNoteWidgetBundle.swift; sourceTree = "<group>"; };
@@ -169,7 +180,6 @@
 		ABE563E58DCBCA9917879E16 /* NoteDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDetailView.swift; sourceTree = "<group>"; };
 		AF9404B69B3D9F3171D1BB5C /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		B431BBB6BC4CA69DADB8B445 /* CaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureView.swift; sourceTree = "<group>"; };
-		B4B7F7A76516EFB03B5F2DC5 /* TaskDetectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetectionService.swift; sourceTree = "<group>"; };
 		B72979429EAE9EC34E2A76B4 /* TriageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriageView.swift; sourceTree = "<group>"; };
 		B7DF161FD4EBB6519F2724E1 /* NoteRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteRowView.swift; sourceTree = "<group>"; };
 		B87F70335700B890CAE5A1FA /* CaptureNoteIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureNoteIntent.swift; sourceTree = "<group>"; };
@@ -180,6 +190,7 @@
 		D328AAC2DE97946768D8387F /* BufferSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferSyncService.swift; sourceTree = "<group>"; };
 		D32E308CABDAF77369C893E8 /* InboxSectionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxSectionBuilder.swift; sourceTree = "<group>"; };
 		D4157E84DB4CBEB88188EA55 /* TriageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriageViewModel.swift; sourceTree = "<group>"; };
+		D46E266E009F36C4A8C12D20 /* NoteDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDetailViewModelTests.swift; sourceTree = "<group>"; };
 		D9FC8EC9E96CE1A46FCA4222 /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
 		DE3989264BA2646747FF1CB3 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		DFFCC1A198B520190463BE8D /* FlashNoteApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FlashNoteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -226,6 +237,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				EF2FAA6AAB40CA921486897A /* FlashNoteCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BE193680958702E046B702E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2C01922A5BCBC6781B3B1C9A /* FlashNoteCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,7 +328,6 @@
 		26930F74094C59206F3E45D6 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				B4B7F7A76516EFB03B5F2DC5 /* TaskDetectionService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -318,6 +336,7 @@
 			isa = PBXGroup;
 			children = (
 				230C19EC3C284669BD906E80 /* FlashNoteApp */,
+				76E06BD9C010A1D4DCB96887 /* FlashNoteAppTests */,
 				727112E521330B0E6B549F4B /* FlashNoteIntents */,
 				0A7DAB37DFDFD3997696B54B /* FlashNoteShareExtension */,
 				ADC2AB374FB2268D41FD791D /* FlashNoteWatch */,
@@ -406,6 +425,17 @@
 			path = FlashNoteIntents;
 			sourceTree = "<group>";
 		};
+		76E06BD9C010A1D4DCB96887 /* FlashNoteAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				13881A79A1A0D01F631BE35E /* CaptureViewModelTests.swift */,
+				1FA732F7CFD8A23875A2E357 /* NavigationRouterTests.swift */,
+				D46E266E009F36C4A8C12D20 /* NoteDetailViewModelTests.swift */,
+				18C050AC8742FA412E9E28E2 /* TriageViewModelTests.swift */,
+			);
+			path = FlashNoteAppTests;
+			sourceTree = "<group>";
+		};
 		78BBC4EFFA1E7BBAAF747305 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -422,6 +452,7 @@
 			isa = PBXGroup;
 			children = (
 				DFFCC1A198B520190463BE8D /* FlashNoteApp.app */,
+				9D9ACB812263939D493EF36E /* FlashNoteAppTests.xctest */,
 				6E493CFC3BE6AA7280F2C405 /* FlashNoteIntents.appex */,
 				7A088BBD63E1AFA57755D992 /* FlashNoteShareExtension.appex */,
 				8044A93E37BFF7EBAA96FAC7 /* FlashNoteWatch.app */,
@@ -515,7 +546,6 @@
 			isa = PBXGroup;
 			children = (
 				0D1B8B4348D80123CF3295EC /* EmptyInboxView.swift */,
-				0E8F7636C224ACE97B3B335F /* SearchBar.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -523,7 +553,6 @@
 		FFBCE8175BC4C759EEE5DFCD /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				1F12467C1E5CF55F4DCB833C /* DateFormatters.swift */,
 				FDB773AF4E5C0C0B6BA8F6F6 /* ShakeDetector.swift */,
 			);
 			path = Utilities;
@@ -613,6 +642,26 @@
 			productReference = 6E493CFC3BE6AA7280F2C405 /* FlashNoteIntents.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		BB5FC2454F33E35BC18F3136 /* FlashNoteAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 50C612C825FDD93944635876 /* Build configuration list for PBXNativeTarget "FlashNoteAppTests" */;
+			buildPhases = (
+				6C6C2CB32FB4354533E84260 /* Sources */,
+				BE193680958702E046B702E2 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				472040335C5EEE0B4F506965 /* PBXTargetDependency */,
+			);
+			name = FlashNoteAppTests;
+			packageProductDependencies = (
+				A763B18793F42470430840DC /* FlashNoteCore */,
+			);
+			productName = FlashNoteAppTests;
+			productReference = 9D9ACB812263939D493EF36E /* FlashNoteAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		DF2991F16C9DBF4776C2B068 /* FlashNoteShareExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0C08DE0245348E4976567C45 /* Build configuration list for PBXNativeTarget "FlashNoteShareExtension" */;
@@ -657,6 +706,10 @@
 						DevelopmentTeam = ML4L5QJ99D;
 						ProvisioningStyle = Automatic;
 					};
+					BB5FC2454F33E35BC18F3136 = {
+						DevelopmentTeam = ML4L5QJ99D;
+						ProvisioningStyle = Automatic;
+					};
 					DF2991F16C9DBF4776C2B068 = {
 						DevelopmentTeam = ML4L5QJ99D;
 						ProvisioningStyle = Automatic;
@@ -681,6 +734,7 @@
 			projectRoot = "";
 			targets = (
 				0F487A470522CCC46CCB76A9 /* FlashNoteApp */,
+				BB5FC2454F33E35BC18F3136 /* FlashNoteAppTests */,
 				A09C17F8A5F09C2BEE1A7A93 /* FlashNoteIntents */,
 				DF2991F16C9DBF4776C2B068 /* FlashNoteShareExtension */,
 				02E123B1E5C30FFACD430CE0 /* FlashNoteWatch */,
@@ -733,6 +787,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6C6C2CB32FB4354533E84260 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				893BF14EF2350F9C2E935D91 /* CaptureViewModelTests.swift in Sources */,
+				3F3459E51D024A018A086934 /* NavigationRouterTests.swift in Sources */,
+				7FBC11BCBAAF96AAD494136C /* NoteDetailViewModelTests.swift in Sources */,
+				069376A886528AE0D3C30177 /* TriageViewModelTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7D55A08CB665225ABEF927F0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -762,7 +827,6 @@
 				1AAC759D7E448268938F3620 /* CaptureViewModel.swift in Sources */,
 				92DBCEDF569E0C3CB2281830 /* ChecklistEditor.swift in Sources */,
 				4A1D67B0DC2BE694001EDA4D /* ContentView.swift in Sources */,
-				3A7C8D227CB68CB9A68F2CA8 /* DateFormatters.swift in Sources */,
 				53477C4C7269515C41848E10 /* DependencyContainer.swift in Sources */,
 				89A143BB6C76BC912A99DC2A /* EmptyInboxView.swift in Sources */,
 				98194ED934F30BA94FE85553 /* ExportActionSheet.swift in Sources */,
@@ -779,13 +843,11 @@
 				CC92D746B86FABB5B85D88EA /* NoteRowView.swift in Sources */,
 				BC5A67A7F101F756CA02C392 /* ResurfacingScheduler.swift in Sources */,
 				9E9DAA48C351FBAFA1EE24B4 /* SaveConfirmationView.swift in Sources */,
-				9337537DBEEF5D5947F4F22D /* SearchBar.swift in Sources */,
 				82EBFF5A0786B6A90CC293B0 /* SettingsView.swift in Sources */,
 				928EC64158BFF544C3557C08 /* SettingsViewModel.swift in Sources */,
 				99315495255D80E777CA1926 /* ShakeDetector.swift in Sources */,
 				80C78D2AEF61800691C9430F /* SpotlightIndexer.swift in Sources */,
 				0473BFB0952938F54B89C307 /* SwipeActionIndicator.swift in Sources */,
-				D1847D1D59B72A1805524D57 /* TaskDetectionService.swift in Sources */,
 				F53B50AB5626DA4DDAB8B87F /* TaskSuggestionBanner.swift in Sources */,
 				22A901BA8FB13538033BE834 /* TriageCardView.swift in Sources */,
 				C052C3C8260B2CD0F4EB6DB8 /* TriageProgressBar.swift in Sources */,
@@ -799,6 +861,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		472040335C5EEE0B4F506965 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0F487A470522CCC46CCB76A9 /* FlashNoteApp */;
+			targetProxy = 1F8B30D163FC08D42731C2DD /* PBXContainerItemProxy */;
+		};
 		512331ED2134C9D31EBBEB6C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DF2991F16C9DBF4776C2B068 /* FlashNoteShareExtension */;
@@ -824,7 +891,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FlashNoteShareExtension/Info.plist;
-				INFOPLIST_KEY_NSExtension_NSExtensionAttributes_NSExtensionActivationRule = TRUEPREDICATE;
+				INFOPLIST_KEY_NSExtension_NSExtensionAttributes_NSExtensionActivationRule = "SUBQUERY(extensionItems, $extensionItem, SUBQUERY($extensionItem.attachments, $attachment, ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.plain-text\" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.url\").@count >= 1).@count >= 1";
 				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.share-services";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1020,7 +1087,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FlashNoteShareExtension/Info.plist;
-				INFOPLIST_KEY_NSExtension_NSExtensionAttributes_NSExtensionActivationRule = TRUEPREDICATE;
+				INFOPLIST_KEY_NSExtension_NSExtensionAttributes_NSExtensionActivationRule = "SUBQUERY(extensionItems, $extensionItem, SUBQUERY($extensionItem.attachments, $attachment, ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.plain-text\" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.url\").@count >= 1).@count >= 1";
 				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.share-services";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1138,6 +1205,40 @@
 			};
 			name = Debug;
 		};
+		C033DAE503A4E66586A0BA89 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.flashnote.app.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FlashNote.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FlashNote";
+			};
+			name = Debug;
+		};
+		D6EE6604372CBBF96E9F7B96 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.flashnote.app.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FlashNote.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FlashNote";
+			};
+			name = Release;
+		};
 		DA356A0337533B188D523CF4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1193,6 +1294,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		50C612C825FDD93944635876 /* Build configuration list for PBXNativeTarget "FlashNoteAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C033DAE503A4E66586A0BA89 /* Debug */,
+				D6EE6604372CBBF96E9F7B96 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		511AF5D7C91FC550A741B86D /* Build configuration list for PBXNativeTarget "FlashNoteWatch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1238,6 +1348,10 @@
 			productName = FlashNoteCore;
 		};
 		76A4B2DC7FBE1DB16CA2D0FF /* FlashNoteCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FlashNoteCore;
+		};
+		A763B18793F42470430840DC /* FlashNoteCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FlashNoteCore;
 		};
