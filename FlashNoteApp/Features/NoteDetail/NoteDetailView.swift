@@ -31,7 +31,7 @@ struct NoteDetailView: View {
                             .font(AppTypography.caption)
                             .foregroundStyle(AppColors.textTertiary)
 
-                        Text(DateFormatters.fullTimestamp(for: note.createdAt))
+                        Text(DateHelpers.fullString(from: note.createdAt))
                             .font(AppTypography.caption)
                             .foregroundStyle(AppColors.textTertiary)
 
@@ -63,7 +63,7 @@ struct NoteDetailView: View {
                     // Edit timestamp
                     if note.updatedAt != note.createdAt {
                         EditorialRule()
-                        Text("edited \(DateFormatters.relativeTimestamp(for: note.updatedAt))")
+                        Text("edited \(DateHelpers.relativeString(from: note.updatedAt))")
                             .font(AppTypography.captionSmall)
                             .foregroundStyle(AppColors.textTertiary)
                     }

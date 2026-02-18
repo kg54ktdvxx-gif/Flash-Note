@@ -19,7 +19,13 @@ public enum AppGroupContainer {
         sharedContainerURL.appendingPathComponent("hot_capture_buffer.jsonl")
     }
 
-    public static var audioDirectory: URL {
+    /// Tracks IDs of buffer entries already flushed to SwiftData.
+    /// Prevents duplicates if the app crashes between save and buffer clear.
+    public static var flushedEntryIDsFileURL: URL {
+        sharedContainerURL.appendingPathComponent("flushed_entry_ids.json")
+    }
+
+    public static let audioDirectory: URL = {
         let url = sharedContainerURL.appendingPathComponent("Audio", isDirectory: true)
         do {
             try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
@@ -27,7 +33,7 @@ public enum AppGroupContainer {
             FNLog.voice.error("Failed to create audio directory: \(error)")
         }
         return url
-    }
+    }()
 
     public static var sharedDefaults: UserDefaults {
         UserDefaults(suiteName: groupIdentifier) ?? .standard

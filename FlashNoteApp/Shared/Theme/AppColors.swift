@@ -1,4 +1,5 @@
 import SwiftUI
+import FlashNoteCore
 #if canImport(UIKit)
 import UIKit
 #endif
@@ -25,10 +26,11 @@ public enum AppColors {
     }
 
     // MARK: - Primary Accent (Vermillion — used with restraint)
+    // Values sourced from DesignTokens (FlashNoteCore) — shared with widgets.
 
     static let accent = adaptive(
-        lightR: 0.83, lightG: 0.22, lightB: 0.17,     // #D4382C
-        darkR: 0.91, darkG: 0.27, darkB: 0.23          // #E8453A
+        lightR: DesignTokens.accent.lightR, lightG: DesignTokens.accent.lightG, lightB: DesignTokens.accent.lightB,
+        darkR: DesignTokens.accent.darkR, darkG: DesignTokens.accent.darkG, darkB: DesignTokens.accent.darkB
     )
 
     static let accentSoft = adaptive(
@@ -43,8 +45,8 @@ public enum AppColors {
     // MARK: - Backgrounds
 
     static let background = adaptive(
-        lightR: 0.98, lightG: 0.98, lightB: 0.97,      // #FAFAF8 warm paper
-        darkR: 0.047, darkG: 0.047, darkB: 0.047       // #0C0C0C near black
+        lightR: DesignTokens.background.lightR, lightG: DesignTokens.background.lightG, lightB: DesignTokens.background.lightB,
+        darkR: DesignTokens.background.darkR, darkG: DesignTokens.background.darkG, darkB: DesignTokens.background.darkB
     )
 
     static let surface = adaptive(

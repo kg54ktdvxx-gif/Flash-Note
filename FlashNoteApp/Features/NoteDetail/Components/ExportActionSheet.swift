@@ -61,6 +61,11 @@ struct ExportActionSheet: View {
             } message: {
                 if let exportError { Text(exportError) }
             }
+            .onDisappear {
+                if let exportURL {
+                    try? FileManager.default.removeItem(at: exportURL)
+                }
+            }
         }
     }
 
@@ -73,6 +78,11 @@ struct ExportActionSheet: View {
     }
 
     private func exportNote(format: ExportFormat) {
+        // Clean up any previous export temp file
+        if let previousURL = exportURL {
+            try? FileManager.default.removeItem(at: previousURL)
+        }
+
         do {
             exportURL = try exportService.exportToFile(notes: [note], format: format)
             showShareSheet = true

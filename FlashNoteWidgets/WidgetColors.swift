@@ -1,17 +1,20 @@
 import SwiftUI
 import UIKit
+import FlashNoteCore
 
-/// Editorial color palette for widgets (mirrors AppColors, standalone for widget target).
+/// Editorial color palette for widgets — values sourced from DesignTokens (single source of truth).
 enum WidgetColors {
     static let accent = Color(UIColor { traits in
-        traits.userInterfaceStyle == .dark
-            ? UIColor(red: 0.91, green: 0.27, blue: 0.23, alpha: 1)  // #E8453A
-            : UIColor(red: 0.83, green: 0.22, blue: 0.17, alpha: 1)  // #D4382C
+        let v = DesignTokens.accent
+        return traits.userInterfaceStyle == .dark
+            ? UIColor(red: v.darkR, green: v.darkG, blue: v.darkB, alpha: 1)
+            : UIColor(red: v.lightR, green: v.lightG, blue: v.lightB, alpha: 1)
     })
 
     static let background = UIColor { traits in
-        traits.userInterfaceStyle == .dark
-            ? UIColor(red: 0.047, green: 0.047, blue: 0.047, alpha: 1)  // #0C0C0C
-            : UIColor(red: 0.98, green: 0.98, blue: 0.97, alpha: 1)     // #FAFAF8
+        let v = DesignTokens.background
+        return traits.userInterfaceStyle == .dark
+            ? UIColor(red: v.darkR, green: v.darkG, blue: v.darkB, alpha: 1)
+            : UIColor(red: v.lightR, green: v.lightG, blue: v.lightB, alpha: 1)
     }
 }

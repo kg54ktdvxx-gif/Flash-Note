@@ -18,7 +18,11 @@ final class DependencyContainer: Sendable {
                 isStoredInMemoryOnly: false,
                 cloudKitDatabase: .none
             )
-            modelContainer = try ModelContainer(for: schema, configurations: [config])
+            modelContainer = try ModelContainer(
+                for: schema,
+                migrationPlan: NoteMigrationPlan.self,
+                configurations: [config]
+            )
         } catch {
             fatalError("Failed to create ModelContainer: \(error)")
         }

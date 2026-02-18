@@ -11,13 +11,20 @@ public struct BufferEntry: Codable, Sendable {
         CaptureSource(rawValue: sourceRaw) ?? .keyboard
     }
 
+    /// Maximum text length for a buffer entry. Inputs exceeding this limit are truncated.
+    public static let maxTextLength = 50_000
+
     public init(
         text: String,
         source: CaptureSource,
         audioFileName: String? = nil
     ) {
         self.id = UUID()
-        self.text = text
+        if text.count > Self.maxTextLength {
+            self.text = String(text.prefix(Self.maxTextLength)) + "\n... (truncated)"
+        } else {
+            self.text = text
+        }
         self.sourceRaw = source.rawValue
         self.capturedAt = .now
         self.audioFileName = audioFileName

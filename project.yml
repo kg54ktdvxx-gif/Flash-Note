@@ -112,12 +112,27 @@ targets:
         GENERATE_INFOPLIST_FILE: "YES"
         INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier: com.apple.share-services
         INFOPLIST_KEY_NSExtension_NSExtensionAttributes_NSExtensionActivationRule: >-
-          TRUEPREDICATE
+          SUBQUERY(extensionItems, $extensionItem, SUBQUERY($extensionItem.attachments, $attachment, ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.plain-text" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.url").@count >= 1).@count >= 1
     entitlements:
       path: FlashNoteShareExtension/FlashNoteShareExtension.entitlements
       properties:
         com.apple.security.application-groups:
           - group.com.flashnote.shared
+
+  FlashNoteAppTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - FlashNoteAppTests
+    dependencies:
+      - target: FlashNoteApp
+      - package: FlashNoteCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.flashnote.app.tests
+        GENERATE_INFOPLIST_FILE: "YES"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/FlashNote.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FlashNote"
+        BUNDLE_LOADER: "$(TEST_HOST)"
 
   FlashNoteIntents:
     type: app-extension

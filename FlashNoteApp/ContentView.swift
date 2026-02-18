@@ -44,6 +44,7 @@ struct ContentView: View {
         }
         .onAppear {
             BufferSyncService.flush(to: modelContext)
+            SettingsViewModel().purgeOldDeletedNotes(context: modelContext)
         }
         .sheet(isPresented: $showSettings) {
             NavigationStack {

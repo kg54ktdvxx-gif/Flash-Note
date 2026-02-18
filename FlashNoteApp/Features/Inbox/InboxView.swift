@@ -10,7 +10,12 @@ struct InboxView: View {
         filter: #Predicate<Note> { $0.statusRaw != "deleted" },
         sort: \Note.createdAt,
         order: .reverse
-    ) private var notes: [Note]
+    ) private var allNotes: [Note]
+
+    /// Limit notes loaded into the section builder to cap memory usage.
+    private var notes: [Note] {
+        Array(allNotes.prefix(200))
+    }
 
     @State private var viewModel = InboxViewModel()
     @State private var selectedNote: Note?

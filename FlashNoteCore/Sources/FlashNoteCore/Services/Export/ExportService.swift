@@ -58,10 +58,11 @@ public struct DefaultExportService: ExportService, Sendable {
             let status: String
         }
 
+        let isoFormatter = ISO8601DateFormatter()
         let exportNotes = notes.map { note in
             ExportNote(
                 text: note.text,
-                createdAt: ISO8601DateFormatter().string(from: note.createdAt),
+                createdAt: isoFormatter.string(from: note.createdAt),
                 source: note.sourceRaw,
                 status: note.statusRaw
             )
