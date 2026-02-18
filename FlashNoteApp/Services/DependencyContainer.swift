@@ -10,6 +10,7 @@ final class DependencyContainer: Sendable {
     let modelContainer: ModelContainer
     let navigationRouter: NavigationRouter
     let hapticService: HapticService
+    private let notificationDelegate: NotificationDelegate
 
     private init() {
         do {
@@ -30,6 +31,7 @@ final class DependencyContainer: Sendable {
 
         navigationRouter = NavigationRouter()
         hapticService = HapticService()
+        notificationDelegate = NotificationDelegate(modelContainer: modelContainer)
     }
 
     func setupWatchConnectivity() {
@@ -38,6 +40,7 @@ final class DependencyContainer: Sendable {
 
     func setupNotifications() {
         let center = UNUserNotificationCenter.current()
+        center.delegate = notificationDelegate
         center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error {
                 FNLog.resurfacing.error("Notification authorization failed: \(error)")
