@@ -77,6 +77,12 @@ struct SettingsView: View {
                     statRow("Build", value: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1")
                 } header: {
                     sectionHeader("ABOUT")
+                } footer: {
+                    Text("Made with ❤️ + 🤖 in 🇸🇬")
+                        .font(AppTypography.caption)
+                        .foregroundStyle(AppColors.textTertiary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 16)
                 }
             }
             .listStyle(.insetGrouped)
