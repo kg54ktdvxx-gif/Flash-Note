@@ -42,6 +42,9 @@ targets:
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         INFOPLIST_KEY_NSMicrophoneUsageDescription: "FlashNote uses the microphone for voice capture to quickly record your thoughts."
         INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: "FlashNote uses speech recognition to transcribe your voice notes on-device."
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: "NO"
+        INFOPLIST_KEY_LSApplicationQueriesSchemes: >-
+          ["x-apple-reminderkit", "things", "obsidian"]
         INFOPLIST_KEY_CFBundleURLTypes: >-
           [{"CFBundleURLSchemes": ["flashnote"], "CFBundleURLName": "com.flashnote.urlscheme"}]
         CODE_SIGN_ENTITLEMENTS: FlashNoteApp/FlashNoteApp.entitlements

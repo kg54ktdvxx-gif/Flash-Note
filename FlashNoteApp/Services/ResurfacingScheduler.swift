@@ -77,12 +77,16 @@ enum ResurfacingScheduler {
         let hour = calendar.component(.hour, from: date)
         // Quiet hours: 22:00 (10pm) to 07:59 (8am)
         if hour >= 22 {
-            // Push to 8am the next day
-            let nextDay = calendar.date(byAdding: .day, value: 1, to: date)!
-            return calendar.date(bySettingHour: 8, minute: 0, second: 0, of: nextDay)!
+            guard let nextDay = calendar.date(byAdding: .day, value: 1, to: date),
+                  let adjusted = calendar.date(bySettingHour: 8, minute: 0, second: 0, of: nextDay) else {
+                return date
+            }
+            return adjusted
         } else if hour < 8 {
-            // Push to 8am same day
-            return calendar.date(bySettingHour: 8, minute: 0, second: 0, of: date)!
+            guard let adjusted = calendar.date(bySettingHour: 8, minute: 0, second: 0, of: date) else {
+                return date
+            }
+            return adjusted
         }
         return date
     }

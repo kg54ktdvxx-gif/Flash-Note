@@ -63,6 +63,7 @@
 		AE417BED7AE6D9662205FB3A /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B85575986B824BB2DED48CE /* NavigationRouter.swift */; };
 		B682C1C1135E01066604B24C /* WatchInboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0225E9B3461D405F8D0997C /* WatchInboxView.swift */; };
 		BC5A67A7F101F756CA02C392 /* ResurfacingScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7ED133B9029C2C0F567CB2 /* ResurfacingScheduler.swift */; };
+		BD0F215EC6DEFDD53F5AE058 /* NotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E134CB44896A1A1066EB30D /* NotificationDelegate.swift */; };
 		BF2E4882E401D24CECAAB701 /* FlashNoteCore in Frameworks */ = {isa = PBXBuildFile; productRef = 3A620719CD3A800B1CFE0584 /* FlashNoteCore */; };
 		C052C3C8260B2CD0F4EB6DB8 /* TriageProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303942C64CB75CEE013C1746 /* TriageProgressBar.swift */; };
 		C15BFBB8F74E168C7CC9E0A6 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ABFC6E6DDDAED685B37506D /* AppColors.swift */; };
@@ -152,6 +153,7 @@
 		4C95A63CB2EBEB21FB4B9E24 /* WatchCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchCaptureView.swift; sourceTree = "<group>"; };
 		4D1D9E1E166FEA732D845EDD /* InboxViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxViewModel.swift; sourceTree = "<group>"; };
 		59E9605EDB6D7F143A1C005F /* TriageCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriageCardView.swift; sourceTree = "<group>"; };
+		5E134CB44896A1A1066EB30D /* NotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDelegate.swift; sourceTree = "<group>"; };
 		6964A37F0A100C37AEAEAFA1 /* FlashNoteWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FlashNoteWatch.entitlements; sourceTree = "<group>"; };
 		69F856223FE94CABC210ACA2 /* CaptureWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureWidget.swift; sourceTree = "<group>"; };
 		6D39D5E2246650D6FCDA5AF9 /* FlashNoteApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FlashNoteApp.entitlements; sourceTree = "<group>"; };
@@ -443,6 +445,7 @@
 				D328AAC2DE97946768D8387F /* BufferSyncService.swift */,
 				D9FC8EC9E96CE1A46FCA4222 /* DependencyContainer.swift */,
 				83592F9A6BBB3C38B28B7A54 /* HapticService.swift */,
+				5E134CB44896A1A1066EB30D /* NotificationDelegate.swift */,
 				1B7ED133B9029C2C0F567CB2 /* ResurfacingScheduler.swift */,
 				CEBF238252E9DC2B7A234CA8 /* SpotlightIndexer.swift */,
 			);
@@ -851,6 +854,7 @@
 				F0BD1C81236BDB2E0C1DABF7 /* NoteDetailView.swift in Sources */,
 				4906A28D1836BE9F44B09756 /* NoteDetailViewModel.swift in Sources */,
 				CC92D746B86FABB5B85D88EA /* NoteRowView.swift in Sources */,
+				BD0F215EC6DEFDD53F5AE058 /* NotificationDelegate.swift in Sources */,
 				BC5A67A7F101F756CA02C392 /* ResurfacingScheduler.swift in Sources */,
 				9E9DAA48C351FBAFA1EE24B4 /* SaveConfirmationView.swift in Sources */,
 				82EBFF5A0786B6A90CC293B0 /* SettingsView.swift in Sources */,
@@ -944,6 +948,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleURLTypes = "[{\"CFBundleURLSchemes\": [\"flashnote\"], \"CFBundleURLName\": \"com.flashnote.urlscheme\"}]";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationQueriesSchemes = "[\"x-apple-reminderkit\", \"things\", \"obsidian\"]";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "FlashNote uses the microphone for voice capture to quickly record your thoughts.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "FlashNote uses speech recognition to transcribe your voice notes on-device.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1120,6 +1126,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleURLTypes = "[{\"CFBundleURLSchemes\": [\"flashnote\"], \"CFBundleURLName\": \"com.flashnote.urlscheme\"}]";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationQueriesSchemes = "[\"x-apple-reminderkit\", \"things\", \"obsidian\"]";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "FlashNote uses the microphone for voice capture to quickly record your thoughts.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "FlashNote uses speech recognition to transcribe your voice notes on-device.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

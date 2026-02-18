@@ -21,23 +21,15 @@ struct ExportActionSheet: View {
                     }
                 }
 
-                Section("Integrations") {
-                    Button {
-                        openInReminders()
-                    } label: {
-                        Label("Add to Reminders", systemImage: "checklist")
-                    }
-
-                    Button {
-                        openInThings()
-                    } label: {
-                        Label("Send to Things", systemImage: "square.and.arrow.up")
-                    }
-
-                    Button {
-                        openInObsidian()
-                    } label: {
-                        Label("Send to Obsidian", systemImage: "doc.text")
+                if !integrations.isEmpty {
+                    Section("Integrations") {
+                        ForEach(integrations, id: \.label) { integration in
+                            Button {
+                                integration.action()
+                            } label: {
+                                Label(integration.label, systemImage: integration.icon)
+                            }
+                        }
                     }
                 }
             }
@@ -67,6 +59,26 @@ struct ExportActionSheet: View {
                 }
             }
         }
+    }
+
+    private struct Integration {
+        let label: String
+        let icon: String
+        let action: () -> Void
+    }
+
+    private var integrations: [Integration] {
+        var result: [Integration] = []
+        if UIApplication.shared.canOpenURL(URL(string: "x-apple-reminderkit://")!) {
+            result.append(Integration(label: "Add to Reminders", icon: "checklist", action: openInReminders))
+        }
+        if UIApplication.shared.canOpenURL(URL(string: "things:///")!) {
+            result.append(Integration(label: "Send to Things", icon: "square.and.arrow.up", action: openInThings))
+        }
+        if UIApplication.shared.canOpenURL(URL(string: "obsidian://")!) {
+            result.append(Integration(label: "Send to Obsidian", icon: "doc.text", action: openInObsidian))
+        }
+        return result
     }
 
     private func iconForFormat(_ format: ExportFormat) -> String {
