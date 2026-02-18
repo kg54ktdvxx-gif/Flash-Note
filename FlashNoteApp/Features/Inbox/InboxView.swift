@@ -87,6 +87,7 @@ struct InboxView: View {
                     .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(showSearch ? AppColors.textSecondary : AppColors.textTertiary)
             }
+            .accessibilityLabel(showSearch ? "Close search" : "Search notes")
 
             Spacer()
 

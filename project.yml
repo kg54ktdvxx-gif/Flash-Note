@@ -71,6 +71,7 @@ targets:
         CURRENT_PROJECT_VERSION: "1"
         GENERATE_INFOPLIST_FILE: "YES"
         INFOPLIST_KEY_WKCompanionAppBundleIdentifier: com.flashnote.app
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     entitlements:
       path: FlashNoteWatch/FlashNoteWatch.entitlements
       properties:
@@ -111,6 +112,7 @@ targets:
         CURRENT_PROJECT_VERSION: "1"
         GENERATE_INFOPLIST_FILE: "YES"
         INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier: com.apple.share-services
+        INFOPLIST_KEY_NSExtension_NSExtensionPrincipalClass: "$(PRODUCT_MODULE_NAME).ShareViewController"
         INFOPLIST_KEY_NSExtension_NSExtensionAttributes_NSExtensionActivationRule: >-
           SUBQUERY(extensionItems, $extensionItem, SUBQUERY($extensionItem.attachments, $attachment, ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.plain-text" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.url").@count >= 1).@count >= 1
     entitlements:

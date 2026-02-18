@@ -50,6 +50,9 @@ struct WatchCaptureView: View {
             try modelContext.save()
             FNLog.watch.info("Watch note saved: \(note.id)")
 
+            // Sync to iPhone via WatchConnectivity
+            WatchConnectivityManager.shared.sendNote(text: trimmed)
+
             #if os(watchOS)
             WKInterfaceDevice.current().play(.success)
             #endif

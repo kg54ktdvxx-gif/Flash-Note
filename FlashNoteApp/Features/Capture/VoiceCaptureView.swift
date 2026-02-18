@@ -53,6 +53,8 @@ struct VoiceCaptureView: View {
                             .foregroundStyle(isRecording ? .white : AppColors.background)
                     }
                 }
+                .accessibilityLabel(isRecording ? "Stop recording" : "Start recording")
+                .accessibilityHint(isRecording ? "Stops voice capture" : "Begins voice capture and transcription")
                 .padding(.bottom, AppSpacing.lg)
 
                 // Save button

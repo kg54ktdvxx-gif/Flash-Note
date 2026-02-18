@@ -1,8 +1,8 @@
+#if canImport(WatchConnectivity)
 import WatchConnectivity
-import FlashNoteCore
 
-final class WatchConnectivityManager: NSObject, WCSessionDelegate, @unchecked Sendable {
-    static let shared = WatchConnectivityManager()
+public final class WatchConnectivityManager: NSObject, WCSessionDelegate, @unchecked Sendable {
+    public static let shared = WatchConnectivityManager()
 
     /// Serial queue for all delegate callbacks and message handling
     private let queue = DispatchQueue(label: "com.flashnote.watchconnectivity")
@@ -11,7 +11,7 @@ final class WatchConnectivityManager: NSObject, WCSessionDelegate, @unchecked Se
         super.init()
     }
 
-    func activate() {
+    public func activate() {
         guard WCSession.isSupported() else { return }
         let session = WCSession.default
         session.delegate = self
@@ -21,7 +21,7 @@ final class WatchConnectivityManager: NSObject, WCSessionDelegate, @unchecked Se
 
     // MARK: - Send note from Watch to iPhone
 
-    func sendNote(text: String) {
+    public func sendNote(text: String) {
         guard WCSession.default.isReachable else {
             // Fall back to transferUserInfo for background delivery
             WCSession.default.transferUserInfo([
@@ -44,7 +44,7 @@ final class WatchConnectivityManager: NSObject, WCSessionDelegate, @unchecked Se
 
     // MARK: - WCSessionDelegate
 
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {
+    public func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {
         if let error {
             FNLog.watch.error("WCSession activation failed: \(error)")
         } else {
@@ -53,19 +53,19 @@ final class WatchConnectivityManager: NSObject, WCSessionDelegate, @unchecked Se
     }
 
     #if os(iOS)
-    func sessionDidBecomeInactive(_ session: WCSession) {}
-    func sessionDidDeactivate(_ session: WCSession) {
+    public func sessionDidBecomeInactive(_ session: WCSession) {}
+    public func sessionDidDeactivate(_ session: WCSession) {
         session.activate()
     }
     #endif
 
-    func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+    public func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
         queue.async { [weak self] in
             self?.handleReceivedMessage(message)
         }
     }
 
-    func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any] = [:]) {
+    public func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any] = [:]) {
         queue.async { [weak self] in
             self?.handleReceivedMessage(userInfo)
         }
@@ -90,3 +90,4 @@ final class WatchConnectivityManager: NSObject, WCSessionDelegate, @unchecked Se
         }
     }
 }
+#endif
