@@ -156,6 +156,7 @@
 		5E134CB44896A1A1066EB30D /* NotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDelegate.swift; sourceTree = "<group>"; };
 		6964A37F0A100C37AEAEAFA1 /* FlashNoteWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FlashNoteWatch.entitlements; sourceTree = "<group>"; };
 		69F856223FE94CABC210ACA2 /* CaptureWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureWidget.swift; sourceTree = "<group>"; };
+		6A06FBA5AA6244A582546A07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		6D39D5E2246650D6FCDA5AF9 /* FlashNoteApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FlashNoteApp.entitlements; sourceTree = "<group>"; };
 		6D58BC74F55B465B2A412F06 /* ExportActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportActionSheet.swift; sourceTree = "<group>"; };
 		6E493CFC3BE6AA7280F2C405 /* FlashNoteIntents.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = FlashNoteIntents.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -276,6 +277,7 @@
 			isa = PBXGroup;
 			children = (
 				24329B17E3FA6CA6BED2C752 /* FlashNoteShareExtension.entitlements */,
+				6A06FBA5AA6244A582546A07 /* Info.plist */,
 				DE3989264BA2646747FF1CB3 /* ShareViewController.swift */,
 			);
 			path = FlashNoteShareExtension;
@@ -904,9 +906,7 @@
 				CODE_SIGN_ENTITLEMENTS = FlashNoteShareExtension/FlashNoteShareExtension.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSExtension_NSExtensionAttributes_NSExtensionActivationRule = "SUBQUERY(extensionItems, $extensionItem, SUBQUERY($extensionItem.attachments, $attachment, ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.plain-text\" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.url\").@count >= 1).@count >= 1";
-				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.share-services";
-				INFOPLIST_KEY_NSExtension_NSExtensionPrincipalClass = "$(PRODUCT_MODULE_NAME).ShareViewController";
+				INFOPLIST_FILE = FlashNoteShareExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1102,9 +1102,7 @@
 				CODE_SIGN_ENTITLEMENTS = FlashNoteShareExtension/FlashNoteShareExtension.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSExtension_NSExtensionAttributes_NSExtensionActivationRule = "SUBQUERY(extensionItems, $extensionItem, SUBQUERY($extensionItem.attachments, $attachment, ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.plain-text\" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.url\").@count >= 1).@count >= 1";
-				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.share-services";
-				INFOPLIST_KEY_NSExtension_NSExtensionPrincipalClass = "$(PRODUCT_MODULE_NAME).ShareViewController";
+				INFOPLIST_FILE = FlashNoteShareExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
