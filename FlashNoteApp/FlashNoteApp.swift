@@ -9,6 +9,7 @@ struct FlashNoteApp: App {
     init() {
         container = DependencyContainer.shared
         container.setupNotifications()
+        container.setupWatchConnectivity()
     }
 
     var body: some Scene {

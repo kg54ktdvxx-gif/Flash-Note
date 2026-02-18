@@ -69,6 +69,7 @@ struct EditorialTabBar: View {
                     .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(AppColors.textTertiary)
             }
+            .accessibilityLabel("Settings")
             .frame(width: 40)
 
             Spacer()

@@ -51,6 +51,12 @@ struct TriageCardView: View {
                     .font(AppTypography.captionSmall)
                 }
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Note: \(note.text)")
+            .accessibilityHint("Swipe right to keep, left to archive, or up to make a task")
+            .accessibilityAction(named: "Keep") { onAction(.keep) }
+            .accessibilityAction(named: "Archive") { onAction(.archive) }
+            .accessibilityAction(named: "Make Task") { onAction(.task) }
             .offset(x: offset.width, y: verticalOffset)
             .rotationEffect(.degrees(Double(offset.width / 25)))
             .gesture(

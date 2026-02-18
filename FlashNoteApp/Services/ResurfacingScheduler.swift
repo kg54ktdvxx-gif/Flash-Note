@@ -1,4 +1,4 @@
-import UserNotifications
+@preconcurrency import UserNotifications
 import FlashNoteCore
 
 enum ResurfacingScheduler {
@@ -37,26 +37,73 @@ enum ResurfacingScheduler {
     static func scheduleResurfacing(for note: Note) {
         guard resurfacingService.shouldResurface(note: note, schedule: schedule) else { return }
 
-        guard let triggerDate = resurfacingService.computeNextResurfaceDate(for: note, schedule: schedule) else {
+        guard var triggerDate = resurfacingService.computeNextResurfaceDate(for: note, schedule: schedule) else {
             return
         }
 
+        // Enforce quiet hours: shift notifications landing in 10pm–8am to 8am
+        let quietHoursEnabled = UserDefaults.standard.object(forKey: "quietHoursEnabled") as? Bool ?? true
+        if quietHoursEnabled {
+            triggerDate = adjustForQuietHours(triggerDate)
+        }
+
+        // Enforce daily notification cap
+        let maxDaily = UserDefaults.standard.object(forKey: "maxDailyNotifications") as? Int ?? 3
+        let adjustedDate = triggerDate
+        let noteID = note.id
+        let resurfaceCount = note.resurfaceCount
+        let center = UNUserNotificationCenter.current()
+        center.getPendingNotificationRequests { requests in
+            let calendar = Calendar.current
+            let sameDayCount = requests.filter { request in
+                guard request.identifier.hasPrefix("resurface-"),
+                      let calTrigger = request.trigger as? UNCalendarNotificationTrigger,
+                      let fireDate = calTrigger.nextTriggerDate() else { return false }
+                return calendar.isDate(fireDate, inSameDayAs: adjustedDate)
+            }.count
+
+            guard sameDayCount < maxDaily else {
+                FNLog.resurfacing.info("Daily cap (\(maxDaily)) reached for \(adjustedDate); skipping note \(noteID)")
+                return
+            }
+
+            Self.deliverResurfacing(noteID: noteID, resurfaceCount: resurfaceCount, triggerDate: adjustedDate)
+        }
+    }
+
+    /// Shift a date out of quiet hours (10pm–8am) to 8am.
+    private static func adjustForQuietHours(_ date: Date) -> Date {
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: date)
+        // Quiet hours: 22:00 (10pm) to 07:59 (8am)
+        if hour >= 22 {
+            // Push to 8am the next day
+            let nextDay = calendar.date(byAdding: .day, value: 1, to: date)!
+            return calendar.date(bySettingHour: 8, minute: 0, second: 0, of: nextDay)!
+        } else if hour < 8 {
+            // Push to 8am same day
+            return calendar.date(bySettingHour: 8, minute: 0, second: 0, of: date)!
+        }
+        return date
+    }
+
+    private static func deliverResurfacing(noteID: UUID, resurfaceCount: Int, triggerDate: Date) {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: triggerDate)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
 
-        let interval = schedule.nextInterval(for: note.resurfaceCount) ?? 86400
+        let interval = schedule.nextInterval(for: resurfaceCount) ?? 86400
         let daysAgo = Int(interval / 86400)
 
         let content = UNMutableNotificationContent()
         content.title = "A thought from \(daysAgo) day\(daysAgo == 1 ? "" : "s") ago"
         content.body = "You saved a thought — tap to review"
         content.categoryIdentifier = categoryIdentifier
-        content.userInfo = ["noteID": note.id.uuidString]
+        content.userInfo = ["noteID": noteID.uuidString]
         content.sound = .default
 
         let request = UNNotificationRequest(
-            identifier: "resurface-\(note.id.uuidString)-\(note.resurfaceCount)",
+            identifier: "resurface-\(noteID.uuidString)-\(resurfaceCount)",
             content: content,
             trigger: trigger
         )
@@ -65,7 +112,7 @@ enum ResurfacingScheduler {
             if let error {
                 FNLog.resurfacing.error("Failed to schedule: \(error)")
             } else {
-                FNLog.resurfacing.info("Scheduled resurface #\(note.resurfaceCount) for note \(note.id)")
+                FNLog.resurfacing.info("Scheduled resurface #\(resurfaceCount) for note \(noteID)")
             }
         }
     }

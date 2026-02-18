@@ -39,6 +39,7 @@ struct CaptureView: View {
                         .padding(.horizontal, AppSpacing.sm)
                         .padding(.vertical, 6)
                     }
+                    .accessibilityLabel(isChecklistMode ? "Disable checklist mode" : "Enable checklist mode")
                 }
                 .padding(.horizontal, AppSpacing.screenHorizontal)
 

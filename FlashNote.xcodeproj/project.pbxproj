@@ -66,7 +66,6 @@
 		BF2E4882E401D24CECAAB701 /* FlashNoteCore in Frameworks */ = {isa = PBXBuildFile; productRef = 3A620719CD3A800B1CFE0584 /* FlashNoteCore */; };
 		C052C3C8260B2CD0F4EB6DB8 /* TriageProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303942C64CB75CEE013C1746 /* TriageProgressBar.swift */; };
 		C15BFBB8F74E168C7CC9E0A6 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ABFC6E6DDDAED685B37506D /* AppColors.swift */; };
-		C587B236CAA58B661F4BF831 /* WatchConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ACAA23B32487AB8E925C7E /* WatchConnectivityManager.swift */; };
 		C7ACCD061B5255CBD447E3E9 /* FlashNoteShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7A088BBD63E1AFA57755D992 /* FlashNoteShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C94B3A72B3FADB6E69086687 /* FlashNoteCore in Frameworks */ = {isa = PBXBuildFile; productRef = 2D34BB5EDD49D41CFACC60BC /* FlashNoteCore */; };
 		CC92D746B86FABB5B85D88EA /* NoteRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7DF161FD4EBB6519F2724E1 /* NoteRowView.swift */; };
@@ -75,6 +74,7 @@
 		E28831D21F093E00A6045215 /* WidgetColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20A68CF9C65896FA2532B0C /* WidgetColors.swift */; };
 		EA30E3DDF41E51F01A7CD5BB /* TriageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4157E84DB4CBEB88188EA55 /* TriageViewModel.swift */; };
 		EF2FAA6AAB40CA921486897A /* FlashNoteCore in Frameworks */ = {isa = PBXBuildFile; productRef = 76A4B2DC7FBE1DB16CA2D0FF /* FlashNoteCore */; };
+		EF52A4236A073FF62C7B60A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 030AE8A598A602EC7E683997 /* Assets.xcassets */; };
 		F0614F82CA03D33CBC578743 /* ControlWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA508C8D1DD800155E1B55B /* ControlWidgets.swift */; };
 		F0BD1C81236BDB2E0C1DABF7 /* NoteDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE563E58DCBCA9917879E16 /* NoteDetailView.swift */; };
 		F1A4EF44C4AB7BACA8B4D23B /* GlassCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD76DFBC72B69ED78C90BFE /* GlassCard.swift */; };
@@ -129,6 +129,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		030AE8A598A602EC7E683997 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		05869DA8472782A6A3A7BF6F /* AppSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSpacing.swift; sourceTree = "<group>"; };
 		0BDF8F0BCC9D4A9D90B6C702 /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxView.swift; sourceTree = "<group>"; };
 		0D1B8B4348D80123CF3295EC /* EmptyInboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyInboxView.swift; sourceTree = "<group>"; };
@@ -148,13 +149,11 @@
 		3222DF73EA0C5DA228ADDF4A /* CaptureStreakService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureStreakService.swift; sourceTree = "<group>"; };
 		3BD76DFBC72B69ED78C90BFE /* GlassCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassCard.swift; sourceTree = "<group>"; };
 		3ED83BBF9A4F58EDCCD68AE4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		44ACAA23B32487AB8E925C7E /* WatchConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnectivityManager.swift; sourceTree = "<group>"; };
 		4C95A63CB2EBEB21FB4B9E24 /* WatchCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchCaptureView.swift; sourceTree = "<group>"; };
 		4D1D9E1E166FEA732D845EDD /* InboxViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxViewModel.swift; sourceTree = "<group>"; };
 		59E9605EDB6D7F143A1C005F /* TriageCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriageCardView.swift; sourceTree = "<group>"; };
 		6964A37F0A100C37AEAEAFA1 /* FlashNoteWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FlashNoteWatch.entitlements; sourceTree = "<group>"; };
 		69F856223FE94CABC210ACA2 /* CaptureWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureWidget.swift; sourceTree = "<group>"; };
-		6A06FBA5AA6244A582546A07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		6D39D5E2246650D6FCDA5AF9 /* FlashNoteApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FlashNoteApp.entitlements; sourceTree = "<group>"; };
 		6D58BC74F55B465B2A412F06 /* ExportActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportActionSheet.swift; sourceTree = "<group>"; };
 		6E493CFC3BE6AA7280F2C405 /* FlashNoteIntents.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = FlashNoteIntents.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -275,7 +274,6 @@
 			isa = PBXGroup;
 			children = (
 				24329B17E3FA6CA6BED2C752 /* FlashNoteShareExtension.entitlements */,
-				6A06FBA5AA6244A582546A07 /* Info.plist */,
 				DE3989264BA2646747FF1CB3 /* ShareViewController.swift */,
 			);
 			path = FlashNoteShareExtension;
@@ -467,7 +465,6 @@
 		7BCB86102F0419335755AD07 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				44ACAA23B32487AB8E925C7E /* WatchConnectivityManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -502,6 +499,7 @@
 			isa = PBXGroup;
 			children = (
 				7BCB86102F0419335755AD07 /* Services */,
+				030AE8A598A602EC7E683997 /* Assets.xcassets */,
 				6964A37F0A100C37AEAEAFA1 /* FlashNoteWatch.entitlements */,
 				9F339A33D13B208C158B9F45 /* FlashNoteWatchApp.swift */,
 				4C95A63CB2EBEB21FB4B9E24 /* WatchCaptureView.swift */,
@@ -569,6 +567,7 @@
 			buildConfigurationList = 511AF5D7C91FC550A741B86D /* Build configuration list for PBXNativeTarget "FlashNoteWatch" */;
 			buildPhases = (
 				7D55A08CB665225ABEF927F0 /* Sources */,
+				ED59669491E80F6D462926D8 /* Resources */,
 				CF864550129B8951831F7A70 /* Frameworks */,
 			);
 			buildRules = (
@@ -756,6 +755,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ED59669491E80F6D462926D8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF52A4236A073FF62C7B60A8 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -808,7 +815,6 @@
 			files = (
 				3C399A1DB762C12C9D2FD172 /* FlashNoteWatchApp.swift in Sources */,
 				13F012252951CC617F0CC1F2 /* WatchCaptureView.swift in Sources */,
-				C587B236CAA58B661F4BF831 /* WatchConnectivityManager.swift in Sources */,
 				885CBAEC5F0F719FA645E3A6 /* WatchContentView.swift in Sources */,
 				B682C1C1135E01066604B24C /* WatchInboxView.swift in Sources */,
 			);
@@ -894,9 +900,9 @@
 				CODE_SIGN_ENTITLEMENTS = FlashNoteShareExtension/FlashNoteShareExtension.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FlashNoteShareExtension/Info.plist;
 				INFOPLIST_KEY_NSExtension_NSExtensionAttributes_NSExtensionActivationRule = "SUBQUERY(extensionItems, $extensionItem, SUBQUERY($extensionItem.attachments, $attachment, ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.plain-text\" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.url\").@count >= 1).@count >= 1";
 				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.share-services";
+				INFOPLIST_KEY_NSExtension_NSExtensionPrincipalClass = "$(PRODUCT_MODULE_NAME).ShareViewController";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1090,9 +1096,9 @@
 				CODE_SIGN_ENTITLEMENTS = FlashNoteShareExtension/FlashNoteShareExtension.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FlashNoteShareExtension/Info.plist;
 				INFOPLIST_KEY_NSExtension_NSExtensionAttributes_NSExtensionActivationRule = "SUBQUERY(extensionItems, $extensionItem, SUBQUERY($extensionItem.attachments, $attachment, ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.plain-text\" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.url\").@count >= 1).@count >= 1";
 				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.share-services";
+				INFOPLIST_KEY_NSExtension_NSExtensionPrincipalClass = "$(PRODUCT_MODULE_NAME).ShareViewController";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

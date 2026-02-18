@@ -32,6 +32,10 @@ final class DependencyContainer: Sendable {
         hapticService = HapticService()
     }
 
+    func setupWatchConnectivity() {
+        WatchConnectivityManager.shared.activate()
+    }
+
     func setupNotifications() {
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
