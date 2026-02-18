@@ -34,6 +34,7 @@
 		4A1D67B0DC2BE694001EDA4D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B5B350E93E4025AB298385 /* ContentView.swift */; };
 		4DF12375FA7BAB90FB0C8247 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE3989264BA2646747FF1CB3 /* ShareViewController.swift */; };
 		53477C4C7269515C41848E10 /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9FC8EC9E96CE1A46FCA4222 /* DependencyContainer.swift */; };
+		5AE02FB3BA9FBE9055F73569 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 81E84D3F8E41658B8A56422F /* PrivacyInfo.xcprivacy */; };
 		5B1111629D36BC3A145230A2 /* FlashNoteIntents.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E493CFC3BE6AA7280F2C405 /* FlashNoteIntents.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7480EFEA684C4F4050475C4B /* MergePromptBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF8B7FDB6ADDC7ED5C42D55 /* MergePromptBanner.swift */; };
 		75606ED862CEAF375A1D8FC6 /* AppBorderRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC25BB457E3CED859DF8F491 /* AppBorderRadius.swift */; };
@@ -166,6 +167,7 @@
 		7B85575986B824BB2DED48CE /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouter.swift; sourceTree = "<group>"; };
 		7FBCA026D4A190DA59059204 /* NoteDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDetailViewModel.swift; sourceTree = "<group>"; };
 		8044A93E37BFF7EBAA96FAC7 /* FlashNoteWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashNoteWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		81E84D3F8E41658B8A56422F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		83592F9A6BBB3C38B28B7A54 /* HapticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticService.swift; sourceTree = "<group>"; };
 		8594A549AB8ED446F379CC56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8E39FA46B484014642D402AA /* FlashNoteWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FlashNoteWidgets.entitlements; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 				F7B5B350E93E4025AB298385 /* ContentView.swift */,
 				6D39D5E2246650D6FCDA5AF9 /* FlashNoteApp.entitlements */,
 				A6F60B0CA37FD874F4EDE8A0 /* FlashNoteApp.swift */,
+				81E84D3F8E41658B8A56422F /* PrivacyInfo.xcprivacy */,
 			);
 			path = FlashNoteApp;
 			sourceTree = "<group>";
@@ -749,6 +752,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				33DD6039701132A341927236 /* Assets.xcassets in Resources */,
+				5AE02FB3BA9FBE9055F73569 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
