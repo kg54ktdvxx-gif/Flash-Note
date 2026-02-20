@@ -75,6 +75,17 @@ struct SettingsView: View {
                 Section {
                     statRow("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
                     statRow("Build", value: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1")
+                    Link(destination: URL(string: "https://kg54ktdvxx-gif.github.io/Flash-Note/privacy-policy.html")!) {
+                        HStack {
+                            Text("Privacy Policy")
+                                .font(AppTypography.body)
+                                .foregroundStyle(AppColors.textPrimary)
+                            Spacer()
+                            Image(systemName: "arrow.up.right")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundStyle(AppColors.textTertiary)
+                        }
+                    }
                 } header: {
                     sectionHeader("ABOUT")
                 } footer: {

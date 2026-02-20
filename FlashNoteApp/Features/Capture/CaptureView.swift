@@ -8,6 +8,7 @@ struct CaptureView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var viewModel = CaptureViewModel()
     @State private var isChecklistMode = false
+    @State private var showVoiceCapture = false
 
     var body: some View {
         ZStack {
@@ -105,6 +106,18 @@ struct CaptureView: View {
 
             Spacer()
 
+            // Voice capture button
+            Button {
+                showVoiceCapture = true
+            } label: {
+                Image(systemName: "mic.fill")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundStyle(AppColors.textSecondary)
+            }
+            .accessibilityLabel("Voice note")
+            .accessibilityHint("Opens voice capture to record and transcribe a note")
+            .padding(.trailing, AppSpacing.sm)
+
             Button {
                 viewModel.save(context: modelContext)
                 if isChecklistMode {
@@ -126,5 +139,16 @@ struct CaptureView: View {
         .padding(.horizontal, AppSpacing.screenHorizontal)
         .padding(.vertical, AppSpacing.sm)
         .background(AppColors.background)
+        .sheet(isPresented: $showVoiceCapture) {
+            VoiceCaptureView { text, audioFileName, audioDuration, confidence in
+                viewModel.saveVoiceNote(
+                    text: text,
+                    audioFileName: audioFileName,
+                    audioDuration: audioDuration,
+                    confidence: confidence,
+                    context: modelContext
+                )
+            }
+        }
     }
 }

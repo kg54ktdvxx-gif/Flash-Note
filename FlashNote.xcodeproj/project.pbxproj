@@ -904,7 +904,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = FlashNoteShareExtension/FlashNoteShareExtension.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FlashNoteShareExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -923,7 +923,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = FlashNoteIntents/FlashNoteIntents.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FlashNoteIntents/Info.plist;
 				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.intents-service";
@@ -945,7 +945,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FlashNoteApp/FlashNoteApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleURLTypes = "[{\"CFBundleURLSchemes\": [\"flashnote\"], \"CFBundleURLName\": \"com.flashnote.urlscheme\"}]";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -1100,7 +1100,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = FlashNoteShareExtension/FlashNoteShareExtension.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FlashNoteShareExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1121,7 +1121,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FlashNoteApp/FlashNoteApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleURLTypes = "[{\"CFBundleURLSchemes\": [\"flashnote\"], \"CFBundleURLName\": \"com.flashnote.urlscheme\"}]";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -1150,7 +1150,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FlashNoteWatch/FlashNoteWatch.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.flashnote.app;
 				MARKETING_VERSION = 1.0.0;
@@ -1165,7 +1165,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = FlashNoteWidgets/FlashNoteWidgets.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FlashNoteWidgets/Info.plist;
 				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
@@ -1185,7 +1185,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = FlashNoteWidgets/FlashNoteWidgets.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FlashNoteWidgets/Info.plist;
 				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
@@ -1205,7 +1205,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = FlashNoteIntents/FlashNoteIntents.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FlashNoteIntents/Info.plist;
 				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.intents-service";
@@ -1260,7 +1260,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FlashNoteWatch/FlashNoteWatch.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.flashnote.app;
 				MARKETING_VERSION = 1.0.0;
