@@ -73,7 +73,7 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
 
         let request = SFSpeechAudioBufferRecognitionRequest()
         request.shouldReportPartialResults = true
-        request.requiresOnDeviceRecognition = true
+        request.requiresOnDeviceRecognition = recognizer.supportsOnDeviceRecognition
 
         let engine = AVAudioEngine()
 
@@ -130,6 +130,12 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
 
                 if let error {
                     FNLog.voice.error("Recognition error: \(error)")
+                    let errorResult = TranscriptionResult(
+                        text: "",
+                        isFinal: true,
+                        errorMessage: "Speech recognition couldn't process your audio. Please try again."
+                    )
+                    continuation.yield(errorResult)
                     continuation.finish()
                 }
             }

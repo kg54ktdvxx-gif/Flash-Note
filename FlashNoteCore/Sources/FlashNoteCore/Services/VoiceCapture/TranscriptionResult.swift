@@ -6,18 +6,21 @@ public struct TranscriptionResult: Sendable {
     public let isFinal: Bool
     public let audioFileName: String?
     public let audioDuration: TimeInterval?
+    public let errorMessage: String?
 
     public init(
         text: String,
         confidence: Float = 1.0,
         isFinal: Bool = false,
         audioFileName: String? = nil,
-        audioDuration: TimeInterval? = nil
+        audioDuration: TimeInterval? = nil,
+        errorMessage: String? = nil
     ) {
         self.text = text
         self.confidence = confidence
         self.isFinal = isFinal
         self.audioFileName = audioFileName
         self.audioDuration = audioDuration
+        self.errorMessage = errorMessage
     }
 }

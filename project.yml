@@ -50,7 +50,7 @@ targets:
         CODE_SIGN_ENTITLEMENTS: FlashNoteApp/FlashNoteApp.entitlements
         PRODUCT_BUNDLE_IDENTIFIER: com.flashnote.app
         MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "3"
+        CURRENT_PROJECT_VERSION: "4"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: "YES"
         PRODUCT_NAME: FlashNote
@@ -71,7 +71,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.flashnote.app.watchkitapp
         MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "3"
+        CURRENT_PROJECT_VERSION: "4"
         GENERATE_INFOPLIST_FILE: "YES"
         INFOPLIST_KEY_WKCompanionAppBundleIdentifier: com.flashnote.app
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -92,7 +92,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.flashnote.app.widgets
         MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "3"
+        CURRENT_PROJECT_VERSION: "4"
         GENERATE_INFOPLIST_FILE: "YES"
         INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier: com.apple.widgetkit-extension
     entitlements:
@@ -112,7 +112,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.flashnote.app.share
         MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "3"
+        CURRENT_PROJECT_VERSION: "4"
         GENERATE_INFOPLIST_FILE: "YES"
         INFOPLIST_FILE: FlashNoteShareExtension/Info.plist
     entitlements:
@@ -147,7 +147,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.flashnote.app.intents
         MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "3"
+        CURRENT_PROJECT_VERSION: "4"
         GENERATE_INFOPLIST_FILE: "YES"
         INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier: com.apple.intents-service
     entitlements:

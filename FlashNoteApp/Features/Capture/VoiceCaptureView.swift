@@ -111,6 +111,12 @@ struct VoiceCaptureView: View {
 
                 for await result in stream {
                     if Task.isCancelled { break }
+
+                    if let error = result.errorMessage {
+                        errorMessage = error
+                        break
+                    }
+
                     transcribedText = result.text
                     confidence = result.confidence
                     audioFileName = result.audioFileName
