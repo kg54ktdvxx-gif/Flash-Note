@@ -126,6 +126,17 @@ Always include a review note for non-obvious features. Example for Voice Notes:
 
 ## Rejection History
 
+### Build 4 — Rejected Mar 1, 2026 (Guideline 2.1 - Performance - App Completeness)
+
+**Issue**: "The app displayed an error message on recording" — iPad Air 11-inch (M3), iPadOS 26.3. Alert: "Voice Capture Error: Speech recognition couldn't process your audio."
+
+**Root cause**: Build 4's fix (`requiresOnDeviceRecognition = recognizer.supportsOnDeviceRecognition`) was incomplete. `supportsOnDeviceRecognition` reports hardware capability, NOT model availability. On M3 iPad it returns `true`, so `requiresOnDeviceRecognition` was set to `true`, but on-device speech models weren't downloaded on the review device → immediate recognition failure.
+
+**Fix (Build 5)**:
+1. Set `requiresOnDeviceRecognition = false` unconditionally — let the system auto-select on-device vs server recognition. On-device is still used when models are available.
+2. Added explicit microphone permission check (`AVAudioApplication.requestRecordPermission()`) before starting audio engine
+3. Guarded recognition error callback — `SFSpeechRecognitionTask` fires error on normal completion too; now skips error if a final result was already received
+
 ### Build 3 — Rejected Feb 23, 2026 (Guideline 2.3 - Accurate Metadata)
 
 **Issue**: "the app does not allow us to save the text created from our speech"
@@ -159,7 +170,7 @@ Always include a review note for non-obvious features. Example for Voice Notes:
 
 ## Lessons Learned
 
-1. **`requiresOnDeviceRecognition = true` is dangerous** — Apple's review devices may not have on-device speech models downloaded. Always use `recognizer.supportsOnDeviceRecognition` to check first.
+1. **`requiresOnDeviceRecognition` must be `false`** — `supportsOnDeviceRecognition` reports hardware capability, NOT model availability. Apple's review devices (clean/managed) may support on-device but lack downloaded models. Always leave `requiresOnDeviceRecognition = false` and let the system auto-select.
 
 2. **ASC version string drops trailing `.0`** — `1.0.0` in Xcode becomes `1.0` in App Store Connect. Use the ASC version string when querying the API.
 

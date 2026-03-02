@@ -46,6 +46,18 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
             throw VoiceCaptureError.alreadyCapturing
         }
 
+        // Check microphone permission explicitly
+        let micStatus = AVAudioApplication.shared.recordPermission
+        if micStatus == .denied {
+            throw VoiceCaptureError.notAuthorized
+        }
+        if micStatus == .undetermined {
+            let granted = await AVAudioApplication.requestRecordPermission()
+            guard granted else {
+                throw VoiceCaptureError.notAuthorized
+            }
+        }
+
         let authStatus = await withCheckedContinuation { continuation in
             SFSpeechRecognizer.requestAuthorization { status in
                 continuation.resume(returning: status)
@@ -73,7 +85,11 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
 
         let request = SFSpeechAudioBufferRecognitionRequest()
         request.shouldReportPartialResults = true
-        request.requiresOnDeviceRecognition = recognizer.supportsOnDeviceRecognition
+        // Always false — let the system auto-select on-device vs server.
+        // supportsOnDeviceRecognition reports hardware capability, NOT model availability.
+        // Clean/managed devices (e.g. Apple review iPads) may support on-device but lack
+        // downloaded models, causing immediate recognition failure.
+        request.requiresOnDeviceRecognition = false
 
         let engine = AVAudioEngine()
 
@@ -113,6 +129,7 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
                 }
             }
 
+            var receivedFinalResult = false
             let task = recognizer.recognitionTask(with: request) { result, error in
                 if let result {
                     let transcription = TranscriptionResult(
@@ -124,11 +141,14 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
                     continuation.yield(transcription)
 
                     if result.isFinal {
+                        receivedFinalResult = true
                         continuation.finish()
                     }
                 }
 
-                if let error {
+                // SFSpeechRecognitionTask fires error on normal completion too.
+                // Only surface the error if we never got a final result.
+                if let error, !receivedFinalResult {
                     FNLog.voice.error("Recognition error: \(error)")
                     let errorResult = TranscriptionResult(
                         text: "",
