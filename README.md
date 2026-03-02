@@ -4,6 +4,12 @@ iOS 26 + watchOS 26 quick-capture note app with an editorial aesthetic.
 
 Built for the moment when you need to get something out of your head immediately. Shake, capture, sort later.
 
+<p align="center">
+  <img src="Screenshots/write_view.png" width="200" alt="Write">
+  <img src="Screenshots/inbox_view.png" width="200" alt="Inbox">
+  <img src="Screenshots/list_view.png" width="200" alt="List">
+</p>
+
 ## Features
 
 ### Capture
