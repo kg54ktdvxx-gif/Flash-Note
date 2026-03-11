@@ -21,14 +21,33 @@ enum ResurfacingScheduler {
             options: []
         )
 
-        let category = UNNotificationCategory(
+        let resurfaceCategory = UNNotificationCategory(
             identifier: categoryIdentifier,
             actions: [keepAction, archiveAction, snoozeAction],
             intentIdentifiers: [],
             hiddenPreviewsBodyPlaceholder: "A thought you saved"
         )
 
-        UNUserNotificationCenter.current().setNotificationCategories([category])
+        // I4 fix: Register both categories in a single setNotificationCategories call
+        // to avoid a race where registerDailyReflectionCategory's async
+        // getNotificationCategories callback could wipe this category.
+        let openTriageAction = UNNotificationAction(
+            identifier: "OPEN_TRIAGE",
+            title: "Review Notes",
+            options: .foreground
+        )
+
+        let dailyReflectionCategory = UNNotificationCategory(
+            identifier: dailyReflectionCategoryIdentifier,
+            actions: [openTriageAction],
+            intentIdentifiers: [],
+            hiddenPreviewsBodyPlaceholder: "Review yesterday's captures"
+        )
+
+        UNUserNotificationCenter.current().setNotificationCategories([
+            resurfaceCategory,
+            dailyReflectionCategory
+        ])
     }
 
     private static let resurfacingService = SpacedResurfacingService()
@@ -136,26 +155,11 @@ enum ResurfacingScheduler {
     private static let dailyReflectionIdentifier = "flashnote-daily-reflection"
     private static let dailyReflectionCategoryIdentifier = "FLASHNOTE_DAILY_REFLECTION"
 
+    /// Daily reflection category is now registered alongside resurfacing category
+    /// in `registerCategories()` to avoid race conditions. This method is kept
+    /// for backward compatibility but is a no-op.
     static func registerDailyReflectionCategory() {
-        let openTriageAction = UNNotificationAction(
-            identifier: "OPEN_TRIAGE",
-            title: "Review Notes",
-            options: .foreground
-        )
-
-        let category = UNNotificationCategory(
-            identifier: dailyReflectionCategoryIdentifier,
-            actions: [openTriageAction],
-            intentIdentifiers: [],
-            hiddenPreviewsBodyPlaceholder: "Review yesterday's captures"
-        )
-
-        let center = UNUserNotificationCenter.current()
-        center.getNotificationCategories { existing in
-            var categories = existing
-            categories.insert(category)
-            center.setNotificationCategories(categories)
-        }
+        // I4 fix: Categories are now registered atomically in registerCategories().
     }
 
     static func scheduleDailyReflection() {

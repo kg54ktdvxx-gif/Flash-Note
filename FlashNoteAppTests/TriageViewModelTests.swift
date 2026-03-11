@@ -262,4 +262,53 @@ struct TriageViewModelTests {
         vm.undo(context: context)
         #expect(vm.currentIndex == 0)
     }
+
+    // MARK: - Consecutive undo regression (I2 fix)
+
+    @Test("consecutive undos restore all notes in correct order")
+    func consecutiveUndos() throws {
+        let context = try makeContext()
+        let n1 = Note(text: "First")
+        let n2 = Note(text: "Second")
+        let n3 = Note(text: "Third")
+        context.insert(n1)
+        context.insert(n2)
+        context.insert(n3)
+        try context.save()
+
+        let vm = TriageViewModel()
+        vm.triageNotes = [n1, n2, n3]
+
+        // Triage all three
+        vm.performAction(.keep, context: context)
+        vm.performAction(.archive, context: context)
+        vm.performAction(.task, context: context)
+        #expect(vm.currentIndex == 3)
+        #expect(vm.isComplete)
+
+        // Undo all three — should land back at the correct note each time
+        vm.undo(context: context)
+        #expect(vm.currentIndex == 2)
+        #expect(vm.currentNote?.text == "Third")
+        #expect(!n3.isTriaged)
+
+        vm.undo(context: context)
+        #expect(vm.currentIndex == 1)
+        #expect(vm.currentNote?.text == "Second")
+        #expect(n2.status == .active)
+
+        vm.undo(context: context)
+        #expect(vm.currentIndex == 0)
+        #expect(vm.currentNote?.text == "First")
+        #expect(!n1.isTriaged)
+
+        // Re-triage from the beginning — all notes should be reachable
+        vm.performAction(.keep, context: context)
+        vm.performAction(.keep, context: context)
+        vm.performAction(.keep, context: context)
+        #expect(vm.isComplete)
+        #expect(n1.isTriaged)
+        #expect(n2.isTriaged)
+        #expect(n3.isTriaged)
+    }
 }

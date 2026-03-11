@@ -23,18 +23,19 @@ public struct SpacedResurfacingService: ResurfacingService, Sendable {
         if hour >= schedule.quietHoursStart || hour < schedule.quietHoursEnd {
             // Target falls in quiet window — push to quietHoursEnd same day (early morning)
             // or next day (late evening).
-            var components = calendar.dateComponents([.year, .month, .day], from: targetDate)
-            components.hour = schedule.quietHoursEnd
-            components.minute = 0
-
             if hour >= schedule.quietHoursStart {
                 // Late evening (e.g. 22:00–23:59) → push to 8am next day
-                if let day = components.day { components.day = day + 1 }
-            }
-            // Early morning (e.g. 0:00–7:59) → push to 8am same day (no day bump needed)
-
-            if let adjusted = calendar.date(from: components) {
-                targetDate = adjusted
+                // I3 fix: Use Calendar.date(byAdding:) instead of raw day+1 increment,
+                // which fails on month boundaries (e.g. Dec 31 → day 32 → nil).
+                if let nextDay = calendar.date(byAdding: .day, value: 1, to: targetDate),
+                   let adjusted = calendar.date(bySettingHour: schedule.quietHoursEnd, minute: 0, second: 0, of: nextDay) {
+                    targetDate = adjusted
+                }
+            } else {
+                // Early morning (e.g. 0:00–7:59) → push to 8am same day
+                if let adjusted = calendar.date(bySettingHour: schedule.quietHoursEnd, minute: 0, second: 0, of: targetDate) {
+                    targetDate = adjusted
+                }
             }
         }
 

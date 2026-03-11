@@ -3,7 +3,6 @@ import SwiftData
 import FlashNoteCore
 
 struct WatchCaptureView: View {
-    @Environment(\.modelContext) private var modelContext
     @State private var showConfirmation = false
     @State private var showTextInput = false
     @State private var confirmationTask: Task<Void, Never>?
@@ -43,34 +42,27 @@ struct WatchCaptureView: View {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
 
-        let note = Note(text: trimmed, source: .watch)
-        modelContext.insert(note)
+        // C3 fix: Only send to iPhone via WatchConnectivity — iPhone is the single
+        // source of truth. Previously we also saved to Watch SwiftData, creating
+        // duplicates when the iPhone buffer was flushed.
+        WatchConnectivityManager.shared.sendNote(text: trimmed)
+        FNLog.watch.info("Watch note sent to iPhone")
 
-        do {
-            try modelContext.save()
-            FNLog.watch.info("Watch note saved: \(note.id)")
+        #if os(watchOS)
+        WKInterfaceDevice.current().play(.success)
+        #endif
 
-            // Sync to iPhone via WatchConnectivity
-            WatchConnectivityManager.shared.sendNote(text: trimmed)
+        withAnimation {
+            showConfirmation = true
+        }
 
-            #if os(watchOS)
-            WKInterfaceDevice.current().play(.success)
-            #endif
-
+        confirmationTask?.cancel()
+        confirmationTask = Task { @MainActor in
+            try? await Task.sleep(for: .seconds(2))
+            guard !Task.isCancelled else { return }
             withAnimation {
-                showConfirmation = true
+                showConfirmation = false
             }
-
-            confirmationTask?.cancel()
-            confirmationTask = Task { @MainActor in
-                try? await Task.sleep(for: .seconds(2))
-                guard !Task.isCancelled else { return }
-                withAnimation {
-                    showConfirmation = false
-                }
-            }
-        } catch {
-            FNLog.watch.error("Failed to save watch note: \(error)")
         }
     }
 }

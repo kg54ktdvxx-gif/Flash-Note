@@ -147,7 +147,10 @@ struct VoiceCaptureView: View {
     }
 
     private func stopRecording() {
-        Task { @MainActor in
+        // I1 fix: Cancel the recording task first so its stream loop doesn't race
+        // with us on isRecording/audioDuration. Then stop capture and update state.
+        recordingTask?.cancel()
+        recordingTask = Task { @MainActor in
             if let result = await voiceService?.stopCapture() {
                 audioDuration = result.audioDuration
             }

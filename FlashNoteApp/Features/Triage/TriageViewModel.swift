@@ -97,7 +97,8 @@ final class TriageViewModel {
 
     func undo(context: ModelContext) {
         guard let entry = undoStack.popLast() else { return }
-        guard let note = triageNotes.first(where: { $0.id == entry.noteID }) else { return }
+        guard let noteIndex = triageNotes.firstIndex(where: { $0.id == entry.noteID }) else { return }
+        let note = triageNotes[noteIndex]
 
         note.status = entry.previousStatus
         note.isTriaged = entry.previousIsTriaged
@@ -110,6 +111,8 @@ final class TriageViewModel {
             FNLog.capture.error("Undo failed: \(error)")
         }
 
-        currentIndex = max(currentIndex - 1, 0)
+        // I2 fix: Set currentIndex to the undone note's position so it's shown next,
+        // rather than blindly decrementing which can skip notes on consecutive undos.
+        currentIndex = noteIndex
     }
 }

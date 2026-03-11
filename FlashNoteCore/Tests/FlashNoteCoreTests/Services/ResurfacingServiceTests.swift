@@ -214,4 +214,52 @@ struct ResurfacingServiceTests {
         // 8:00 is NOT >= 22 and NOT < 8, so no adjustment
         #expect(resultComponents.hour == 8)
     }
+
+    // MARK: - Month-boundary regression (I3 fix)
+
+    @Test("month-end quiet hours: Dec 31 at 23:00 rolls to Jan 1 at 8:00")
+    func quietHoursMonthBoundaryDecember() throws {
+        var calendar = Calendar.current
+        calendar.timeZone = .current
+        var components = DateComponents()
+        components.year = 2025
+        components.month = 12
+        components.day = 30  // +1 day = Dec 31
+        components.hour = 23
+        components.minute = 0
+        let createdAt = calendar.date(from: components)!
+
+        let (note, _) = try makeNote(resurfaceCount: 0, createdAt: createdAt)
+        let result = service.computeNextResurfaceDate(for: note, schedule: schedule)
+
+        #expect(result != nil)
+        let resultComponents = calendar.dateComponents([.year, .month, .day, .hour], from: result!)
+        #expect(resultComponents.hour == 8)
+        // Dec 31 at 23:00 → pushed to Jan 1 at 8:00
+        #expect(resultComponents.month == 1)
+        #expect(resultComponents.year == 2026)
+        #expect(resultComponents.day == 1)
+    }
+
+    @Test("month-end quiet hours: Jan 31 at 23:00 rolls to Feb 1 at 8:00")
+    func quietHoursMonthBoundaryJanuary() throws {
+        var calendar = Calendar.current
+        calendar.timeZone = .current
+        var components = DateComponents()
+        components.year = 2026
+        components.month = 1
+        components.day = 30  // +1 day = Jan 31
+        components.hour = 23
+        components.minute = 0
+        let createdAt = calendar.date(from: components)!
+
+        let (note, _) = try makeNote(resurfaceCount: 0, createdAt: createdAt)
+        let result = service.computeNextResurfaceDate(for: note, schedule: schedule)
+
+        #expect(result != nil)
+        let resultComponents = calendar.dateComponents([.month, .day, .hour], from: result!)
+        #expect(resultComponents.hour == 8)
+        #expect(resultComponents.month == 2)
+        #expect(resultComponents.day == 1)
+    }
 }

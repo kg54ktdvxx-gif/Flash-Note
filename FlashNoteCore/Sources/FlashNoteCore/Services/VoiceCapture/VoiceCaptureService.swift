@@ -113,6 +113,8 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
         recorder.record()
 
         let serviceLock = self.lock
+        // C2 fix: Capture self weakly to avoid retain cycle in AsyncStream closure
+        weak var weakSelf = self
         let stream = AsyncStream<TranscriptionResult> { continuation in
             inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
                 request.append(buffer)
@@ -123,8 +125,8 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
                         sum += abs(channelData[i])
                     }
                     let avg = sum / Float(max(frameLength, 1))
-                    serviceLock.withLock { [weak self] in
-                        self?._audioLevel = avg
+                    serviceLock.withLock {
+                        weakSelf?._audioLevel = avg
                     }
                 }
             }
@@ -159,8 +161,8 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
                     continuation.finish()
                 }
             }
-            serviceLock.withLock { [weak self] in
-                self?.recognitionTask = task
+            serviceLock.withLock {
+                weakSelf?.recognitionTask = task
             }
 
             do {
@@ -169,7 +171,7 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
             } catch {
                 FNLog.voice.error("Audio engine failed to start: \(error)")
                 // Clean up everything since we claimed _isCapturing = true
-                self.tearDownCaptureResources(deleteOrphanedAudio: true)
+                weakSelf?.tearDownCaptureResources(deleteOrphanedAudio: true)
                 continuation.finish()
             }
         }
@@ -229,6 +231,9 @@ public final class OnDeviceVoiceCaptureService: VoiceCaptureService, @unchecked 
         request?.endAudio()
         task?.cancel()
         recorder?.stop()
+
+        // C1 fix: Deactivate audio session so ducked apps resume playback
+        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
 
         if deleteOrphanedAudio, let fileName {
             let url = AppGroupContainer.audioFileURL(for: fileName)

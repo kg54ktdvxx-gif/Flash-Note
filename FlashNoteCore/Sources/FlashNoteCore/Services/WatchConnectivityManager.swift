@@ -22,6 +22,14 @@ public final class WatchConnectivityManager: NSObject, WCSessionDelegate, @unche
     // MARK: - Send note from Watch to iPhone
 
     public func sendNote(text: String) {
+        // I7 fix: Accessing isReachable or transferUserInfo before activation
+        // throws NSInternalInconsistencyException (ObjC exception, bypasses Swift catch).
+        guard WCSession.isSupported(),
+              WCSession.default.activationState == .activated else {
+            FNLog.watch.warning("WCSession not activated — note will not be sent")
+            return
+        }
+
         guard WCSession.default.isReachable else {
             // Fall back to transferUserInfo for background delivery
             WCSession.default.transferUserInfo([

@@ -172,7 +172,11 @@ final class CaptureViewModel {
         descriptor.fetchLimit = 2
 
         guard let recent = try? context.fetch(descriptor),
-              recent.count >= 2 else { return }
+              recent.count >= 2,
+              // I9 fix: Verify the first result is actually the note we just saved.
+              // Without this, heavy write activity could return an unrelated note
+              // at index 1, and mergeWithPrevious would corrupt it.
+              recent[0].id == currentNote.id else { return }
 
         let previous = recent[1]
         let timeDiff = currentNote.createdAt.timeIntervalSince(previous.createdAt)

@@ -5,9 +5,9 @@ import FlashNoteCore
 struct RecentNotesProvider: TimelineProvider {
     func placeholder(in context: Context) -> RecentNotesEntry {
         RecentNotesEntry(date: .now, notes: [
-            RecentNoteItem(id: UUID(), text: "Remember to call dentist", timeAgo: "2h ago"),
-            RecentNoteItem(id: UUID(), text: "Great idea for the project", timeAgo: "5h ago"),
-            RecentNoteItem(id: UUID(), text: "Buy groceries on the way home", timeAgo: "1d ago"),
+            WidgetNoteItem(id: UUID(), text: "Remember to call dentist", timeAgo: "2h ago"),
+            WidgetNoteItem(id: UUID(), text: "Great idea for the project", timeAgo: "5h ago"),
+            WidgetNoteItem(id: UUID(), text: "Buy groceries on the way home", timeAgo: "1d ago"),
         ])
     }
 
@@ -24,25 +24,20 @@ struct RecentNotesProvider: TimelineProvider {
         completion(timeline)
     }
 
-    private func loadRecentNotes() -> [RecentNoteItem] {
+    // I8 fix: Uses shared WidgetNoteItem from FlashNoteCore instead of a local duplicate struct.
+    private func loadRecentNotes() -> [WidgetNoteItem] {
         let defaults = AppGroupContainer.sharedDefaults
         guard let data = defaults.data(forKey: "recentNotes"),
-              let items = try? JSONDecoder().decode([RecentNoteItem].self, from: data) else {
+              let items = try? JSONDecoder().decode([WidgetNoteItem].self, from: data) else {
             return []
         }
         return Array(items.prefix(3))
     }
 }
 
-struct RecentNoteItem: Codable, Identifiable {
-    let id: UUID
-    let text: String
-    let timeAgo: String
-}
-
 struct RecentNotesEntry: TimelineEntry {
     let date: Date
-    let notes: [RecentNoteItem]
+    let notes: [WidgetNoteItem]
 }
 
 struct RecentNotesWidgetView: View {

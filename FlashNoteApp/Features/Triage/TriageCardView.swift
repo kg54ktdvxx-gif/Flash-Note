@@ -10,6 +10,7 @@ struct TriageCardView: View {
     @State private var verticalOffset: CGFloat = 0
     @State private var crossedActionThreshold = false
     @State private var crossedCommitThreshold = false
+    @State private var swipeCompletionTask: Task<Void, Never>?
 
     private let swipeThreshold: CGFloat = 100
     private let verticalThreshold: CGFloat = -80
@@ -131,7 +132,12 @@ struct TriageCardView: View {
             if action == .task { verticalOffset = -500 }
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        // I6 fix: Use cancellable Task instead of DispatchQueue.main.asyncAfter
+        // to avoid mutating dead state if the view disappears during the animation.
+        swipeCompletionTask?.cancel()
+        swipeCompletionTask = Task { @MainActor in
+            try? await Task.sleep(for: .seconds(0.2))
+            guard !Task.isCancelled else { return }
             offset = .zero
             verticalOffset = 0
             onAction(action)

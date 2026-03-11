@@ -61,6 +61,7 @@
 		AAE0339CE65F2932F34ED283 /* FlashNoteWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E1A3F4ED0D858F28BDE7B5CA /* FlashNoteWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AD0B6B0B303FBB455942A5B8 /* HapticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83592F9A6BBB3C38B28B7A54 /* HapticService.swift */; };
 		AE417BED7AE6D9662205FB3A /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B85575986B824BB2DED48CE /* NavigationRouter.swift */; };
+		B230006AFC627E60DAF1F9B8 /* NoteMaintenance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C328CAB3106A189D3E20A2 /* NoteMaintenance.swift */; };
 		B682C1C1135E01066604B24C /* WatchInboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0225E9B3461D405F8D0997C /* WatchInboxView.swift */; };
 		BC5A67A7F101F756CA02C392 /* ResurfacingScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7ED133B9029C2C0F567CB2 /* ResurfacingScheduler.swift */; };
 		BD0F215EC6DEFDD53F5AE058 /* NotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E134CB44896A1A1066EB30D /* NotificationDelegate.swift */; };
@@ -173,6 +174,7 @@
 		83592F9A6BBB3C38B28B7A54 /* HapticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticService.swift; sourceTree = "<group>"; };
 		8594A549AB8ED446F379CC56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8E39FA46B484014642D402AA /* FlashNoteWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FlashNoteWidgets.entitlements; sourceTree = "<group>"; };
+		93C328CAB3106A189D3E20A2 /* NoteMaintenance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteMaintenance.swift; sourceTree = "<group>"; };
 		949886A2157F71253D7EE76D /* WidgetIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetIntents.swift; sourceTree = "<group>"; };
 		9D9ACB812263939D493EF36E /* FlashNoteAppTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FlashNoteAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E5525CB02F95BE0355C5FEA /* SaveConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveConfirmationView.swift; sourceTree = "<group>"; };
@@ -447,6 +449,7 @@
 				D328AAC2DE97946768D8387F /* BufferSyncService.swift */,
 				D9FC8EC9E96CE1A46FCA4222 /* DependencyContainer.swift */,
 				83592F9A6BBB3C38B28B7A54 /* HapticService.swift */,
+				93C328CAB3106A189D3E20A2 /* NoteMaintenance.swift */,
 				5E134CB44896A1A1066EB30D /* NotificationDelegate.swift */,
 				1B7ED133B9029C2C0F567CB2 /* ResurfacingScheduler.swift */,
 				CEBF238252E9DC2B7A234CA8 /* SpotlightIndexer.swift */,
@@ -724,7 +727,6 @@
 				};
 			};
 			buildConfigurationList = 1EE523EFB6E0D342C072D80F /* Build configuration list for PBXProject "FlashNote" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -737,6 +739,7 @@
 				AD3E57389C0E4A693D096B90 /* XCLocalSwiftPackageReference "FlashNoteCore" */,
 			);
 			preferredProjectObjectVersion = 77;
+			productRefGroup = 7BA7E8C54917BD282A05C6AD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -855,6 +858,7 @@
 				AE417BED7AE6D9662205FB3A /* NavigationRouter.swift in Sources */,
 				F0BD1C81236BDB2E0C1DABF7 /* NoteDetailView.swift in Sources */,
 				4906A28D1836BE9F44B09756 /* NoteDetailViewModel.swift in Sources */,
+				B230006AFC627E60DAF1F9B8 /* NoteMaintenance.swift in Sources */,
 				CC92D746B86FABB5B85D88EA /* NoteRowView.swift in Sources */,
 				BD0F215EC6DEFDD53F5AE058 /* NotificationDelegate.swift in Sources */,
 				BC5A67A7F101F756CA02C392 /* ResurfacingScheduler.swift in Sources */,
@@ -904,7 +908,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = FlashNoteShareExtension/FlashNoteShareExtension.entitlements;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FlashNoteShareExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -923,7 +927,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = FlashNoteIntents/FlashNoteIntents.entitlements;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FlashNoteIntents/Info.plist;
 				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.intents-service";
@@ -945,7 +949,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FlashNoteApp/FlashNoteApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleURLTypes = "[{\"CFBundleURLSchemes\": [\"flashnote\"], \"CFBundleURLName\": \"com.flashnote.urlscheme\"}]";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -1100,7 +1104,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = FlashNoteShareExtension/FlashNoteShareExtension.entitlements;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FlashNoteShareExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1121,7 +1125,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FlashNoteApp/FlashNoteApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleURLTypes = "[{\"CFBundleURLSchemes\": [\"flashnote\"], \"CFBundleURLName\": \"com.flashnote.urlscheme\"}]";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -1150,7 +1154,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FlashNoteWatch/FlashNoteWatch.entitlements;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.flashnote.app;
 				MARKETING_VERSION = 1.0.0;
@@ -1165,7 +1169,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = FlashNoteWidgets/FlashNoteWidgets.entitlements;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FlashNoteWidgets/Info.plist;
 				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
@@ -1185,7 +1189,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = FlashNoteWidgets/FlashNoteWidgets.entitlements;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FlashNoteWidgets/Info.plist;
 				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
@@ -1205,7 +1209,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = FlashNoteIntents/FlashNoteIntents.entitlements;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FlashNoteIntents/Info.plist;
 				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.intents-service";
@@ -1260,7 +1264,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FlashNoteWatch/FlashNoteWatch.entitlements;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.flashnote.app;
 				MARKETING_VERSION = 1.0.0;

@@ -39,9 +39,17 @@ public enum WidgetDataService {
     }
 }
 
-/// Matches the format expected by RecentNotesWidget.
-private struct WidgetNoteItem: Codable {
-    let id: UUID
-    let text: String
-    let timeAgo: String
+/// I8 fix: Public shared struct used by both WidgetDataService and RecentNotesWidget.
+/// Previously two separate private structs with matching fields — a rename in either
+/// would silently break widget decoding.
+public struct WidgetNoteItem: Codable, Identifiable, Sendable {
+    public let id: UUID
+    public let text: String
+    public let timeAgo: String
+
+    public init(id: UUID, text: String, timeAgo: String) {
+        self.id = id
+        self.text = text
+        self.timeAgo = timeAgo
+    }
 }

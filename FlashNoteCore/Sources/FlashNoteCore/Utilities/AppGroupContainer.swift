@@ -12,7 +12,8 @@ public enum AppGroupContainer {
         // Fallback to Documents when App Group entitlement is missing (e.g. tests, previews).
         // Logged so it's visible in Console during development.
         FNLog.buffer.warning("App Group '\(groupIdentifier)' unavailable — falling back to Documents")
-        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+            ?? URL(fileURLWithPath: NSTemporaryDirectory())
     }
 
     public static var hotBufferFileURL: URL {
